@@ -12,6 +12,8 @@ namespace CaveGeneration
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D block;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,6 +41,7 @@ namespace CaveGeneration
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            block = this.Content.Load<Texture2D>("Block");
 
             // TODO: use this.Content to load your game content here
         }
@@ -76,7 +79,11 @@ namespace CaveGeneration
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(block, new Vector2(100,1));
+            spriteBatch.End();
 
+           
             base.Draw(gameTime);
         }
     }
