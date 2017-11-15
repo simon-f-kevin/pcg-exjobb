@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace CaveGeneration
 {
@@ -15,7 +16,7 @@ namespace CaveGeneration
 
         Texture2D block;
 
-        Grid grid = new Grid();
+        Grid grid;
 
 
         public Game1()
@@ -33,12 +34,7 @@ namespace CaveGeneration
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-            grid.Height = graphics.GraphicsDevice.Viewport.Height;
-            grid.Width = graphics.GraphicsDevice.Viewport.Width;
-
-            CaveGenerator cg = new CaveGenerator();
-            cg.Draw(grid);
+            
 
             base.Initialize();
         }
@@ -51,7 +47,11 @@ namespace CaveGeneration
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            //block = new Texture2D(graphics.GraphicsDevice, 10, 10);
             block = this.Content.Load<Texture2D>("Block");
+            block = CreateTexture(graphics.GraphicsDevice, 3, 3, pixel => Color.Black);
+            //grid = new Grid(10, 15, spriteBatch, block);
+            grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block);
 
             // TODO: use this.Content to load your game content here
         }
@@ -86,15 +86,36 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(block, new Vector2(100,1));
+            //spriteBatch.Draw(block, new Vector2(100,1));
+            grid.Draw();
             spriteBatch.End();
 
-           
+            
             base.Draw(gameTime);
         }
+
+        private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, System.Func<int, Color> paint)
+        {
+            //initialize a texture
+            Texture2D texture = new Texture2D(device, width, height);
+
+            //the array holds the color for each pixel in the texture
+            Color[] data = new Color[width * height];
+            for (int pixel = 0; pixel < data.Count(); pixel++)
+            {
+                //the function applies the color according to the specified pixel
+                data[pixel] = paint(pixel);
+            }
+
+            //set the color
+            texture.SetData(data);
+
+            return texture;
+        }
+
     }
 }

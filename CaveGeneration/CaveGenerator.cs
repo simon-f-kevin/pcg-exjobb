@@ -19,24 +19,24 @@ namespace CaveGeneration
 
         int[,] map;
 
-
-        public void Start()
+        public CaveGenerator(int width, int height, int randomFillPercent)
         {
+            Width = width;
+            Height = height;
+            this.randomFillPercent = randomFillPercent;
+        }
+
+        public void Start(bool useRandom)
+        {
+            if (useRandom)
+                UseRandomSeed = true;
+
             GenerateMap();
         }
 
-        public void Draw(Grid grid)
+        public int[,] GetMap()
         {
-            if(map != null)
-            {
-                for(int x = 0; x < Width; x++)
-                {
-                    for(int y = 0; y < Height; y++)
-                    {
-
-                    }
-                }
-            }
+            return map;
         }
 
         private void GenerateMap()
@@ -55,8 +55,8 @@ namespace CaveGeneration
             {
                 Seed = DateTime.Now.ToString();
             }
-
-            Random pseudoRandom = new Random(Seed.GetHashCode());
+            
+            Random pseudoRandom = new Random();
 
             for (int x = 0; x < Width; x++)
             {
