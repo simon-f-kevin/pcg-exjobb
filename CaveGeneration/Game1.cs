@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CaveGeneration.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -13,6 +14,9 @@ namespace CaveGeneration
         SpriteBatch spriteBatch;
 
         Texture2D block;
+
+        Grid grid = new Grid();
+
 
         public Game1()
         {
@@ -29,6 +33,12 @@ namespace CaveGeneration
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            grid.Height = graphics.GraphicsDevice.Viewport.Height;
+            grid.Width = graphics.GraphicsDevice.Viewport.Width;
+
+            CaveGenerator cg = new CaveGenerator();
+            cg.Draw(grid);
 
             base.Initialize();
         }

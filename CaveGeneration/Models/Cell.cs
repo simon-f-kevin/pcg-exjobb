@@ -8,6 +8,13 @@ namespace CaveGeneration.Models
 {
     public class Cell
     {
+        public Cell(int width, int height, bool visible)
+        {
+            Width = width;
+            Height = height;
+            Transparent = visible;
+        }
+
         public int Width { get; set; }
 
         public int Height { get; set; }
