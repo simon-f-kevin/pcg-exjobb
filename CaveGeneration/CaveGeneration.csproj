@@ -42,7 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CaveGenerator.cs" />
+    <Compile Include="Models\Cell.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Models\Grid.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

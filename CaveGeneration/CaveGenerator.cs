@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaveGeneration.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,20 @@ namespace CaveGeneration
             GenerateMap();
         }
 
+        public void Draw(Grid grid)
+        {
+            if(map != null)
+            {
+                for(int x = 0; x < Width; x++)
+                {
+                    for(int y = 0; y < Height; y++)
+                    {
+
+                    }
+                }
+            }
+        }
+
         private void GenerateMap()
         {
             map = new int[Width, Height];
@@ -34,18 +49,6 @@ namespace CaveGeneration
                 SmoothMap();
             }
         }
-
-        private void SmoothMap()
-        {
-            for(int x = 0; x < Width; x++)
-            {
-                for(int y = 0; y < Height; y++)
-                {
-
-                }
-            }
-        }
-
         private void RandomFillMap()
         {
             if (UseRandomSeed)
@@ -55,11 +58,11 @@ namespace CaveGeneration
 
             Random pseudoRandom = new Random(Seed.GetHashCode());
 
-            for(int x = 0; x < Width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for(int y = 0; y < Height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    if (x == 0 || x == Width-1 || y == 0 || y == Height - 1)
+                    if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
                     {
                         map[x, y] = 1;
                     }
@@ -70,5 +73,50 @@ namespace CaveGeneration
                 }
             }
         }
+
+        private void SmoothMap()
+        {
+            for(int x = 0; x < Width; x++)
+            {
+                for(int y = 0; y < Height; y++)
+                {
+                    int neighbourWallTiles = GetSorroundingWallCount(x, y);
+
+                    if(neighbourWallTiles > 4)
+                    {
+                        map[x, y] = 1;
+                    }
+                    else if(neighbourWallTiles < 4)
+                    {
+                        map[x, y] = 0;
+                    }
+                }
+            }
+        }
+
+        private int GetSorroundingWallCount(int gridX, int gridY)
+        {
+            int wallCount = 0;
+            for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
+            {
+                for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
+                {
+                    if (neighbourX >= 0 && neighbourX < Width && neighbourY >= 0 && neighbourY < Height)
+                    {
+                        if (neighbourX != gridX || neighbourY != gridY)
+                        {
+                            wallCount += map[neighbourX, neighbourY];
+                        }
+                    }
+                    else
+                    {
+                        wallCount++;
+                    }
+                }
+            }
+
+            return wallCount;
+        }
+
     }
 }
