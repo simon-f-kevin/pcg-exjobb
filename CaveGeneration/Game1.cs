@@ -18,6 +18,9 @@ namespace CaveGeneration
 
         Grid grid;
 
+        string seed;
+        int blockHeight;
+        int blockWidth;
 
         public Game1()
         {
@@ -34,7 +37,19 @@ namespace CaveGeneration
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            
+
+            // Set your seed. Leave empty if you want a random map
+            seed = "";
+
+            // Sets the window-size
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height-100;
+            graphics.IsFullScreen = false;
+            graphics.ApplyChanges();
+
+            //Sets the block size
+            blockHeight = 15;
+            blockWidth = 15;
 
             base.Initialize();
         }
@@ -47,11 +62,8 @@ namespace CaveGeneration
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            //block = new Texture2D(graphics.GraphicsDevice, 10, 10);
-            block = this.Content.Load<Texture2D>("Block");
-            block = CreateTexture(graphics.GraphicsDevice, 3, 3, pixel => Color.Black);
-            //grid = new Grid(10, 15, spriteBatch, block);
-            grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block);
+            block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
+            grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
 
             // TODO: use this.Content to load your game content here
         }

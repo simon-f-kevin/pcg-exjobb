@@ -23,20 +23,20 @@ namespace CaveGeneration.Models
 
 
 
-        public Grid(int x, int y, SpriteBatch sb, Texture2D texture)
+        public Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
         {
             Columns = x;
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            cg = new CaveGenerator(Columns, Rows, 45);
-            Init();
+            cg = new CaveGenerator(Columns, Rows, 50);
+            Init(seed);
         }
 
-        private void Init()
+        private void Init(string seed)
         {
             Cells = new Cell[Columns, Rows];
-            cg.Start(false);
+            cg.Start(seed);
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)
@@ -46,7 +46,6 @@ namespace CaveGeneration.Models
                 }
             }
             int[,] map = cg.GetMap();
-
 
             int col = map.GetLength(0);
             int row = map.GetLength(1);
@@ -64,8 +63,6 @@ namespace CaveGeneration.Models
 
         public void Draw()
         {
-            
-
             foreach(var cell in Cells)
             {
                 cell.Draw(_spriteBatch);

@@ -26,11 +26,12 @@ namespace CaveGeneration
             this.randomFillPercent = randomFillPercent;
         }
 
-        public void Start(bool useRandom)
+        public void Start(string seed)
         {
-            if (useRandom)
+            if (seed.Equals(""))
                 UseRandomSeed = true;
 
+            Seed = seed;
             GenerateMap();
         }
 
@@ -44,7 +45,7 @@ namespace CaveGeneration
             map = new int[Width, Height];
             RandomFillMap();
 
-            for(int i = 0; i < 5; i++)
+            for(int i = 0; i < 6; i++)
             {
                 SmoothMap();
             }
@@ -56,7 +57,7 @@ namespace CaveGeneration
                 Seed = DateTime.Now.ToString();
             }
             
-            Random pseudoRandom = new Random();
+            Random pseudoRandom = new Random(Seed.GetHashCode());
 
             for (int x = 0; x < Width; x++)
             {

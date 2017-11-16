@@ -18,6 +18,8 @@ namespace CaveGeneration.Models
 
         public bool IsVisible { get; set; }
 
+        private bool WalkAble { get; set; }
+
         public Cell(Vector2 pos, Texture2D texture, bool visible)
         {
             Position = pos;
@@ -30,7 +32,7 @@ namespace CaveGeneration.Models
             _spriteBatch = spriteBatch;
             if (IsVisible)
             {
-                Rectangle destinationRect = new Rectangle(new Point((int)Position.X, (int)Position.Y), new Point(2, 2));
+                Rectangle destinationRect = new Rectangle(new Point((int)Position.X, (int)Position.Y), new Point(Texture.Width - 1, Texture.Height - 1));
                 _spriteBatch.Draw(Texture, destinationRect, color: Color.White);
             }
         }
