@@ -19,7 +19,7 @@ namespace CaveGeneration.Models
 
         private SpriteBatch _spriteBatch { get; set; }
 
-        private CaveGenerator cg;
+        private DrunkardWalk dw;
 
 
 
@@ -29,14 +29,14 @@ namespace CaveGeneration.Models
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            cg = new CaveGenerator(Columns, Rows, 50);
+            dw = new DrunkardWalk(Columns, Rows);
             Init(seed);
         }
 
         private void Init(string seed)
         {
             Cells = new Cell[Columns, Rows];
-            cg.Start(seed);
+            dw.Start();
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)
@@ -45,7 +45,7 @@ namespace CaveGeneration.Models
                     Cells[x, y] = new Cell(pos, CellTexture, false);
                 }
             }
-            int[,] map = cg.GetMap();
+            int[,] map = dw.GetMap();
 
             int col = map.GetLength(0);
             int row = map.GetLength(1);
