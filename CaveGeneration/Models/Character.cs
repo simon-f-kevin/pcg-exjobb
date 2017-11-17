@@ -20,50 +20,76 @@ namespace CaveGeneration.Models
         public float Gravity { get; set; }
 
         private Vector2 oldPosition;
+        private Rectangle boundingRectangle;
 
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
             Texture = texture;
             SpriteBatch = spiteBatch;
-            MaxSpeed = .9f;
-            JumpingHeight = texture.Height;
-            Gravity = .65f;
+            MaxSpeed = 3;
+            JumpingHeight = texture.Height * 2;
+            Gravity = .99f;
         }
 
         public void Update(GameTime gametime)
         {
             UpdatePosition();
             SimulateGravity();
-            Collision();
+            CollisionDetection(gametime);
+           
+        }
+
+        private void CollisionDetection(GameTime gametime)
+        {
+            if (CollisionDetected())
+            {
+                var tmp = oldPosition;
+                Position = tmp;
+            }
+            
+        }
+
+        private bool CollisionDetected()
+        {
+            boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            if(Grid.Instance().IsCollidingWithCell(boundingRectangle))
+            {
+                return true;
+            }
+            return false;
         }
 
         private void SimulateGravity()
         {
-            Position += Vector2.UnitY * Gravity;
+            if (!IsOnGround())
+            {
+                Position += Vector2.UnitY * Gravity;
+            }
         }
 
-        private void Collision()
+        private void CollisionHandling()
         {
             Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
+            if (lastMovement.X == 0) { Position *= Vector2.UnitY; }
+            if (lastMovement.Y == 0) { Position *= Vector2.UnitX; }
         }
 
         private void UpdatePosition()
         {
+            oldPosition = Position;
             KeyboardState kbState = Keyboard.GetState();
 
             if(kbState.IsKeyDown(Keys.Left)) { Position -= Vector2.UnitX * MaxSpeed; }
             if(kbState.IsKeyDown(Keys.Right)) { Position += Vector2.UnitX * MaxSpeed; }
-            if(kbState.IsKeyDown(Keys.Space) || kbState.IsKeyDown(Keys.Up) && IsOnGround()) { Movement -= Vector2.UnitY * JumpingHeight; }
+            if(kbState.IsKeyDown(Keys.Space) && IsOnGround() || kbState.IsKeyDown(Keys.Up) && IsOnGround()) { Position -= Vector2.UnitY * JumpingHeight; }
         }
 
         private bool IsOnGround()
         {
             Rectangle onePixelLower = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             onePixelLower.Offset(0, 1);
-            return !Grid.Instance().IsCollidingWithCell(onePixelLower);
+            return Grid.Instance().IsCollidingWithCell(onePixelLower);
         }
 
         public void Draw()
