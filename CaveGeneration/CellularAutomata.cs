@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration
 {
-    public class CaveGenerator
+    public class CellularAutomata
     {
         public int Width;
         public int Height;
@@ -19,7 +19,7 @@ namespace CaveGeneration
 
         int[,] map;
 
-        public CaveGenerator(int width, int height, int randomFillPercent)
+        public CellularAutomata(int width, int height, int randomFillPercent)
         {
             Width = width;
             Height = height;
@@ -45,11 +45,22 @@ namespace CaveGeneration
             map = new int[Width, Height];
             RandomFillMap();
 
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 1; i++)
             {
                 SmoothMap();
             }
         }
+        private void FillMap()
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    map[x, y] = 1;
+                }
+            }
+        }
+
         private void RandomFillMap()
         {
             if (UseRandomSeed)
@@ -77,11 +88,12 @@ namespace CaveGeneration
 
         private void SmoothMap()
         {
-            for(int x = 0; x < Width; x++)
+            var pm = CopyMap(map);
+            for (int x = 0; x < Width; x++)
             {
                 for(int y = 0; y < Height; y++)
                 {
-                    int neighbourWallTiles = GetSorroundingWallCount(x, y);
+                    int neighbourWallTiles = GetSorroundingWallCount(x, y, map);
 
                     if(neighbourWallTiles > 4)
                     {
@@ -95,7 +107,21 @@ namespace CaveGeneration
             }
         }
 
-        private int GetSorroundingWallCount(int gridX, int gridY)
+        private int[,] CopyMap(int[,] map)
+        {
+            int[,] previousMap = new int[Height, Width];
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    previousMap[x, y] = map[x, y];
+                }
+            }
+
+            return previousMap;
+        }
+
+        private int GetSorroundingWallCount(int gridX, int gridY, int[,] map)
         {
             int wallCount = 0;
             for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)

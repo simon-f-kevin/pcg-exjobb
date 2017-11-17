@@ -41,7 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CaveGenerator.cs" />
+    <Compile Include="CellularAutomata.cs" />
     <Compile Include="DrunkardWalk.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Game1.cs" />

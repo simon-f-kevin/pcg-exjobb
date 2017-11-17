@@ -39,7 +39,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "";
+            seed = "nick";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
@@ -48,8 +48,8 @@ namespace CaveGeneration
             graphics.ApplyChanges();
 
             //Sets the block size
-            blockHeight = 15;
-            blockWidth = 15;
+            blockHeight = 10;
+            blockWidth = 10;
 
             base.Initialize();
         }
@@ -63,7 +63,8 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
-            grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
+            //grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
+            grid = new Grid(100, 100, spriteBatch, block, seed);
 
             // TODO: use this.Content to load your game content here
         }

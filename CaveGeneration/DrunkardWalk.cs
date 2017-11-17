@@ -58,7 +58,7 @@ namespace CaveGeneration
         private void GenerateMap()
         {
             map = new int[Width, Height];
-            RandomFillMap();
+            FillMap();
             MultiWalk(numberOfWalks);
 
             for (int i = 0; i < numberofSmoothings; i++)
@@ -69,7 +69,7 @@ namespace CaveGeneration
         }
 
 
-        private void RandomFillMap()
+        private void FillMap()
         {
             for (int x = 0; x < Width; x++)
             {
