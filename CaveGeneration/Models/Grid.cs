@@ -22,9 +22,24 @@ namespace CaveGeneration.Models
         private DrunkardWalk dw;
         private CellularAutomata cg;
 
+        private static Grid _instance;
 
+        public static Grid CreateNewGrid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
+        {
+            if(_instance == null)
+            {
+                _instance = new Grid(x, y, sb, texture, seed);
+                return _instance;
+            }
+            return _instance;
+        }
 
-        public Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
+        public static Grid Instance()
+        {
+            return _instance;
+        }
+
+        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
         {
             Columns = x;
             Rows = y;
@@ -60,6 +75,21 @@ namespace CaveGeneration.Models
                     }
                 }
             }
+
+            Cells[Columns / 2, Rows / 2].IsVisible = false;
+        }
+
+        public bool IsCollidingWithCell(Rectangle rectangleToCheck)
+        {
+            foreach (var cell in Cells)
+            {
+                var boundingRectangle = new Rectangle((int)cell.Position.X, (int)cell.Position.Y, cell.Texture.Width, cell.Texture.Height);
+                if (cell.IsVisible && boundingRectangle.Intersects(rectangleToCheck))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void Draw()

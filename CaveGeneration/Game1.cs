@@ -15,8 +15,10 @@ namespace CaveGeneration
         SpriteBatch spriteBatch;
 
         Texture2D block;
+        Texture2D characterTexture;
 
         Grid grid;
+        Character player;
 
         string seed;
         int blockHeight;
@@ -48,8 +50,8 @@ namespace CaveGeneration
             graphics.ApplyChanges();
 
             //Sets the block size
-            blockHeight = 10;
-            blockWidth = 10;
+            blockHeight = 15;
+            blockWidth = 15;
 
             base.Initialize();
         }
@@ -63,8 +65,11 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
+            characterTexture = Content.Load<Texture2D>("jumper - magenta");
             //grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
-            grid = new Grid(100, 100, spriteBatch, block, seed);
+            grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
+
+            player = new Character(characterTexture, new Vector2(graphics.GraphicsDevice.Viewport.Width/2, graphics.GraphicsDevice.Viewport.Height/2), spriteBatch);
 
             // TODO: use this.Content to load your game content here
         }
@@ -89,7 +94,7 @@ namespace CaveGeneration
                 Exit();
 
             // TODO: Add your update logic here
-
+            player.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -105,6 +110,7 @@ namespace CaveGeneration
             spriteBatch.Begin();
             //spriteBatch.Draw(block, new Vector2(100,1));
             grid.Draw();
+            player.Draw();
             spriteBatch.End();
 
             

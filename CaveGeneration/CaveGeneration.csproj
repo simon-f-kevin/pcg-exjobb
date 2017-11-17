@@ -45,6 +45,7 @@
     <Compile Include="DrunkardWalk.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Models\Character.cs" />
     <Compile Include="Models\Grid.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

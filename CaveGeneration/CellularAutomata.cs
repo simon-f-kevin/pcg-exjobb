@@ -45,11 +45,12 @@ namespace CaveGeneration
             map = new int[Width, Height];
             RandomFillMap();
 
-            for(int i = 0; i < 1; i++)
+            for(int i = 0; i < 3; i++)
             {
                 SmoothMap();
             }
         }
+
         private void FillMap()
         {
             for (int x = 0; x < Width; x++)
@@ -109,7 +110,7 @@ namespace CaveGeneration
 
         private int[,] CopyMap(int[,] map)
         {
-            int[,] previousMap = new int[Height, Width];
+            int[,] previousMap = new int[Width, Height];
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
