@@ -19,7 +19,7 @@ namespace CaveGeneration.Models
 
         private SpriteBatch _spriteBatch { get; set; }
 
-        private DrunkardWalk dw;
+        private DrunkenCells dw;
         private CellularAutomata cg;
 
         private static Grid _instance;

@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CellularAutomata.cs" />
-    <Compile Include="DrunkardWalk.cs" />
+    <Compile Include="DrunkenCells.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Models\Character.cs" />

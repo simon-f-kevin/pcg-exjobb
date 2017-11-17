@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration
 {
-    class DrunkardWalk
+    class DrunkenCells
     {
         public int Width;
         public int Height;
@@ -33,7 +33,7 @@ namespace CaveGeneration
         }
         */
 
-        public DrunkardWalk(int width, int height)
+        public DrunkenCells(int width, int height)
         {
             this.Width = width;
             this.Height = height;
