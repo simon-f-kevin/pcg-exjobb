@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CaveGeneration.Content_Generation;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,7 @@ namespace CaveGeneration.Models
 
         private SpriteBatch _spriteBatch { get; set; }
 
-        private DrunkenCells dw;
-        private CellularAutomata cg;
+        private MapGenerator mapGenerator;
 
         private static Grid _instance;
 
@@ -39,20 +39,64 @@ namespace CaveGeneration.Models
             return _instance;
         }
 
+        public void Draw()
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Draw(_spriteBatch);
+            }
+        }
+        public bool IsCollidingWithCell(Rectangle rectangleToCheck)
+        {
+            foreach (var cell in Cells)
+            {
+                var boundingRectangle = new Rectangle((int)cell.Position.X, (int)cell.Position.Y, cell.Texture.Width, cell.Texture.Height);
+                if (cell.IsVisible && boundingRectangle.Intersects(rectangleToCheck))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
+        {
+            MovementWrapper move = new MovementWrapper(originalPosition, destination, boundingRectangle);
+
+            for (int i = 1; i <= move.NumberOfStepsToBreakMovementInto; i++)
+            {
+                Vector2 positionToTry = originalPosition + move.OneStep * i;
+                Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, boundingRectangle.Width, boundingRectangle.Height);
+                if (!IsCollidingWithCell(newBoundary))
+                {
+                    move.FurthestAvailableLocationSoFar = positionToTry;
+                }
+                else
+                {
+                    if (move.IsDiagonalMove)
+                    {
+                        move.FurthestAvailableLocationSoFar = CheckPossibleNonDiagonalMovement(move, i);
+                    }
+                    break;
+                }
+            }
+            return move.FurthestAvailableLocationSoFar;
+        }
+
         private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
         {
             Columns = x;
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            cg = new CellularAutomata(Columns, Rows, 45);
+            mapGenerator = new CellularAutomata(Columns, Rows, 45); //change this when choosing algorithm for generation
             Init(seed);
         }
 
         private void Init(string seed)
         {
             Cells = new Cell[Columns, Rows];
-            cg.Start(seed);
+            mapGenerator.Start(seed);
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)
@@ -61,7 +105,7 @@ namespace CaveGeneration.Models
                     Cells[x, y] = new Cell(pos, CellTexture, false);
                 }
             }
-            int[,] map = cg.GetMap();
+            int[,] map = mapGenerator.GetMap();
 
             int col = map.GetLength(0);
             int row = map.GetLength(1);
@@ -79,25 +123,28 @@ namespace CaveGeneration.Models
             Cells[Columns / 2, Rows / 2].IsVisible = false;
         }
 
-        public bool IsCollidingWithCell(Rectangle rectangleToCheck)
+        private Vector2 CheckPossibleNonDiagonalMovement(MovementWrapper move, int i)
         {
-            foreach (var cell in Cells)
+            if (move.IsDiagonalMove)
             {
-                var boundingRectangle = new Rectangle((int)cell.Position.X, (int)cell.Position.Y, cell.Texture.Width, cell.Texture.Height);
-                if (cell.IsVisible && boundingRectangle.Intersects(rectangleToCheck))
-                {
-                    return true;
-                }
+                int stepsLeft = move.NumberOfStepsToBreakMovementInto - (i - 1);
+
+                Vector2 remainingHorizontalMovement = move.OneStep.X * Vector2.UnitX * stepsLeft;
+                move.FurthestAvailableLocationSoFar =
+                    WhereCanIGetTo(move.FurthestAvailableLocationSoFar, move.FurthestAvailableLocationSoFar + remainingHorizontalMovement, move.BoundingRectangle);
+
+                Vector2 remainingVerticalMovement = move.OneStep.Y * Vector2.UnitY * stepsLeft;
+                move.FurthestAvailableLocationSoFar =
+                    WhereCanIGetTo(move.FurthestAvailableLocationSoFar, move.FurthestAvailableLocationSoFar + remainingVerticalMovement, move.BoundingRectangle);
             }
-            return false;
+
+            return move.FurthestAvailableLocationSoFar;
         }
 
-        public void Draw()
+        private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
         {
-            foreach(var cell in Cells)
-            {
-                cell.Draw(_spriteBatch);
-            }
+            return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
+
     }
 }

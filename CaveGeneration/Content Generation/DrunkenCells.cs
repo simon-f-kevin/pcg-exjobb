@@ -5,14 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaveGeneration
+namespace CaveGeneration.Content_Generation
 {
-    class DrunkenCells
+    public class DrunkenCells : MapGenerator
     {
-        public int Width;
-        public int Height;
-
-        int[,] map;
 
         int numberOfWalks = 20;
         int numberOfSteps = 5000;
@@ -33,20 +29,18 @@ namespace CaveGeneration
         }
         */
 
-        public DrunkenCells(int width, int height)
+        public DrunkenCells(int height, int width) : base(height, width)
         {
-            this.Width = width;
-            this.Height = height;
+
         }
 
-        public int[,] GetMap()
+        public override void Start(string seed)
         {
-            return map;
-        }
+            if (seed.Equals(""))
+                UseRandomSeed = true;
 
+            Seed = seed;
 
-        public void Start()
-        {
             GenerateMap();
         }
 

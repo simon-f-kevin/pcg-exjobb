@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using System;
 
 namespace CaveGeneration
 {
@@ -19,6 +20,7 @@ namespace CaveGeneration
 
         Grid grid;
         Character player;
+        Rectangle spawnPoint;
 
         string seed;
         int blockHeight;
@@ -41,17 +43,17 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "nick";
+            seed = "";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height-100;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height-50;
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
 
             //Sets the block size
-            blockHeight = 15;
-            blockWidth = 15;
+            blockHeight = 20;
+            blockWidth = 20;
 
             base.Initialize();
         }
@@ -66,12 +68,34 @@ namespace CaveGeneration
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
             characterTexture = Content.Load<Texture2D>("jumper - magenta");
+            spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             //grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
             grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
-
-            player = new Character(characterTexture, new Vector2(graphics.GraphicsDevice.Viewport.Width/2, graphics.GraphicsDevice.Viewport.Height/2), spriteBatch);
+            TestSpawnPoint();
+            player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
 
             // TODO: use this.Content to load your game content here
+        }
+
+        private void TestSpawnPoint()
+        {
+            int X = graphics.GraphicsDevice.Viewport.Width / 2;
+            int Y = graphics.GraphicsDevice.Viewport.Height / 2;
+
+            for(int y = 0; y <= X * 2; y++)
+            {
+                for(int x = 0; x <= Y * 2; x++)
+                {
+                    if (grid.IsCollidingWithCell(spawnPoint))
+                    {
+                        spawnPoint = new Rectangle(new Point(X + x, Y + y), new Point(characterTexture.Width, characterTexture.Height));
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>

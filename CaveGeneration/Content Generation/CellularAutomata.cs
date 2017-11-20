@@ -5,39 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaveGeneration
+namespace CaveGeneration.Content_Generation
 {
-    public class CellularAutomata
+    public class CellularAutomata : MapGenerator
     {
-        public int Width;
-        public int Height;
-
-        public string Seed;
-        public bool UseRandomSeed;
-
         public int randomFillPercent;
 
-        int[,] map;
-
-        public CellularAutomata(int width, int height, int randomFillPercent)
+        public CellularAutomata(int width, int height, int randomFillPercent) : base(height, width)
         {
-            Width = width;
-            Height = height;
             this.randomFillPercent = randomFillPercent;
         }
 
-        public void Start(string seed)
+        public override void Start(string seed)
         {
             if (seed.Equals(""))
                 UseRandomSeed = true;
 
             Seed = seed;
             GenerateMap();
-        }
-
-        public int[,] GetMap()
-        {
-            return map;
         }
 
         private void GenerateMap()

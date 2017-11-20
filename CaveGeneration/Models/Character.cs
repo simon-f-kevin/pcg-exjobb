@@ -19,82 +19,73 @@ namespace CaveGeneration.Models
         public float JumpingHeight { get; set; }
         public float Gravity { get; set; }
 
+        private Grid grid = Grid.Instance();
+
         private Vector2 oldPosition;
-        private Rectangle boundingRectangle;
 
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
             Texture = texture;
             SpriteBatch = spiteBatch;
-            MaxSpeed = 3;
-            JumpingHeight = texture.Height * 2;
-            Gravity = .99f;
+            MaxSpeed = 2;
+            JumpingHeight = texture.Height;
+            Gravity = 2;
         }
 
         public void Update(GameTime gametime)
         {
-            UpdatePosition();
+            GetInputAndUpdateMovement();
             SimulateGravity();
-            CollisionDetection(gametime);
+            SimulateFriction();
+            UpdatePosition(gametime);
+            CollisionHandling(gametime);
            
         }
-
-        private void CollisionDetection(GameTime gametime)
+        public void Draw()
         {
-            if (CollisionDetected())
-            {
-                var tmp = oldPosition;
-                Position = tmp;
-            }
-            
+            SpriteBatch.Draw(Texture, Position, Color.White);
         }
 
-        private bool CollisionDetected()
+        private void UpdatePosition(GameTime gametime)
         {
-            boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
-            if(Grid.Instance().IsCollidingWithCell(boundingRectangle))
-            {
-                return true;
-            }
-            return false;
+            oldPosition = Position;
+            Position += Movement * (float)gametime.ElapsedGameTime.TotalMilliseconds / 60;
+            Position = grid.WhereCanIGetTo(oldPosition, Position, new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height));
+        }
+
+        private void GetInputAndUpdateMovement()
+        {
+            KeyboardState kbState = Keyboard.GetState();
+
+            if (kbState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * MaxSpeed; }
+            if (kbState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * MaxSpeed; }
+            if (kbState.IsKeyDown(Keys.Space) && IsOnGround() || kbState.IsKeyDown(Keys.Up) && IsOnGround()) { Movement -= Vector2.UnitY * JumpingHeight; }
+        }
+
+        private void CollisionHandling(GameTime gametime)
+        {
+            Vector2 lastMovement = Position - oldPosition;
+            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
+            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
         }
 
         private void SimulateGravity()
         {
-            if (!IsOnGround())
-            {
-                Position += Vector2.UnitY * Gravity;
-            }
+            Movement += Vector2.UnitY * Gravity;
         }
 
-        private void CollisionHandling()
+        private void SimulateFriction()
         {
-            Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Position *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Position *= Vector2.UnitX; }
-        }
-
-        private void UpdatePosition()
-        {
-            oldPosition = Position;
-            KeyboardState kbState = Keyboard.GetState();
-
-            if(kbState.IsKeyDown(Keys.Left)) { Position -= Vector2.UnitX * MaxSpeed; }
-            if(kbState.IsKeyDown(Keys.Right)) { Position += Vector2.UnitX * MaxSpeed; }
-            if(kbState.IsKeyDown(Keys.Space) && IsOnGround() || kbState.IsKeyDown(Keys.Up) && IsOnGround()) { Position -= Vector2.UnitY * JumpingHeight; }
+            if (IsOnGround()) { Movement -= Movement * Vector2.One * .08f; }
+            else { Movement -= Movement * Vector2.One * .02f; }
         }
 
         private bool IsOnGround()
         {
             Rectangle onePixelLower = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             onePixelLower.Offset(0, 1);
-            return Grid.Instance().IsCollidingWithCell(onePixelLower);
-        }
-
-        public void Draw()
-        {
-            SpriteBatch.Draw(Texture, Position, Color.White);
+            return grid.IsCollidingWithCell(onePixelLower);
         }
 
     }
