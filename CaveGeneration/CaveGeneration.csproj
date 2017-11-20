@@ -41,12 +41,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Content Generation\CellularAutomata.cs" />
-    <Compile Include="Content Generation\DrunkenCells.cs" />
-    <Compile Include="Content Generation\MapGenerator.cs" />
+    <Compile Include="Content Generation\Map Generation\CellularAutomata.cs" />
+    <Compile Include="Content Generation\Map Generation\DrunkenCells.cs" />
+    <Compile Include="Content Generation\Goal Placement\GoalPlacer.cs" />
+    <Compile Include="Content Generation\Map Generation\MapGenerator.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Models\Character.cs" />
+    <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Grid.cs" />
     <Compile Include="Models\MovementWrapper.cs" />
     <Compile Include="Program.cs" />

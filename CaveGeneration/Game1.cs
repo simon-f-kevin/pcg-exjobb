@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using System;
+using CaveGeneration.Content_Generation.Goal_Placement;
 
 namespace CaveGeneration
 {
@@ -17,10 +18,12 @@ namespace CaveGeneration
 
         Texture2D block;
         Texture2D characterTexture;
+        Texture2D goalTexture;
 
         Grid grid;
         Character player;
         Rectangle spawnPoint;
+        Goal goal;
 
         string seed;
         int blockHeight;
@@ -68,34 +71,17 @@ namespace CaveGeneration
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
             characterTexture = Content.Load<Texture2D>("jumper - magenta");
+            goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
-            //grid = new Grid(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height, spriteBatch, block, seed);
+            
             grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
-            TestSpawnPoint();
+            goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
+            StartAndGoalPlacer startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
+            spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
+            goal = startAndGoalPlacer.GenerateReachableGoalPosition();
 
             // TODO: use this.Content to load your game content here
-        }
-
-        private void TestSpawnPoint()
-        {
-            int X = graphics.GraphicsDevice.Viewport.Width / 2;
-            int Y = graphics.GraphicsDevice.Viewport.Height / 2;
-
-            for(int y = 0; y <= X * 2; y++)
-            {
-                for(int x = 0; x <= Y * 2; x++)
-                {
-                    if (grid.IsCollidingWithCell(spawnPoint))
-                    {
-                        spawnPoint = new Rectangle(new Point(X + x, Y + y), new Point(characterTexture.Width, characterTexture.Height));
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -135,6 +121,7 @@ namespace CaveGeneration
             //spriteBatch.Draw(block, new Vector2(100,1));
             grid.Draw();
             player.Draw();
+            goal.Draw();
             spriteBatch.End();
 
             
@@ -159,6 +146,8 @@ namespace CaveGeneration
 
             return texture;
         }
+
+        
 
     }
 }

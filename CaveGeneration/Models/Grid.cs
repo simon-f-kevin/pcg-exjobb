@@ -1,4 +1,4 @@
-﻿using CaveGeneration.Content_Generation;
+﻿using CaveGeneration.Content_Generation.Map_Generation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -66,7 +66,7 @@ namespace CaveGeneration.Models
             for (int i = 1; i <= move.NumberOfStepsToBreakMovementInto; i++)
             {
                 Vector2 positionToTry = originalPosition + move.OneStep * i;
-                Rectangle newBoundary = CreateRectangleAtPosition(positionToTry, boundingRectangle.Width, boundingRectangle.Height);
+                Rectangle newBoundary = new Rectangle((int)positionToTry.X, (int)positionToTry.Y, boundingRectangle.Width, boundingRectangle.Height);
                 if (!IsCollidingWithCell(newBoundary))
                 {
                     move.FurthestAvailableLocationSoFar = positionToTry;
@@ -139,11 +139,6 @@ namespace CaveGeneration.Models
             }
 
             return move.FurthestAvailableLocationSoFar;
-        }
-
-        private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
-        {
-            return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaveGeneration.Content_Generation
+namespace CaveGeneration.Content_Generation.Map_Generation
 {
     public class CellularAutomata : MapGenerator
     {
