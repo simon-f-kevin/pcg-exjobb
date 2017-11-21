@@ -24,6 +24,7 @@ namespace CaveGeneration
         Character player;
         Rectangle spawnPoint;
         Goal goal;
+        StartAndGoalPlacer startAndGoalPlacer
 
         string seed;
         int blockHeight;
@@ -76,7 +77,7 @@ namespace CaveGeneration
             
             grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
-            StartAndGoalPlacer startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
+            startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
