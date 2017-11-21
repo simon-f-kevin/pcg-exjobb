@@ -10,10 +10,10 @@ namespace CaveGeneration.Content_Generation.Map_Generation
     public class DrunkenCells : MapGenerator
     {
 
-        int numberOfWalks = 20;
-        int numberOfSteps = 5000;
-        int numberofSmoothings = 7;
-        int distanceBetweenWalks = 7;
+        int numberOfWalks = 10;
+        int numberOfSteps = 10000;
+        int numberofSmoothings = 3;
+        int distanceBetweenWalks = 5;
 
         Random rand = new Random();
 
@@ -29,7 +29,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         */
 
-        public DrunkenCells(int height, int width) : base(height, width)
+        public DrunkenCells(int width, int height) : base(height, width)
         {
 
         }
@@ -42,9 +42,19 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             Seed = seed;
 
             GenerateMap();
+
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
+                    {
+                        map[x, y] = 1;
+                    }
+                }
+            }
+
         }
-
-
 
         #region Private methods below
 
@@ -87,41 +97,43 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         private void Walk(int StartX, int StartY)
         {
-
+            int upChance = 20;      //Ignore this column
+            int downChance = 20     + upChance;
+            int leftChance = 20     + downChance;
+            int rightChance = 40    + leftChance;
 
             for (int i = 0; i < numberOfSteps; i++)
             {
                 StartX = MathHelper.Clamp(StartX, 0, Width - 1);
                 StartY = MathHelper.Clamp(StartY, 0, Height - 1);
 
-                int rnd = rand.Next(9);
-                switch (rnd)
+                int rnd = rand.Next(100);
+
+
+                if(rnd < upChance)
                 {
-                    case 0:
-                    case 1:
-                        if (StartY > 0)
-                            map[StartX, StartY--] = 0;
-                        break;
-                    case 2:
-                    case 3:
-                        if (StartY < Height)
-                            map[StartX, StartY++] = 0;
-                        break;
-                    case 4:
-                    case 5:
-                        if (StartX > 0)
-                            map[StartX--, StartY] = 0;
-                        break;
-                    case 6:
-                    case 7:
-                    case 8:
-                        if (StartX < Width)
-                            map[StartX++, StartY] = 0;
-                        break;
+                    map[StartX, StartY--] = 0;
                 }
+                else if (rnd < downChance)
+                {
+                    map[StartX, StartY++] = 0;
+                }
+                else if (rnd < leftChance){
+                    map[StartX--, StartY] = 0;
+                }
+                else if (rnd < rightChance)
+                {
+                    map[StartX++, StartY] = 0;
+                }
+
             }
-            Console.WriteLine();
+
         }
+
+
+
+
+
 
 
 
