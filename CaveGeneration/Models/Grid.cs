@@ -89,7 +89,7 @@ namespace CaveGeneration.Models
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            mapGenerator = new CellularAutomata(Columns, Rows, 45); //change this when choosing algorithm for generation
+            mapGenerator = new DrunkenCells(Columns, Rows); //change this when choosing algorithm for generation
             Init(seed);
         }
 
