@@ -72,9 +72,9 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             var width = Goal.Texture.Width;
             var height = Goal.Texture.Height;
             Goal.Position = new Vector2(width, Map.GetLength(1));
-            for (int X = width; X < Map.GetLength(0) * width; X++)
-            {
-                for (int Y = height; Y < Map.GetLength(1) - 1 * height; Y++)
+            for (int X = Map.GetLength(0) * width -1; X > width; --X)
+                {
+                for (int Y = height; Y < (Map.GetLength(1) - 1) * height; Y++)
                 {
                     if (grid.IsCollidingWithCell(Goal.BoundingRectangle))
                     {
