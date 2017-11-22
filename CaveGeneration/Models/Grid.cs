@@ -24,11 +24,11 @@ namespace CaveGeneration.Models
 
         private static Grid _instance;
 
-        public static Grid CreateNewGrid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
+        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed)
         {
             if(_instance == null)
             {
-                _instance = new Grid(x, y, sb, texture, seed);
+                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed);
                 return _instance;
             }
             return _instance;
@@ -89,7 +89,7 @@ namespace CaveGeneration.Models
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            mapGenerator = new DrunkenCells(Columns, Rows); //change this when choosing algorithm for generation
+            mapGenerator = new CellularAutomata(Columns, Rows, randomFillPercent: 45); //change this when choosing algorithm for generation
             Init(seed);
         }
 

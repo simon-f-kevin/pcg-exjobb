@@ -24,7 +24,7 @@ namespace CaveGeneration
         Character player;
         Rectangle spawnPoint;
         Goal goal;
-        StartAndGoalPlacer startAndGoalPlacer
+        StartAndGoalPlacer startAndGoalPlacer;
 
         string seed;
         int blockHeight;
@@ -47,7 +47,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "";
+            seed = "björn";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
@@ -81,6 +81,7 @@ namespace CaveGeneration
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
+            //goal.BoundingRectangle = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(goalTexture.Width, goalTexture.Height));
 
             // TODO: use this.Content to load your game content here
         }

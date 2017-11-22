@@ -11,7 +11,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
     {
         public int randomFillPercent;
 
-        public CellularAutomata(int width, int height, int randomFillPercent) : base(height, width)
+        public CellularAutomata(int width, int height, int randomFillPercent) : base(width, height)
         {
             this.randomFillPercent = randomFillPercent;
         }

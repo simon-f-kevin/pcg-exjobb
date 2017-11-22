@@ -29,7 +29,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         */
 
-        public DrunkenCells(int width, int height) : base(height, width)
+        public DrunkenCells(int width, int height) : base(width, height)
         {
 
         }

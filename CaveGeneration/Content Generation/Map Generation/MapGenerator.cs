@@ -16,7 +16,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         public bool UseRandomSeed;
         public string Seed;
 
-        public MapGenerator(int height, int width)
+        public MapGenerator(int width, int height)
         {
             Height = height;
             Width = width;

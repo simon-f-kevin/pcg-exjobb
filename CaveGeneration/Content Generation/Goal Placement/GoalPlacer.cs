@@ -45,34 +45,15 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             return Goal;
         }
 
-        private Goal GenerateFirstValidGoalPosition()
-        {
-            Goal.Position = new Vector2(0, Map.GetLength(0));
-            var width = Goal.Texture.Width;
-            for (int y = 0; y < Map.GetLength(1); y++)
-            {
-                for (int x = Map.GetLength(0) - 1 ; x > 0; x--)
-                {
-                    if (grid.IsCollidingWithCell(Goal.BoundingRectangle))
-                    {
-                        Goal.Position = new Vector2(x, y);
-                        Goal.BoundingRectangle = new Rectangle(new Point(x * width, y * width), new Point(Goal.Texture.Width, Goal.Texture.Height));
-                    }
-                    else { break; }
-                }
-            }
-            return Goal;
-        }
-
         private void TestSpawnPoint()
         {
             int X = graphics.GraphicsDevice.Viewport.Width / 2;
             int Y = graphics.GraphicsDevice.Viewport.Height / 2;
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(playerTexture.Width, playerTexture.Height));
 
-            for (int y = 0; y < X * 2; y++)
+            for (int x = 0; x < X * 2; x++)
             {
-                for (int x = 0; x < Y * 2; x++)
+                for (int y = 0; y < Y * 2; y++)
                 {
                     if (grid.IsCollidingWithCell(spawnPoint))
                     {
@@ -85,19 +66,47 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
                 }
             }
         }
+
+        private Goal GenerateFirstValidGoalPosition()
+        {
+            var width = Goal.Texture.Width;
+            var height = Goal.Texture.Height;
+            Goal.Position = new Vector2(width, Map.GetLength(1));
+            for (int X = width; X < Map.GetLength(0) * width; X++)
+            {
+                for (int Y = height; Y < Map.GetLength(1) - 1 * height; Y++)
+                {
+                    if (grid.IsCollidingWithCell(Goal.BoundingRectangle))
+                    {
+                        Goal.Position = new Vector2(X, Y);
+                        Goal.BoundingRectangle = new Rectangle(new Point(X , Y ), new Point(Goal.Texture.Width, Goal.Texture.Height));
+                    }
+                    else { break; }
+                }
+            }
+            return Goal;
+        }
+
         private bool IsGoalOnGround()
         {
+            bool tmp = false;
             Rectangle onePixelLower = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width));
             onePixelLower.Offset(0, 1);
-            return (grid.IsCollidingWithCell(onePixelLower) && !grid.IsCollidingWithCell(new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width))));
+            if(grid.IsCollidingWithCell(onePixelLower) && !grid.IsCollidingWithCell(new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width))))
+            {
+                tmp = true;
+            }
+           
+            return tmp;
         }
 
         private void MoveGoalToGround()
         {
             var width = Goal.Texture.Width;
+            var height = Goal.Texture.Height;
             while (!IsGoalOnGround())
             {
-                Goal.Position = new Vector2(Goal.Position.X, MathHelper.Clamp(Goal.Position.Y + 1, 0, graphics.GraphicsDevice.Viewport.Height-50));
+                Goal.Position = new Vector2(Goal.Position.X, MathHelper.Clamp((Goal.Position.Y + height), 0, graphics.GraphicsDevice.Viewport.Height - 50));
                 Goal.BoundingRectangle = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Width, Goal.Texture.Height));
             }
         }
