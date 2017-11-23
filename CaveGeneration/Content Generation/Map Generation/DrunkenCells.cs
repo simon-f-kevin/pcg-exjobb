@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CaveGeneration.Content_Generation.Map_Cleanup;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,9 +66,11 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             FillMap();
             MultiWalk(numberOfWalks);
 
+            CellularAutomata ca = new CellularAutomata(Width, Height, map);
+
             for (int i = 0; i < numberofSmoothings; i++)
             {
-                SmoothMap();
+                ca.SmoothMap();
             }
 
         }
@@ -128,58 +131,6 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
             }
 
-        }
-
-
-
-
-
-
-
-
-
-        private void SmoothMap()
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    int neighbourWallTiles = GetSorroundingWallCount(x, y);
-
-                    if (neighbourWallTiles > 4)
-                    {
-                        map[x, y] = 1;
-                    }
-                    else if (neighbourWallTiles < 4)
-                    {
-                        map[x, y] = 0;
-                    }
-                }
-            }
-        }
-
-        private int GetSorroundingWallCount(int gridX, int gridY)
-        {
-            int wallCount = 0;
-            for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
-            {
-                for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
-                {
-                    if (neighbourX >= 0 && neighbourX < Width && neighbourY >= 0 && neighbourY < Height)
-                    {
-                        if (neighbourX != gridX || neighbourY != gridY)
-                        {
-                            wallCount += map[neighbourX, neighbourY];
-                        }
-                    }
-                    else
-                    {
-                        wallCount++;
-                    }
-                }
-            }
-
-            return wallCount;
         }
 #endregion
 

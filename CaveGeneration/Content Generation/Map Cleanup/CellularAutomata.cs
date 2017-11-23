@@ -5,74 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaveGeneration.Content_Generation.Map_Generation
+namespace CaveGeneration.Content_Generation.Map_Cleanup
 {
-    public class CellularAutomata : MapGenerator
-    {
-        public int randomFillPercent;
+    public class CellularAutomata {
+        private int Width;
+        private int Height;
+        private int[,] map;
 
-        public CellularAutomata(int width, int height, int randomFillPercent) : base(width, height)
+        public CellularAutomata(int width, int height, int[,] Map)
         {
-            this.randomFillPercent = randomFillPercent;
+            this.Width = width;
+            this.Height = height;
+            this.map = Map;
+
         }
 
-        public override void Start(string seed)
-        {
-            if (seed.Equals(""))
-                UseRandomSeed = true;
-
-            Seed = seed;
-            GenerateMap();
-        }
-
-        private void GenerateMap()
-        {
-            map = new int[Width, Height];
-            RandomFillMap();
-
-            for(int i = 0; i < 3; i++)
-            {
-                SmoothMap();
-            }
-        }
-
-        private void FillMap()
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    map[x, y] = 1;
-                }
-            }
-        }
-
-        private void RandomFillMap()
-        {
-            if (UseRandomSeed)
-            {
-                Seed = DateTime.Now.ToString();
-            }
-            
-            Random pseudoRandom = new Random(Seed.GetHashCode());
-
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
-                    {
-                        map[x, y] = 1;
-                    }
-                    else
-                    {
-                        map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
-                    }
-                }
-            }
-        }
-
-        private void SmoothMap()
+        public void SmoothMap()
         {
             var pm = CopyMap(map);
             for (int x = 0; x < Width; x++)
