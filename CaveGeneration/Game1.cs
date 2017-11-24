@@ -47,7 +47,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "björn";
+            seed = "";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
@@ -71,17 +71,16 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
-            characterTexture = Content.Load<Texture2D>("jumper - magenta");
+            characterTexture = Content.Load<Texture2D>("skeleton_2");
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             
-            grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
+            grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed, 1);
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
-            //goal.BoundingRectangle = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(goalTexture.Width, goalTexture.Height));
 
             // TODO: use this.Content to load your game content here
         }

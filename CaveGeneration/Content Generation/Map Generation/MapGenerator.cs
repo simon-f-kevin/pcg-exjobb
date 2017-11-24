@@ -22,7 +22,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             Width = width;
         }
 
-        public abstract void Start(string seed);
+        public abstract void Start(string seed, int iterationsOfSmoothmap);
 
         public int[,] GetMap()
         {

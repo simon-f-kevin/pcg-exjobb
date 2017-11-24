@@ -24,11 +24,11 @@ namespace CaveGeneration.Models
 
         private static Grid _instance;
 
-        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed)
+        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap)
         {
             if(_instance == null)
             {
-                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed);
+                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap);
                 return _instance;
             }
             return _instance;
@@ -83,20 +83,20 @@ namespace CaveGeneration.Models
             return move.FurthestAvailableLocationSoFar;
         }
 
-        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed)
+        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap)
         {
             Columns = x;
             Rows = y;
             _spriteBatch = sb;
             CellTexture = texture;
             mapGenerator = new RandomPlacement(Columns, Rows, randomFillPercent: 45); //change this when choosing algorithm for generation
-            Init(seed);
+            Init(seed, iterationsOfSmoothmap);
         }
 
-        private void Init(string seed)
+        private void Init(string seed, int iterationsOfSmoothmap)
         {
             Cells = new Cell[Columns, Rows];
-            mapGenerator.Start(seed);
+            mapGenerator.Start(seed, iterationsOfSmoothmap);
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)

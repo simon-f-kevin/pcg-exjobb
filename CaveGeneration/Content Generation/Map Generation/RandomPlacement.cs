@@ -16,23 +16,23 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             this.randomFillPercent = randomFillPercent;
         }
 
-        public override void Start(string seed)
+        public override void Start(string seed, int iterationsOfSmoothmap)
         {
             if (seed.Equals(""))
                 UseRandomSeed = true;
 
             Seed = seed;
-            GenerateMap();
+            GenerateMap(iterationsOfSmoothmap);
         }
 
-        private void GenerateMap()
+        private void GenerateMap(int iterationsOfSmoothmap)
         {
             map = new int[Width, Height];
             RandomFillMap();
 
             CellularAutomata ca = new CellularAutomata(Width, Height, map);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < iterationsOfSmoothmap; i++)
             {
                 ca.SmoothMap();
             }

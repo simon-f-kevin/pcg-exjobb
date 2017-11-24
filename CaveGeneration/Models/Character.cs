@@ -14,13 +14,12 @@ namespace CaveGeneration.Models
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
-        public SpriteBatch SpriteBatch { get; set; }
         public float MaxSpeed { get; set; }
         public float JumpingHeight { get; set; }
         public float Gravity { get; set; }
 
         private Grid grid = Grid.Instance();
-
+        private SpriteBatch SpriteBatch;
         private Vector2 oldPosition;
 
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)

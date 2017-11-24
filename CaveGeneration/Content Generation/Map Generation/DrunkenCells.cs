@@ -13,10 +13,10 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
         int numberOfWalks = 10;
         int numberOfSteps = 10000;
-        int numberofSmoothings = 3;
         int distanceBetweenWalks = 5;
 
         Random rand = new Random();
+        int numberofSmoothings;
 
         /* 
         public DIRECTION WeightedDirection;
@@ -35,13 +35,13 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
         }
 
-        public override void Start(string seed)
+        public override void Start(string seed, int iterations)
         {
             if (seed.Equals(""))
                 UseRandomSeed = true;
 
             Seed = seed;
-
+            numberofSmoothings = iterations;
             GenerateMap();
 
             for (int x = 0; x < Width; x++)
