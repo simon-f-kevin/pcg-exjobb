@@ -48,8 +48,8 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         private void TestSpawnPoint()
         {
             int X = graphics.GraphicsDevice.Viewport.Width / 2;
-            int Y = graphics.GraphicsDevice.Viewport.Height / 2;
-            spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(playerTexture.Width, playerTexture.Height));
+            int Y = graphics.GraphicsDevice.Viewport.Height / 4;
+            spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 4), new Point(playerTexture.Width, playerTexture.Height));
 
             for (int x = 0; x < X * 2; x++)
             {
