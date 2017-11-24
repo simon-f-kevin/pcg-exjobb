@@ -19,6 +19,8 @@ namespace CaveGeneration.Models
         public float JumpingHeight { get; set; }
         public float Gravity { get; set; }
 
+        public bool Alive { get; set; }
+
         private Grid grid = Grid.Instance();
 
         private Vector2 oldPosition;
@@ -31,6 +33,7 @@ namespace CaveGeneration.Models
             MaxSpeed = 2;
             JumpingHeight = texture.Height;
             Gravity = 2;
+            Alive = true;
         }
 
         public void Update(GameTime gametime)
