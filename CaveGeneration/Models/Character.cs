@@ -79,7 +79,14 @@ namespace CaveGeneration.Models
 
         private void SimulateFriction()
         {
-            if (IsOnGround()) { Movement -= Movement * Vector2.One * .08f; }
+            if (IsOnGround())
+            {
+                KeyboardState kbState = Keyboard.GetState();
+                if (!kbState.IsKeyDown(Keys.Space) && !kbState.IsKeyDown(Keys.Up))
+                {
+                    Movement -= Movement * Vector2.One * .08f;
+                }
+            }
             else { Movement -= Movement * Vector2.One * .02f; }
         }
 
