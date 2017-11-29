@@ -55,7 +55,7 @@ namespace CaveGeneration
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height - 50;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
 
