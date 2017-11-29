@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration.Content_Generation.Map_Generation
 {
-    public class DrunkenCells : MapGenerator
+    public class DrunkardWalk : MapGenerator
     {
 
         int numberOfWalks = 10;
-        int numberOfSteps = 10000;
+        int numberOfSteps = 1000;
         int distanceBetweenWalks = 5;
 
         Random rand = new Random();
@@ -30,7 +30,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         */
 
-        public DrunkenCells(int width, int height) : base(width, height)
+        public DrunkardWalk(int width, int height) : base(width, height)
         {
 
         }
