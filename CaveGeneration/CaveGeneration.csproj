@@ -52,6 +52,7 @@
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Grid.cs" />
+    <Compile Include="Models\Input.cs" />
     <Compile Include="Models\MovementWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

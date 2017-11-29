@@ -58,23 +58,11 @@ namespace CaveGeneration.Models
 
         private void GetInputAndUpdateMovement()
         {
-            KeyboardState kbState = Keyboard.GetState();
+            var actions = Input.GetInput();
 
-            
-            GamePadState gpState = GamePad.GetState(PlayerIndex.Two);
-            if (gpState.IsConnected)
-            {
-                Console.WriteLine("YES");
-            }
-            else
-            {
-                Console.WriteLine("NO");
-            }
-
-
-            if (kbState.IsKeyDown(Keys.Left) || gpState.IsButtonDown(Buttons.DPadLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
-            if (kbState.IsKeyDown(Keys.Right) || gpState.IsButtonDown(Buttons.DPadRight)) { Movement += Vector2.UnitX * MaxSpeed; }
-            if (IsOnGround() && (kbState.IsKeyDown(Keys.Space) || kbState.IsKeyDown(Keys.Up) || gpState.IsButtonDown(Buttons.DPadUp))) { Movement -= Vector2.UnitY * JumpingHeight; }
+            if (actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
+            if (actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
+            if (IsOnGround() && (actions.Contains(Action.MoveUp))) { Movement -= Vector2.UnitY * JumpingHeight; }
         }
 
         private void CollisionHandling(GameTime gametime)
