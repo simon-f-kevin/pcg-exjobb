@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Content Generation\AI\AStarAgent.cs" />
+    <Compile Include="Content Generation\AI\PriorityQueueB.cs" />
     <Compile Include="Content Generation\Goal Placement\GoalPlacer.cs" />
     <Compile Include="Content Generation\Map Cleanup\CellularAutomata.cs" />
     <Compile Include="Content Generation\Map Generation\DrunkardWalk.cs" />
