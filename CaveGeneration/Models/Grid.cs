@@ -59,6 +59,17 @@ namespace CaveGeneration.Models
             return false;
         }
 
+        public bool IsGround(int x, int y)
+        {
+            if (Cells[x, y].IsVisible) return true;
+            else return false;
+        }
+
+        public bool IsOneWayPlatform(int x, int v)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
         {
             MovementWrapper move = new MovementWrapper(originalPosition, destination, boundingRectangle);
