@@ -14,13 +14,14 @@ namespace CaveGeneration.Models
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
-        public SpriteBatch SpriteBatch { get; set; }
         public float MaxSpeed { get; set; }
         public float JumpingHeight { get; set; }
         public float Gravity { get; set; }
 
-        private Grid grid = Grid.Instance();
+        public bool Alive { get; set; }
 
+        private Grid grid = Grid.Instance();
+        private SpriteBatch SpriteBatch;
         private Vector2 oldPosition;
 
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
@@ -31,6 +32,7 @@ namespace CaveGeneration.Models
             MaxSpeed = 2;
             JumpingHeight = texture.Height;
             Gravity = 2;
+            Alive = true;
         }
 
         public void Update(GameTime gametime)
@@ -56,11 +58,11 @@ namespace CaveGeneration.Models
 
         private void GetInputAndUpdateMovement()
         {
-            KeyboardState kbState = Keyboard.GetState();
+            var actions = Input.GetInput();
 
-            if (kbState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * MaxSpeed; }
-            if (kbState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * MaxSpeed; }
-            if (kbState.IsKeyDown(Keys.Space) && IsOnGround() || kbState.IsKeyDown(Keys.Up) && IsOnGround()) { Movement -= Vector2.UnitY * JumpingHeight; }
+            if (actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
+            if (actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
+            if (IsOnGround() && (actions.Contains(Action.MoveUp))) { Movement -= Vector2.UnitY * JumpingHeight; }
         }
 
         private void CollisionHandling(GameTime gametime)
@@ -77,7 +79,14 @@ namespace CaveGeneration.Models
 
         private void SimulateFriction()
         {
-            if (IsOnGround()) { Movement -= Movement * Vector2.One * .08f; }
+            if (IsOnGround())
+            {
+                KeyboardState kbState = Keyboard.GetState();
+                if (!kbState.IsKeyDown(Keys.Space) && !kbState.IsKeyDown(Keys.Up))
+                {
+                    Movement -= Movement * Vector2.One * .08f;
+                }
+            }
             else { Movement -= Movement * Vector2.One * .02f; }
         }
 

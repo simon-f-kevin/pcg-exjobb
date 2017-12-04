@@ -15,6 +15,7 @@ namespace CaveGeneration
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Camera camera;
 
         Texture2D block;
         Texture2D characterTexture;
@@ -25,6 +26,9 @@ namespace CaveGeneration
         Rectangle spawnPoint;
         Goal goal;
         StartAndGoalPlacer startAndGoalPlacer;
+
+        public Vector2 playerPosition;
+        public Rectangle playerRectangle;
 
         string seed;
         int blockHeight;
@@ -47,17 +51,19 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "björn";
+            seed = "dummathomas";
 
             // Sets the window-size
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width-100;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height-50;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
 
             //Sets the block size
             blockHeight = 20;
             blockWidth = 20;
+
+            camera = new Camera(GraphicsDevice.Viewport);
 
             base.Initialize();
         }
@@ -71,18 +77,18 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
-            characterTexture = Content.Load<Texture2D>("jumper - magenta");
+            characterTexture = Content.Load<Texture2D>("skeleton_5");
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             
-            grid = Grid.CreateNewGrid(80, 50, spriteBatch, block, seed);
+            grid = Grid.CreateNewGrid(200, 20, spriteBatch, block, seed, 1);
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
-            //goal.BoundingRectangle = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(goalTexture.Width, goalTexture.Height));
 
+            playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
             // TODO: use this.Content to load your game content here
         }
 
@@ -102,11 +108,19 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            playerPosition = player.Position;
+            playerRectangle.X = (int)playerPosition.X;
+            playerRectangle.Y = (int)playerPosition.Y;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            if (!player.Alive)
+            {
+                Exit();
+            }
             // TODO: Add your update logic here
             player.Update(gameTime);
+            camera.Update(gameTime, this);
             base.Update(gameTime);
         }
 
@@ -119,7 +133,7 @@ namespace CaveGeneration
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
             //spriteBatch.Draw(block, new Vector2(100,1));
             grid.Draw();
             player.Draw();
