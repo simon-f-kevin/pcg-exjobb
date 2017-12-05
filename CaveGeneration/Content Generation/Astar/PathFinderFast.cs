@@ -82,8 +82,8 @@ namespace CaveGeneration.Content_Generation.Astar
         private bool                            mStop                   = false;
         private bool                            mStopped                = true;
         private int                             mHoriz                  = 0;
-        private HeuristicFormula                mFormula                = HeuristicFormula.Manhattan;
-        private bool                            mDiagonals              = true;
+        private HeuristicFormula                mFormula                = HeuristicFormula.DiagonalShortCut;
+        private bool                            mDiagonals              = false;
         private int                             mHEstimate              = 2;
         private bool                            mPunishChangeDirection  = false;
         private bool                            mTieBreaker             = false;
@@ -128,7 +128,7 @@ namespace CaveGeneration.Content_Generation.Astar
             mGridX          = (ushort) (mGrid.GetUpperBound(0) + 1);
             mGridY          = (ushort) (mGrid.GetUpperBound(1) + 1);
             mGridXMinus1    = (ushort) (mGridX - 1);
-            mGridXLog2      = (ushort) Math.Log(mGridY, 2);
+            mGridXLog2      = (ushort) Math.Log(mGridX, 2);
 
             // This should be done at the constructor, for now we leave it here.
             if (Math.Log(mGridX, 2) != (int) Math.Log(mGridX, 2) ||
@@ -227,16 +227,19 @@ namespace CaveGeneration.Content_Generation.Astar
             mStop = true;
         }
 
-        public List<Vector2> FindPath(Vector2 start, Vector2 end, int characterWidth, int characterHeight, short maxCharacterJumpHeight)
+        public List<Vector2> FindPath(Vector2 startPixels, Vector2 endPixels, int characterWidth, int characterHeightPixels, short maxCharacterJumpHeight)
         {
+            var end = endPixels / 20;
+            var start = startPixels / 20;
+            var characterHeight = characterHeightPixels / 20;
             lock (this)
             {
 
                 while (touchedLocations.Count > 0)
                     nodes[touchedLocations.Pop()].Clear();
 
-                if (mGrid[(int)end.X, (int)end.Y] == 0)
-                    return null;
+                //if (mGrid[(int)end.X, (int)end.Y] == 0)
+                //    return null;
 
                 mFound              = false;
                 mStop               = false;
@@ -295,13 +298,18 @@ namespace CaveGeneration.Content_Generation.Astar
                     //Lets calculate each successors
                     for (var i = 0; i < (mDiagonals ? 8 : 4); i++)
                     {
-                        mNewLocationX = (ushort)(mLocationX + mDirection[i, 0]);
+                        mNewLocationX = (ushort)(mLocationX + mDirection[i, 0]);                        
                         mNewLocationY = (ushort)(mLocationY + mDirection[i, 1]);
+                        //if(mDirection[i, 1] == -1)
+                        //{
+                        //    mNewLocationY = (ushort)(mLocationY + 1);
+                        //}
                         mNewLocation = (mNewLocationY << mGridXLog2) + mNewLocationX;
 
                         var onGround = false;
                         var atCeiling = false;
-
+                        //if (mNewLocationX == mGrid.GetLength(0)) mNewLocationX = (ushort)(mNewLocationX - 1); 
+                        //if (mNewLocationY == mGrid.GetLength(1)) mNewLocationY = (ushort)(mNewLocationY - 1);
                         if (mGrid[mNewLocationX, mNewLocationY] == 0)
                             goto CHILDREN_LOOP_END;
 

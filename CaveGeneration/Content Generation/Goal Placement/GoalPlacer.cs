@@ -11,8 +11,6 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         private Goal Goal;
         private Rectangle spawnPoint;
 
-        private PathFinderFast Astar;
-
         private Cell[,] Map;
         private Grid grid = Grid.Instance();
         private Texture2D playerTexture;
@@ -56,17 +54,17 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
 
         private void TestSpawnPoint()
         {
-            int X = graphics.GraphicsDevice.Viewport.Width / 2;
-            int Y = graphics.GraphicsDevice.Viewport.Height / 4;
-            spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 4), new Point(playerTexture.Width, playerTexture.Height));
+            int X = Map.GetLength(0) * 20;
+            int Y = Map.GetLength(1) / 2;
+            spawnPoint = new Rectangle(new Point(0, 0), new Point(playerTexture.Width, playerTexture.Height));
 
-            for (int x = 0; x < X * 2; x++)
+            for (int x = 1; x < X; x++)
             {
-                for (int y = 0; y < Y * 2; y++)
+                for (int y = 0; y < Y - 1; y++)
                 {
                     if (grid.IsCollidingWithCell(spawnPoint))
                     {
-                        spawnPoint = new Rectangle(new Point(X + x, Y + y), new Point(playerTexture.Width, playerTexture.Height));
+                        spawnPoint = new Rectangle(new Point(x * playerTexture.Width, y * playerTexture.Height), new Point(playerTexture.Width, playerTexture.Height));
                     }
                     else
                     {

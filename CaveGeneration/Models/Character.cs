@@ -87,7 +87,7 @@ namespace CaveGeneration.Models
                     Movement -= Movement * Vector2.One * .08f;
                 }
             }
-            else { Movement -= Movement * Vector2.One * .02f; }
+            else { Movement -= Movement * Vector2.One * .01f; }
         }
 
         private bool IsOnGround()
