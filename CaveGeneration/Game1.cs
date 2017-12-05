@@ -31,7 +31,6 @@ namespace CaveGeneration
         public Vector2 playerPosition;
         public Rectangle playerRectangle;
 
-        private PathFinderFast Astar;
 
         string seed;
         int blockHeight;
@@ -91,11 +90,8 @@ namespace CaveGeneration
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             startAndGoalPlacer.SetPlayer(player);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
-
-
             
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
-            //TestIfMapSolveable();
             // TODO: use this.Content to load your game content here
         }
 
@@ -127,6 +123,7 @@ namespace CaveGeneration
             }
             if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
+                System.Threading.Thread.Sleep(1000);
                 Exit();
             }
             // TODO: Add your update logic here
@@ -174,25 +171,25 @@ namespace CaveGeneration
             return texture;
         }
 
-        private void TestIfMapSolveable()
-        {
-            int[,] intArray = grid.GetCellsAsIntArray();
-            byte[,] result = new byte[(int)Math.Pow(grid.Columns, 1), (int)Math.Pow(grid.Rows, 1)];
-            for (int x = 0; x < intArray.GetLength(0); x++)
-            {
-                for (int y = 0; y < intArray.GetLength(1); y++)
-                {
-                    //Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
-                    if (intArray[x, y] == 0) result[x, y] = 0;
-                    if (intArray[x, y] == 1) result[x, y] = 1;
-                }
-            }
+        //private void TestIfMapSolveable()
+        //{
+        //    int[,] intArray = grid.GetCellsAsIntArray();
+        //    byte[,] result = new byte[(int)Math.Pow(grid.Columns, 1), (int)Math.Pow(grid.Rows, 1)];
+        //    for (int x = 0; x < intArray.GetLength(0); x++)
+        //    {
+        //        for (int y = 0; y < intArray.GetLength(1); y++)
+        //        {
+        //            //Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
+        //            if (intArray[x, y] == 0) result[x, y] = 0;
+        //            if (intArray[x, y] == 1) result[x, y] = 1;
+        //        }
+        //    }
             
 
-            Astar = new PathFinderFast(result, grid);
-            bool test = Astar.IsMapSolveable(player.Position, goal.Position, player.Texture.Width, player.Texture.Height, (short)player.JumpingHeight);
+        //    Astar = new PathFinderFast(result, grid);
+        //    bool test = Astar.IsMapSolveable(player.Position, goal.Position, player.Texture.Width, player.Texture.Height, (short)player.JumpingHeight);
             
-        }
+        //}
 
     }
 }

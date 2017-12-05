@@ -42,6 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Content Generation\Astar\AuthorAttribute.cs" />
+    <Compile Include="Content Generation\Astar\PriorityQueue.cs" />
+    <Compile Include="Content Generation\Astar\SpatialAStar.cs" />
     <Compile Include="Content Generation\Goal Placement\GoalPlacer.cs" />
     <Compile Include="Content Generation\Astar\IPathFinder.cs" />
     <Compile Include="Content Generation\Map Cleanup\CellularAutomata.cs" />
