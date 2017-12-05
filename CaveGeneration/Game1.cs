@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using System;
 using CaveGeneration.Content_Generation.Goal_Placement;
+using CaveGeneration.Content_Generation.Astar;
 
 namespace CaveGeneration
 {
@@ -30,6 +31,8 @@ namespace CaveGeneration
         public Vector2 playerPosition;
         public Rectangle playerRectangle;
 
+        private PathFinderFast Astar;
+
         string seed;
         int blockHeight;
         int blockWidth;
@@ -51,7 +54,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "dummathomas";
+            seed = "";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
@@ -86,8 +89,11 @@ namespace CaveGeneration
             startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
+            startAndGoalPlacer.SetPlayer(player);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
 
+
+            TestIfMapSolveable();
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
             // TODO: use this.Content to load your game content here
         }
@@ -163,7 +169,25 @@ namespace CaveGeneration
             return texture;
         }
 
-        
+        private void TestIfMapSolveable()
+        {
+            int[,] intArray = grid.GetCellsAsIntArray();
+            byte[,] result = new byte[(int)Math.Pow(grid.Columns, 2), (int)Math.Pow(grid.Rows, 2)];
+            for (int x = 0; x < intArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < intArray.GetLength(1); y++)
+                {
+                    //Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
+                    if (intArray[x, y] == 0) result[x, y] = 0;
+                    if (intArray[x, y] == 1) result[x, y] = 1;
+                }
+            }
+            
+
+            Astar = new PathFinderFast(result, grid);
+            bool test = Astar.IsMapSolveable(new Vector2(spawnPoint.Left, spawnPoint.Bottom),
+                new Vector2(goal.Position.X, goal.Position.Y), player.Texture.Width, player.Texture.Height, (short)player.JumpingHeight);
+        }
 
     }
 }

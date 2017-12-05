@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using Microsoft.Xna.Framework;
+using CaveGeneration.Content_Generation.Astar;
+using static CaveGeneration.Content_Generation.Astar.PathFinderFast;
 
 namespace CaveGeneration.Content_Generation.Astar
 {
     [Author("Franco, Gustavo")]
     interface IPathFinder
     {
-        #region Events
-        event PathFinderDebugHandler PathFinderDebug;
-        #endregion
 
         #region Properties
         bool Stopped
@@ -82,7 +81,7 @@ namespace CaveGeneration.Content_Generation.Astar
 
         #region Methods
         void FindPathStop();
-        List<PathFinderNode> FindPath(Vector2 start, Vector2 end, int characterWidth, int characterHeight, short maxCharacterJumpHeight);
+        List<PathFinderNodeFast> FindPath(Vector2 start, Vector2 end, int characterWidth, int characterHeight, short maxCharacterJumpHeight);
         #endregion
 
     }

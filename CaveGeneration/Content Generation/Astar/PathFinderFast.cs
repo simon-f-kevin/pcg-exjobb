@@ -55,7 +55,17 @@ namespace CaveGeneration.Content_Generation.Astar
             }
         }
 
-       
+        public enum HeuristicFormula
+        {
+            Manhattan = 1,
+            MaxDXDY = 2,
+            DiagonalShortCut = 3,
+            Euclidean = 4,
+            EuclideanNoSQR = 5,
+            Custom1 = 6
+        }
+
+
         #endregion
 
         #region Win32APIs
@@ -63,9 +73,6 @@ namespace CaveGeneration.Content_Generation.Astar
         //public unsafe static extern bool ZeroMemory(byte* destination, int length);
         #endregion
 
-        #region Events
-        public event PathFinderDebugHandler PathFinderDebug;
-        #endregion
 
         #region Variables Declaration
         // Heap variables are initializated to default, but I like to do it anyway
@@ -91,7 +98,7 @@ namespace CaveGeneration.Content_Generation.Astar
         
         //Promoted local variables to member variables to avoid recreation between calls
         private int                             mH                      = 0;
-        private Location                             mLocation               = 0;
+        private Location                        mLocation               = new Location();
         private int                             mNewLocation            = 0;
         private ushort                          mLocationX              = 0;
         private ushort                          mLocationY              = 0;
@@ -370,21 +377,21 @@ namespace CaveGeneration.Content_Generation.Astar
                         {
                             default:
                             case HeuristicFormula.Manhattan:
-                                mH = mHEstimate * (Math.Abs(mNewLocationX - end.X) + Math.Abs(mNewLocationY - end.y));
+                                mH = mHEstimate * (Math.Abs(mNewLocationX - (int)end.X) + Math.Abs(mNewLocationY - (int)end.Y));
                                 break;
                             case HeuristicFormula.MaxDXDY:
-                                mH = mHEstimate * (Math.Max(Math.Abs(mNewLocationX - end.X), Math.Abs(mNewLocationY - end.y)));
+                                mH = mHEstimate * (Math.Max(Math.Abs(mNewLocationX - (int)end.X), Math.Abs(mNewLocationY - (int)end.Y)));
                                 break;
                             case HeuristicFormula.DiagonalShortCut:
-                                var h_diagonal = Math.Min(Math.Abs(mNewLocationX - end.X), Math.Abs(mNewLocationY - end.y));
-                                var h_straight = (Math.Abs(mNewLocationX - end.X) + Math.Abs(mNewLocationY - end.y));
+                                var h_diagonal = Math.Min(Math.Abs(mNewLocationX - (int)end.X), Math.Abs(mNewLocationY - (int)end.Y));
+                                var h_straight = (Math.Abs(mNewLocationX - (int)end.X) + Math.Abs(mNewLocationY - (int)end.Y));
                                 mH = (mHEstimate * 2) * h_diagonal + mHEstimate * (h_straight - 2 * h_diagonal);
                                 break;
                             case HeuristicFormula.Euclidean:
-                                mH = (int)(mHEstimate * Math.Sqrt(Math.Pow((mNewLocationY - end.X), 2) + Math.Pow((mNewLocationY - end.y), 2)));
+                                mH = (int)(mHEstimate * Math.Sqrt(Math.Pow((mNewLocationY - end.X), 2) + Math.Pow((mNewLocationY - (int)end.Y), 2)));
                                 break;
                             case HeuristicFormula.EuclideanNoSQR:
-                                mH = (int)(mHEstimate * (Math.Pow((mNewLocationX - end.X), 2) + Math.Pow((mNewLocationY - end.y), 2)));
+                                mH = (int)(mHEstimate * (Math.Pow((mNewLocationX - end.X), 2) + Math.Pow((mNewLocationY - (int)end.Y), 2)));
                                 break;
                             case HeuristicFormula.Custom1:
                                 var dxy = new Vector2(Math.Abs(end.X - mNewLocationX), Math.Abs(end.Y - mNewLocationY));
@@ -420,8 +427,8 @@ namespace CaveGeneration.Content_Generation.Astar
                 if (mFound)
                 {
                     mClose.Clear();
-                    var posX = end.x;
-                    var posY = end.y;
+                    var posX = end.X;
+                    var posY = end.Y;
 
                     var fPrevNodeTmp = new PathFinderNodeFast();
                     var fNodeTmp = nodes[mEndLocation][0];
@@ -436,15 +443,12 @@ namespace CaveGeneration.Content_Generation.Astar
                         var fNextNodeTmp = nodes[loc][fNodeTmp.PZ];
 
                         if ((mClose.Count == 0)
-                            //|| (mMap.IsOneWayPlatform((int)fNode.X, (int)fNode.Y - 1))
-                            //|| (mGrid[(int)fNode.X, (int)fNode.Y - 1] == 0 && mMap.IsOneWayPlatform((int)fPrevNode.X, (int)fPrevNode.Y - 1))
-                            || (fNodeTmp.JumpLength == 3)
-                            || (fNextNodeTmp.JumpLength != 0 && fNodeTmp.JumpLength == 0)                                                                                                       //mark jumps starts
-                            || (fNodeTmp.JumpLength == 0 && fPrevNodeTmp.JumpLength != 0)                                                                                                       //mark landings
-                            || (fNode.X > mClose[mClose.Count - 1].Y && fNode.Y > fNodeTmp.PY)
-                            || (fNode.X < mClose[mClose.Count - 1].Y && fNode.Y < fNodeTmp.PY)
+                            || (fNextNodeTmp.JumpLength != 0 && fNodeTmp.JumpLength == 0)
+                            || (fNodeTmp.JumpLength == 3 && fPrevNodeTmp.JumpLength != 0)
+                            || (fNodeTmp.JumpLength == 0 && fPrevNodeTmp.JumpLength != 0)
+                            || (fNode.Y > mClose[mClose.Count - 1].Y && fNode.Y > fNodeTmp.PY)
                             || ((mMap.IsGround((int)fNode.X - 1, (int)fNode.Y) || mMap.IsGround((int)fNode.X + 1, (int)fNode.Y))
-                                && fNode.y != mClose[mClose.Count - 1].y && fNode.X != mClose[mClose.Count - 1].X))
+                                && fNode.Y != mClose[mClose.Count - 1].Y && fNode.X != mClose[mClose.Count - 1].X))
                             mClose.Add(fNode);
 
                         fPrevNode = fNode;
@@ -468,6 +472,16 @@ namespace CaveGeneration.Content_Generation.Astar
         }
         #endregion
 
+        public bool IsMapSolveable(Vector2 start, Vector2 end, int characterWidth, int characterHeight, short maxCharacterJumpHeight)
+        {
+            List<Vector2> positions = new List<Vector2>();
+            positions = FindPath(start, end, characterWidth, characterHeight, maxCharacterJumpHeight);
+            if (positions[positions.Count - 1] == end)
+            {
+                return true;
+            }
+            return false;
+        }
         #region Inner Classes
         [Author("Franco, Gustavo")]
         internal class ComparePFNodeMatrix : IComparer<Location>

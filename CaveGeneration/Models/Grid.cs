@@ -65,9 +65,9 @@ namespace CaveGeneration.Models
             else return false;
         }
 
-        public bool IsOneWayPlatform(int x, int v)
+        public int[,] GetCellsAsIntArray()
         {
-            throw new NotImplementedException();
+            return mapGenerator.GetMap();
         }
 
         public Vector2 WhereCanIGetTo(Vector2 originalPosition, Vector2 destination, Rectangle boundingRectangle)
