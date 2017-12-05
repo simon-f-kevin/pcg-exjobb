@@ -125,6 +125,10 @@ namespace CaveGeneration
             {
                 Exit();
             }
+            if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
+            {
+                Exit();
+            }
             // TODO: Add your update logic here
             player.Update(gameTime);
             camera.Update(gameTime, this);
