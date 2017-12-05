@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CaveGeneration.Content_Generation.Astar;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration.Models
 {
-    public class Cell 
+    public class Cell : IPathNode<Object>
     {
         public Vector2 Position { get; set; }
 
@@ -17,8 +18,6 @@ namespace CaveGeneration.Models
         private SpriteBatch _spriteBatch { get; set; }
 
         public bool IsVisible { get; set; }
-
-        private bool WalkAble { get; set; }
 
         public Cell(Vector2 pos, Texture2D texture, bool visible)
         {
@@ -35,6 +34,11 @@ namespace CaveGeneration.Models
                 Rectangle destinationRect = new Rectangle(new Point((int)Position.X, (int)Position.Y), new Point(Texture.Width - 1, Texture.Height - 1));
                 _spriteBatch.Draw(Texture, destinationRect, color: Color.White);
             }
+        }
+
+        public bool IsWalkable(object inContext)
+        {
+            return !IsVisible;
         }
     }
 }

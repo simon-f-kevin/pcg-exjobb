@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using CaveGeneration.Content_Generation.Goal_Placement;
 using CaveGeneration.Content_Generation.Astar;
+using System.Collections.Generic;
 
 namespace CaveGeneration
 {
@@ -90,10 +91,12 @@ namespace CaveGeneration
             player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
             startAndGoalPlacer.SetPlayer(player);
             goal = startAndGoalPlacer.GenerateReachableGoalPosition();
-            
+
+
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
             // TODO: use this.Content to load your game content here
         }
+
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -171,6 +174,8 @@ namespace CaveGeneration
             return texture;
         }
 
+        
+
         //private void TestIfMapSolveable()
         //{
         //    int[,] intArray = grid.GetCellsAsIntArray();
@@ -184,11 +189,11 @@ namespace CaveGeneration
         //            if (intArray[x, y] == 1) result[x, y] = 1;
         //        }
         //    }
-            
+
 
         //    Astar = new PathFinderFast(result, grid);
         //    bool test = Astar.IsMapSolveable(player.Position, goal.Position, player.Texture.Width, player.Texture.Height, (short)player.JumpingHeight);
-            
+
         //}
 
     }

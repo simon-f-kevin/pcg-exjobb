@@ -22,12 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SettlersEngine
+namespace CaveGeneration.Content_Generation.Astar
 {
     public interface IPathNode<TUserContext>
     {
@@ -143,7 +144,7 @@ namespace SettlersEngine
         /// Returns null, if no path is found. Start- and End-Node are included in returned path. The user context
         /// is passed to IsWalkable().
         /// </summary>
-        public LinkedList<TPathNode> Search(System.Drawing.Point inStartNode, System.Drawing.Point inEndNode, TUserContext inUserContext)
+        public LinkedList<TPathNode> Search(Point inStartNode, Point inEndNode, TUserContext inUserContext)
         {
             PathNode startNode = m_SearchSpace[inStartNode.X, inStartNode.Y];
             PathNode endNode = m_SearchSpace[inEndNode.X, inEndNode.Y];

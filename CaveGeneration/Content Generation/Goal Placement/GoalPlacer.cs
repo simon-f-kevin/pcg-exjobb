@@ -3,6 +3,7 @@ using CaveGeneration.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using CaveGeneration.Content_Generation.Astar;
+using System.Collections.Generic;
 
 namespace CaveGeneration.Content_Generation.Goal_Placement
 {
@@ -39,16 +40,24 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         public Goal GenerateReachableGoalPosition()
         {
             Goal = GenerateFirstValidGoalPosition();
-
-            if (IsGoalOnGround())
+            LinkedList<Cell> path = null;
+            while(path == null)
             {
-                return Goal;
+                path = TestIfMapIsSolveable();
+                if (IsGoalOnGround() && path != null)
+                {
+                    return Goal;
+                }
+                else if(IsGoalOnGround() && path == null)
+                {
+                    MoveGoalToLeft();
+                }
+                else
+                {
+                    MoveGoalToGround();
+                   
+                }
             }
-            else
-            {
-                MoveGoalToGround();
-            }
-
             return Goal;
         }
 
@@ -79,7 +88,6 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             var width = Goal.Texture.Width;
             var height = Goal.Texture.Height;
             Goal.Position = new Vector2(width, Map.GetLength(1));
-            //for (int X = width; X < Map.GetLength(0) * width; X++)
             for (int X = (Map.GetLength(0) - 1) * width ; X > width; X--)
             {
                 for (int Y = height; Y < (Map.GetLength(1) - 1) * height ; Y++)
@@ -119,5 +127,18 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             }
         }
 
+        private void MoveGoalToLeft()
+        {
+
+        }
+
+        private LinkedList<Cell> TestIfMapIsSolveable()
+        {
+
+            SpatialAStar<Cell, Object> aStar = new SpatialAStar<Cell, Object>(grid.Cells);
+            LinkedList<Cell> path = aStar.Search(new Point((int)player.Position.X / 20, (int)player.Position.Y / 20),
+               new Point((int)Goal.Position.X / 20, (int)Goal.Position.Y / 20), null);
+            return path;
+        }
     }
 }
