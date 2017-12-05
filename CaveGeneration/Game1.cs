@@ -84,7 +84,7 @@ namespace CaveGeneration
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             
-            grid = Grid.CreateNewGrid(200, 20, spriteBatch, block, seed, 1);
+            grid = Grid.CreateNewGrid(256, 32, spriteBatch, block, seed, 1);
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
             spawnPoint = startAndGoalPlacer.GetSpawnPosition();
@@ -121,6 +121,10 @@ namespace CaveGeneration
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (!player.Alive)
+            {
+                Exit();
+            }
+            if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
                 Exit();
             }
@@ -172,7 +176,7 @@ namespace CaveGeneration
         private void TestIfMapSolveable()
         {
             int[,] intArray = grid.GetCellsAsIntArray();
-            byte[,] result = new byte[(int)Math.Pow(grid.Columns, 2), (int)Math.Pow(grid.Rows, 2)];
+            byte[,] result = new byte[(int)Math.Pow(grid.Columns, 1), (int)Math.Pow(grid.Rows, 1)];
             for (int x = 0; x < intArray.GetLength(0); x++)
             {
                 for (int y = 0; y < intArray.GetLength(1); y++)
