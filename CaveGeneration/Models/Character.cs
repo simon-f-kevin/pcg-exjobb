@@ -24,6 +24,9 @@ namespace CaveGeneration.Models
         private SpriteBatch SpriteBatch;
         private Vector2 oldPosition;
 
+        private int frameCount = 0;
+        bool groundJump;
+
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
@@ -59,10 +62,41 @@ namespace CaveGeneration.Models
         private void GetInputAndUpdateMovement()
         {
             var actions = Input.GetInput();
+            if(groundJump)
+            frameCount++;
+            if (frameCount > 60)
+            {
+                groundJump = false;
+                frameCount = 0;
+            }
 
-            if (actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
-            if (actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
-            if (IsOnGround() && (actions.Contains(Action.MoveUp))) { Movement -= Vector2.UnitY * JumpingHeight; }
+            if (IsByWall() && !IsOnGround())
+            {
+                if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveLeft) && !groundJump))
+                {
+                    Movement -= Vector2.UnitY * (JumpingHeight / 4);
+                    Movement += Vector2.UnitX * (MaxSpeed * 5);
+                    return;
+                }
+                else if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveRight) && !groundJump))
+                {
+                    Movement -= Vector2.UnitY * (JumpingHeight / 4);
+                    Movement -= Vector2.UnitX * (MaxSpeed * 5);
+                    return;
+                }
+            }
+            else if (!IsOnGround())
+            {
+                if (actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
+                if (actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
+            }
+            if (IsOnGround() && actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
+            if (IsOnGround() && actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
+            if (IsOnGround() && (actions.Contains(Action.MoveUp))) {
+                groundJump = true;
+                Movement -= Vector2.UnitY * JumpingHeight;
+            }
+
         }
 
         private void CollisionHandling(GameTime gametime)
@@ -95,6 +129,12 @@ namespace CaveGeneration.Models
             Rectangle onePixelLower = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             onePixelLower.Offset(0, 1);
             return grid.IsCollidingWithCell(onePixelLower);
+        }
+
+        private bool IsByWall()
+        {
+            Rectangle boundingCharacter = new Rectangle((int)Position.X - 1, (int)Position.Y, Texture.Width + 2, Texture.Height);
+            return grid.IsCollidingWithCell(boundingCharacter);
         }
 
     }

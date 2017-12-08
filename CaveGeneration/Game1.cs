@@ -85,7 +85,7 @@ namespace CaveGeneration
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
-            CreateMap(80, 10, useCopyOfMap: true);
+            CreateMap(64, 16, useCopyOfMap: true);
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
 
             // TODO: use this.Content to load your game content here
