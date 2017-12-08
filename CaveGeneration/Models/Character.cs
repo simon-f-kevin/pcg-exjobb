@@ -27,6 +27,8 @@ namespace CaveGeneration.Models
         private int frameCount = 0;
         bool groundJump;
 
+        List<Action> oldInput = null;
+
         public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
@@ -61,10 +63,10 @@ namespace CaveGeneration.Models
 
         private void GetInputAndUpdateMovement()
         {
-            var actions = Input.GetInput();
+            List<Action> actions = Input.GetInput();
             if(groundJump)
             frameCount++;
-            if (frameCount > 60)
+            if (frameCount > 10)
             {
                 groundJump = false;
                 frameCount = 0;
@@ -74,28 +76,43 @@ namespace CaveGeneration.Models
             {
                 if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveLeft) && !groundJump))
                 {
-                    Movement -= Vector2.UnitY * (JumpingHeight / 4);
-                    Movement += Vector2.UnitX * (MaxSpeed * 5);
-                    return;
+                    if (!oldInput.Contains(Action.MoveUp)) { 
+                        Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
+                        Movement += Vector2.UnitX * (MaxSpeed * 7.5f);
+                        groundJump = true;
+                        return;
+                    }
                 }
                 else if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveRight) && !groundJump))
                 {
-                    Movement -= Vector2.UnitY * (JumpingHeight / 4);
-                    Movement -= Vector2.UnitX * (MaxSpeed * 5);
-                    return;
+                    if (!oldInput.Contains(Action.MoveUp)) {
+                        Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
+                        Movement -= Vector2.UnitX * (MaxSpeed * 7.5f);
+                        groundJump = true;
+                        return;
+                    }
                 }
             }
             else if (!IsOnGround())
             {
-                if (actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
-                if (actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
+                if (actions.Contains(Action.MoveLeft))
+                    { Movement -= Vector2.UnitX * (MaxSpeed * 1.1f); }
+                if (actions.Contains(Action.MoveRight))
+                    { Movement += Vector2.UnitX * (MaxSpeed * 1.1f); }
             }
-            if (IsOnGround() && actions.Contains(Action.MoveLeft)) { Movement -= Vector2.UnitX * MaxSpeed; }
-            if (IsOnGround() && actions.Contains(Action.MoveRight)) { Movement += Vector2.UnitX * MaxSpeed; }
-            if (IsOnGround() && (actions.Contains(Action.MoveUp))) {
+
+            if (IsOnGround() && (actions.Contains(Action.MoveUp)))
+            {
                 groundJump = true;
                 Movement -= Vector2.UnitY * JumpingHeight;
             }
+
+            if (IsOnGround() && actions.Contains(Action.MoveLeft))
+                { Movement -= Vector2.UnitX * MaxSpeed; }
+            if (IsOnGround() && actions.Contains(Action.MoveRight))
+                { Movement += Vector2.UnitX * MaxSpeed; }
+
+            oldInput = actions;
 
         }
 
