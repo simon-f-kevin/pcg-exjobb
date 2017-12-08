@@ -7,38 +7,45 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration.Content_Generation.Map_Cleanup
 {
-    public class CellularAutomata {
-        private int Width;
-        private int Height;
-        private int[,] map;
+    public class CellularAutomata : MapCleanup {
+        
+        private bool useCopy;
 
-        public CellularAutomata(int width, int height, int[,] Map)
+        public CellularAutomata(int width, int height, bool useMapCopy)
         {
             this.Width = width;
             this.Height = height;
-            this.map = Map;
-
+            useCopy = useMapCopy;
         }
 
-        public void SmoothMap()
+        public override int[,] SmoothMap(int[,] map)
         {
             var pm = CopyMap(map);
             for (int x = 0; x < Width; x++)
             {
-                for(int y = 0; y < Height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    int neighbourWallTiles = GetSorroundingWallCount(x, y, map);
+                    int neighbourWallTiles;
+                    if (useCopy)
+                    {
+                        neighbourWallTiles = GetSorroundingWallCount(x, y, pm);
+                    }
+                    else
+                    {
+                        neighbourWallTiles = GetSorroundingWallCount(x, y, map);
+                    }
 
-                    if(neighbourWallTiles > 4)
+                    if (neighbourWallTiles > 4)
                     {
                         map[x, y] = 1;
                     }
-                    else if(neighbourWallTiles < 4)
+                    else if (neighbourWallTiles < 4)
                     {
                         map[x, y] = 0;
                     }
                 }
             }
+            return map;
         }
 
         private int[,] CopyMap(int[,] map)

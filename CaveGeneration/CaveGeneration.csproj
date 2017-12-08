@@ -41,10 +41,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Content Generation\Astar\NotSolveableException.cs" />
     <Compile Include="Content Generation\Astar\PriorityQueue.cs" />
     <Compile Include="Content Generation\Astar\SpatialAStar.cs" />
     <Compile Include="Content Generation\Goal Placement\GoalPlacer.cs" />
     <Compile Include="Content Generation\Map Cleanup\CellularAutomata.cs" />
+    <Compile Include="Content Generation\Map Cleanup\MapCleanup.cs" />
     <Compile Include="Content Generation\Map Generation\DrunkardWalk.cs" />
     <Compile Include="Content Generation\Map Generation\MapGenerator.cs" />
     <Compile Include="Content Generation\Map Generation\RandomPlacement.cs" />

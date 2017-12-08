@@ -39,23 +39,34 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
 
         public Goal GenerateReachableGoalPosition()
         {
+            int nLeftMoves = 0;
             Goal = GenerateFirstValidGoalPosition();
             LinkedList<Cell> path = null;
-            while(path == null)
+            while (path == null)
             {
+                if (nLeftMoves == 10)
+                {
+                    throw new NotSolveableException("Not solveable");
+                    //return Goal;
+                }
                 path = TestIfMapIsSolveable();
-                if (IsGoalOnGround() && path != null)
+                if (IsGoalReachable() && path != null)
                 {
                     return Goal;
                 }
-                else if(IsGoalOnGround() && path == null)
+                else if (IsGoalReachable() && path == null)
                 {
                     MoveGoalToLeft();
+                    nLeftMoves++;
                 }
                 else
                 {
+                    if(path == null)
+                    {
+                        MoveGoalToLeft();
+                        nLeftMoves++;
+                    }
                     MoveGoalToGround();
-                   
                 }
             }
             return Goal;
@@ -103,12 +114,12 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             return Goal;
         }
 
-        private bool IsGoalOnGround()
+        private bool IsGoalReachable()
         {
             bool tmp = false;
-            Rectangle onePixelLower = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width));
-            onePixelLower.Offset(0, 1);
-            if(grid.IsCollidingWithCell(onePixelLower) && !grid.IsCollidingWithCell(new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width))))
+            Rectangle oneBlockLower = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width));
+            oneBlockLower.Offset(0, 1);
+            if(grid.IsCollidingWithCell(oneBlockLower) && !grid.IsCollidingWithCell(new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Height, Goal.Texture.Width))))
             {
                 tmp = true;
             }
@@ -120,7 +131,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         {
             var width = Goal.Texture.Width;
             var height = Goal.Texture.Height;
-            while (!IsGoalOnGround())
+            while (!IsGoalReachable() && Goal.Position.Y < ((grid.HeightInBlocks - 2) * 20))
             {
                 Goal.Position = new Vector2(Goal.Position.X, MathHelper.Clamp((Goal.Position.Y + height), 0, graphics.GraphicsDevice.Viewport.Height - 50));
                 Goal.BoundingRectangle = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Width, Goal.Texture.Height));
@@ -129,12 +140,15 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
 
         private void MoveGoalToLeft()
         {
+            var width = Goal.Texture.Width;
+            var height = Goal.Texture.Height;
 
+            Goal.Position = new Vector2(MathHelper.Clamp(Goal.Position.X - width, width, Goal.Position.X), Goal.Position.Y);
+            Goal.BoundingRectangle = new Rectangle(new Point((int)Goal.Position.X, (int)Goal.Position.Y), new Point(Goal.Texture.Width, Goal.Texture.Height));
         }
 
         private LinkedList<Cell> TestIfMapIsSolveable()
         {
-
             SpatialAStar<Cell, Object> aStar = new SpatialAStar<Cell, Object>(grid.Cells);
             LinkedList<Cell> path = aStar.Search(new Point((int)player.Position.X / 20, (int)player.Position.Y / 20),
                new Point((int)Goal.Position.X / 20, (int)Goal.Position.Y / 20), null);

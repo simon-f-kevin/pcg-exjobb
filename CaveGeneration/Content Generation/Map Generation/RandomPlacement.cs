@@ -30,12 +30,6 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             map = new int[Width, Height];
             RandomFillMap();
 
-            CellularAutomata ca = new CellularAutomata(Width, Height, map);
-
-            for (int i = 0; i < iterationsOfSmoothmap; i++)
-            {
-                ca.SmoothMap();
-            }
         }
 
         private void FillMap()

@@ -66,13 +66,6 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             FillMap();
             MultiWalk(numberOfWalks);
 
-            CellularAutomata ca = new CellularAutomata(Width, Height, map);
-
-            for (int i = 0; i < numberofSmoothings; i++)
-            {
-                ca.SmoothMap();
-            }
-
         }
 
 

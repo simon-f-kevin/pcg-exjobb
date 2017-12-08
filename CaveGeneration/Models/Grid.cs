@@ -1,4 +1,5 @@
-﻿using CaveGeneration.Content_Generation.Map_Generation;
+﻿using CaveGeneration.Content_Generation.Map_Cleanup;
+using CaveGeneration.Content_Generation.Map_Generation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,8 +12,8 @@ namespace CaveGeneration.Models
 {
     public class Grid
     {
-        public int Columns { get; set; }
-        public int Rows { get; set; }
+        public int WidthInBlocks { get; set; }
+        public int HeightInBlocks { get; set; }
 
         public Cell[,] Cells { get; set; }
 
@@ -21,14 +22,15 @@ namespace CaveGeneration.Models
         private SpriteBatch _spriteBatch { get; set; }
 
         private MapGenerator mapGenerator;
+        private MapCleanup mapCleaner;
 
         private static Grid _instance;
 
-        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap)
+        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap)
         {
             if(_instance == null)
             {
-                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap);
+                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap, useCopyOfMap);
                 return _instance;
             }
             return _instance;
@@ -37,6 +39,11 @@ namespace CaveGeneration.Models
         public static Grid Instance()
         {
             return _instance;
+        }
+
+        public static void ClearInstance()
+        {
+            _instance = null;
         }
 
         public void Draw()
@@ -94,29 +101,37 @@ namespace CaveGeneration.Models
             return move.FurthestAvailableLocationSoFar;
         }
 
-        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap)
+        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap)
         {
-            Columns = x;
-            Rows = y;
+            WidthInBlocks = x;
+            HeightInBlocks = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            mapGenerator = new RandomPlacement(Columns, Rows, randomFillPercent: 45); //change this when choosing algorithm for generation
+            mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
+            mapCleaner = new CellularAutomata(WidthInBlocks, HeightInBlocks, useCopyOfMap);
             Init(seed, iterationsOfSmoothmap);
         }
 
         private void Init(string seed, int iterationsOfSmoothmap)
         {
-            Cells = new Cell[Columns, Rows];
+            Cells = new Cell[WidthInBlocks, HeightInBlocks];
             mapGenerator.Start(seed, iterationsOfSmoothmap);
-            for (int x = 0; x < Columns; x++)
+           
+            for (int x = 0; x < WidthInBlocks; x++)
             {
-                for (int y = 0; y < Rows; y++)
+                for (int y = 0; y < HeightInBlocks; y++)
                 {
                     Vector2 pos = new Vector2(x * CellTexture.Width, y * CellTexture.Height);
                     Cells[x, y] = new Cell(pos, CellTexture, false);
                 }
             }
+
             int[,] map = mapGenerator.GetMap();
+
+            for(int i = 0; i < iterationsOfSmoothmap; i++)
+            {
+                map = mapCleaner.SmoothMap(map);
+            }
 
             int col = map.GetLength(0);
             int row = map.GetLength(1);
@@ -131,7 +146,7 @@ namespace CaveGeneration.Models
                 }
             }
 
-            Cells[Columns / 2, Rows / 2].IsVisible = false;
+            Cells[WidthInBlocks / 2, HeightInBlocks / 2].IsVisible = false;
         }
 
         private Vector2 CheckPossibleNonDiagonalMovement(MovementWrapper move, int i)

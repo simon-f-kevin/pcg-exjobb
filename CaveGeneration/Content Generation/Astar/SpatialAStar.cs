@@ -147,6 +147,10 @@ namespace CaveGeneration.Content_Generation.Astar
         public LinkedList<TPathNode> Search(Point inStartNode, Point inEndNode, TUserContext inUserContext)
         {
             PathNode startNode = m_SearchSpace[inStartNode.X, inStartNode.Y];
+
+            //inEndNode.X = MathHelper.Clamp(inEndNode.X, 0, m_SearchSpace.GetLength(0));
+            //inEndNode.Y = MathHelper.Clamp(inEndNode.Y, 0, m_SearchSpace.GetLength(1));
+
             PathNode endNode = m_SearchSpace[inEndNode.X, inEndNode.Y];
 
             //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();

@@ -32,7 +32,7 @@ namespace CaveGeneration
         public Vector2 playerPosition;
         public Rectangle playerRectangle;
 
-
+        bool useCopyOfMap;
         string seed;
         int blockHeight;
         int blockWidth;
@@ -80,23 +80,16 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
-            characterTexture = Content.Load<Texture2D>("skeleton_5");
+            characterTexture = Content.Load<Texture2D>("sprite-girl");
+            Texture texture = new Texture2D(GraphicsDevice, 20, 20);
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
-            
-            grid = Grid.CreateNewGrid(32, 8, spriteBatch, block, seed, 1);
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
-            startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
-            spawnPoint = startAndGoalPlacer.GetSpawnPosition();
-            player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
-            startAndGoalPlacer.SetPlayer(player);
-            goal = startAndGoalPlacer.GenerateReachableGoalPosition();
-
-
+            CreateMap(80, 10, useCopyOfMap: true);
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
+
             // TODO: use this.Content to load your game content here
         }
-
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -127,6 +120,8 @@ namespace CaveGeneration
             if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
                 System.Threading.Thread.Sleep(1000);
+                Console.WriteLine("you win");
+                Console.ReadLine();
                 Exit();
             }
             // TODO: Add your update logic here
@@ -145,7 +140,7 @@ namespace CaveGeneration
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
-            //spriteBatch.Draw(block, new Vector2(100,1));
+            
             grid.Draw();
             player.Draw();
             goal.Draw();
@@ -174,27 +169,35 @@ namespace CaveGeneration
             return texture;
         }
 
-        
-
-        //private void TestIfMapSolveable()
-        //{
-        //    int[,] intArray = grid.GetCellsAsIntArray();
-        //    byte[,] result = new byte[(int)Math.Pow(grid.Columns, 1), (int)Math.Pow(grid.Rows, 1)];
-        //    for (int x = 0; x < intArray.GetLength(0); x++)
-        //    {
-        //        for (int y = 0; y < intArray.GetLength(1); y++)
-        //        {
-        //            //Buffer.BlockCopy(intArray, 0, result, 0, result.Length);
-        //            if (intArray[x, y] == 0) result[x, y] = 0;
-        //            if (intArray[x, y] == 1) result[x, y] = 1;
-        //        }
-        //    }
-
-
-        //    Astar = new PathFinderFast(result, grid);
-        //    bool test = Astar.IsMapSolveable(player.Position, goal.Position, player.Texture.Width, player.Texture.Height, (short)player.JumpingHeight);
-
-        //}
+        private void CreateMap(int mapWidthInBlocks, int mapHeightInBlocks, bool useCopyOfMap)
+        {
+            bool solveable = true;
+            do
+            {
+                Grid.ClearInstance();
+                grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap);
+                startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
+                spawnPoint = startAndGoalPlacer.GetSpawnPosition();
+                player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
+                startAndGoalPlacer.SetPlayer(player);
+                try
+                {
+                    goal = startAndGoalPlacer.GenerateReachableGoalPosition();
+                    solveable = true;
+                }
+                catch (NotSolveableException ex)
+                {
+                    if (ex.Message.Equals("Not solveable"))
+                    {
+                        solveable = false;
+                        var tmp = new Random(seed.GetHashCode()).Next();
+                        seed = tmp.ToString();
+                    }
+                }
+            }
+            while (!solveable);
+            
+        }
 
     }
 }

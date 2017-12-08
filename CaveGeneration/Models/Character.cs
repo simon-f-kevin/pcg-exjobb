@@ -30,7 +30,7 @@ namespace CaveGeneration.Models
             Texture = texture;
             SpriteBatch = spiteBatch;
             MaxSpeed = 2;
-            JumpingHeight = texture.Height;
+            JumpingHeight = texture.Height * 1.5f;
             Gravity = 2;
             Alive = true;
         }
