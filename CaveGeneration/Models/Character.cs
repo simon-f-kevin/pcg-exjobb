@@ -72,9 +72,12 @@ namespace CaveGeneration.Models
                 frameCount = 0;
             }
 
-            if (IsByWall() && !IsOnGround())
+            bool leftWall = IsByLeftWall();
+            bool rightWall = IsByRightWall();
+
+            if ((leftWall || rightWall) && !IsOnGround())
             {
-                if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveLeft) && !groundJump))
+                if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveLeft) && leftWall && !groundJump))
                 {
                     if (!oldInput.Contains(Action.MoveUp)) { 
                         Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
@@ -83,7 +86,7 @@ namespace CaveGeneration.Models
                         return;
                     }
                 }
-                else if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveRight) && !groundJump))
+                else if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveRight) && rightWall && !groundJump))
                 {
                     if (!oldInput.Contains(Action.MoveUp)) {
                         Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
@@ -91,6 +94,13 @@ namespace CaveGeneration.Models
                         groundJump = true;
                         return;
                     }
+                }
+                else if (!IsOnGround())
+                {
+                    if (actions.Contains(Action.MoveLeft))
+                    { Movement -= Vector2.UnitX * (MaxSpeed * 1.1f); }
+                    if (actions.Contains(Action.MoveRight))
+                    { Movement += Vector2.UnitX * (MaxSpeed * 1.1f); }
                 }
             }
             else if (!IsOnGround())
@@ -148,9 +158,14 @@ namespace CaveGeneration.Models
             return grid.IsCollidingWithCell(onePixelLower);
         }
 
-        private bool IsByWall()
+        private bool IsByLeftWall()
         {
-            Rectangle boundingCharacter = new Rectangle((int)Position.X - 1, (int)Position.Y, Texture.Width + 2, Texture.Height);
+            Rectangle boundingCharacter = new Rectangle((int)Position.X - 1, (int)Position.Y, Texture.Width + 1, Texture.Height);
+            return grid.IsCollidingWithCell(boundingCharacter);
+        }
+        private bool IsByRightWall()
+        {
+            Rectangle boundingCharacter = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width + 1, Texture.Height);
             return grid.IsCollidingWithCell(boundingCharacter);
         }
 
