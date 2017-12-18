@@ -1,35 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CaveGeneration.Models
+namespace CaveGeneration.Models.Characters
 {
-    public class Character
+    public class Player : Character
     {
-        public Vector2 Movement { get; set; }
-        public Vector2 Position { get; set; }
-        public Texture2D Texture { get; set; }
-        public float MaxSpeed { get; set; }
-        public float JumpingHeight { get; set; }
-        public float Gravity { get; set; }
-
         public bool Alive { get; set; }
-
-        private Grid grid = Grid.Instance();
-        private SpriteBatch SpriteBatch;
-        private Vector2 oldPosition;
 
         private int frameCount = 0;
         bool groundJump;
 
         List<Action> oldInput = null;
 
-        public Character(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
+        public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
             Texture = texture;
@@ -40,25 +25,13 @@ namespace CaveGeneration.Models
             Alive = true;
         }
 
-        public void Update(GameTime gametime)
+        public override void Update(GameTime gametime)
         {
             GetInputAndUpdateMovement();
             SimulateGravity();
             SimulateFriction();
             UpdatePosition(gametime);
             CollisionHandling(gametime);
-           
-        }
-        public void Draw()
-        {
-            SpriteBatch.Draw(Texture, Position, Color.White);
-        }
-
-        private void UpdatePosition(GameTime gametime)
-        {
-            oldPosition = Position;
-            Position += Movement * (float)gametime.ElapsedGameTime.TotalMilliseconds / 60;
-            Position = grid.WhereCanIGetTo(oldPosition, Position, new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height));
         }
 
         private void GetInputAndUpdateMovement()
@@ -126,19 +99,7 @@ namespace CaveGeneration.Models
 
         }
 
-        private void CollisionHandling(GameTime gametime)
-        {
-            Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
-        }
-
-        private void SimulateGravity()
-        {
-            Movement += Vector2.UnitY * Gravity;
-        }
-
-        private void SimulateFriction()
+        protected override void SimulateFriction()
         {
             if (IsOnGround())
             {
@@ -149,24 +110,6 @@ namespace CaveGeneration.Models
                 }
             }
             else { Movement -= Movement * Vector2.One * .01f; }
-        }
-
-        private bool IsOnGround()
-        {
-            Rectangle onePixelLower = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
-            onePixelLower.Offset(0, 1);
-            return grid.IsCollidingWithCell(onePixelLower);
-        }
-
-        private bool IsByLeftWall()
-        {
-            Rectangle boundingCharacter = new Rectangle((int)Position.X - 1, (int)Position.Y, Texture.Width + 1, Texture.Height);
-            return grid.IsCollidingWithCell(boundingCharacter);
-        }
-        private bool IsByRightWall()
-        {
-            Rectangle boundingCharacter = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width + 1, Texture.Height);
-            return grid.IsCollidingWithCell(boundingCharacter);
         }
 
     }

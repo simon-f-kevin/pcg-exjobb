@@ -7,6 +7,8 @@ using System;
 using CaveGeneration.Content_Generation.Goal_Placement;
 using CaveGeneration.Content_Generation.Astar;
 using System.Collections.Generic;
+using CaveGeneration.Models.Characters;
+using CaveGeneration.Content_Generation.Enemy_Placement;
 
 namespace CaveGeneration
 {
@@ -22,17 +24,20 @@ namespace CaveGeneration
         Texture2D block;
         Texture2D characterTexture;
         Texture2D goalTexture;
+        Texture2D enemyTexture;
 
         Grid grid;
-        Character player;
+        Player player;
         Rectangle spawnPoint;
         Goal goal;
         StartAndGoalPlacer startAndGoalPlacer;
+        EnemySpawner enemySpawner;
+
+        List<Enemy> allEnemies;
 
         public Vector2 playerPosition;
         public Rectangle playerRectangle;
 
-        bool useCopyOfMap;
         string seed;
         int blockHeight;
         int blockWidth;
@@ -54,7 +59,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "blörn";
+            seed = "";
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
@@ -81,13 +86,12 @@ namespace CaveGeneration
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
-            Texture texture = new Texture2D(GraphicsDevice, 20, 20);
+            enemyTexture = Content.Load<Texture2D>("enemy");
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             CreateMap(64, 16, useCopyOfMap: true);
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -111,6 +115,8 @@ namespace CaveGeneration
             playerRectangle.X = (int)playerPosition.X;
             playerRectangle.Y = (int)playerPosition.Y;
 
+            
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (!player.Alive)
@@ -119,7 +125,7 @@ namespace CaveGeneration
             }
             if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(500);
                 Console.WriteLine("you win");
                 Console.ReadLine();
                 Exit();
@@ -127,6 +133,17 @@ namespace CaveGeneration
             // TODO: Add your update logic here
             player.Update(gameTime);
             camera.Update(gameTime, this);
+            
+            foreach (var enemy in allEnemies)
+            {
+                enemy.Update(gameTime);
+                if (playerRectangle.Intersects(new Rectangle((int)enemy.Position.X, (int)enemy.Position.Y, enemy.Texture.Width, enemy.Texture.Height)))
+                {
+                    System.Threading.Thread.Sleep(500);
+                    Console.WriteLine("You Lose");
+                    Exit();
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -144,6 +161,12 @@ namespace CaveGeneration
             grid.Draw();
             player.Draw();
             goal.Draw();
+
+            foreach(var enemy in allEnemies)
+            {
+                enemy.Draw();
+            }
+
             spriteBatch.End();
 
             
@@ -177,9 +200,13 @@ namespace CaveGeneration
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap);
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
+                enemySpawner = new EnemySpawner(2, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
-                player = new Character(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
+                enemySpawner.RunSpawner();
+                player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
                 startAndGoalPlacer.SetPlayer(player);
+                allEnemies = enemySpawner.GetEnemies();
+
                 try
                 {
                     goal = startAndGoalPlacer.GenerateReachableGoalPosition();
@@ -187,6 +214,7 @@ namespace CaveGeneration
                 }
                 catch (NotSolveableException ex)
                 {
+                    //if the map is not solveable we generate a new random seed and try again
                     if (ex.Message.Equals("Not solveable"))
                     {
                         solveable = false;

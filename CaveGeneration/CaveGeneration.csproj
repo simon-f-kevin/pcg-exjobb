@@ -44,7 +44,8 @@
     <Compile Include="Content Generation\Astar\NotSolveableException.cs" />
     <Compile Include="Content Generation\Astar\PriorityQueue.cs" />
     <Compile Include="Content Generation\Astar\SpatialAStar.cs" />
-    <Compile Include="Content Generation\Goal Placement\GoalPlacer.cs" />
+    <Compile Include="Content Generation\Enemy Placement\EnemySpawner.cs" />
+    <Compile Include="Content Generation\Goal Placement\StartAndGoalPlacer.cs" />
     <Compile Include="Content Generation\Map Cleanup\CellularAutomata.cs" />
     <Compile Include="Content Generation\Map Cleanup\MapCleanup.cs" />
     <Compile Include="Content Generation\Map Generation\DrunkardWalk.cs" />
@@ -53,7 +54,9 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Models\Camera.cs" />
     <Compile Include="Models\Cell.cs" />
-    <Compile Include="Models\Character.cs" />
+    <Compile Include="Models\Characters\Character.cs" />
+    <Compile Include="Models\Characters\Player.cs" />
+    <Compile Include="Models\Characters\Enemy.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Grid.cs" />
     <Compile Include="Models\Input.cs" />

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using CaveGeneration.Content_Generation.Astar;
 using System.Collections.Generic;
+using CaveGeneration.Models.Characters;
 
 namespace CaveGeneration.Content_Generation.Goal_Placement
 {
@@ -15,7 +16,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         private Cell[,] Map;
         private Grid grid = Grid.Instance();
         private Texture2D playerTexture;
-        private Character player;
+        private Player player;
         private GraphicsDeviceManager graphics;
 
         public StartAndGoalPlacer(Goal goal, Texture2D texture, GraphicsDeviceManager graphics)
@@ -27,7 +28,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             TestSpawnPoint();
         }
 
-        public void SetPlayer(Character player)
+        public void SetPlayer(Player player)
         {
             this.player = player;
         }
