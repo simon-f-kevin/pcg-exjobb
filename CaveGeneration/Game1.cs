@@ -26,6 +26,8 @@ namespace CaveGeneration
         Texture2D goalTexture;
         Texture2D enemyTexture;
 
+        SpriteFont font;
+
         Grid grid;
         Player player;
         Rectangle spawnPoint;
@@ -41,6 +43,10 @@ namespace CaveGeneration
         string seed;
         int blockHeight;
         int blockWidth;
+
+        string GameOverMessage;
+
+        GameState gameState;
 
         public Game1()
         {
@@ -73,6 +79,10 @@ namespace CaveGeneration
 
             camera = new Camera(GraphicsDevice.Viewport);
 
+            GameOverMessage = "";
+
+            gameState = GameState.Playing;
+
             base.Initialize();
         }
 
@@ -84,6 +94,7 @@ namespace CaveGeneration
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("Font");
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
             enemyTexture = Content.Load<Texture2D>("enemy");
@@ -111,40 +122,68 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
+            switch (gameState)
+            {
+                case GameState.MainMenu:
+                    UpdateMainMenu(gameTime);
+                    break;
+                case GameState.Playing:
+                    UpdateGameplay(gameTime);
+                    break;
+                case GameState.GameOver:
+                    UpdateEndOfGame(gameTime);
+                    break;
+            }
+            base.Update(gameTime);
+            
+        }
+
+        private void UpdateEndOfGame(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+        }
+
+        private void UpdateGameplay(GameTime gameTime)
+        {
             playerPosition = player.Position;
             playerRectangle.X = (int)playerPosition.X;
             playerRectangle.Y = (int)playerPosition.Y;
 
-            
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (!player.Alive)
-            {
-                Exit();
-            }
+
             if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
-                System.Threading.Thread.Sleep(500);
-                Console.WriteLine("you win");
-                Console.ReadLine();
-                Exit();
+                GameOverMessage = "You Win!";
+                
+                gameState = GameState.GameOver;
             }
+
             // TODO: Add your update logic here
             player.Update(gameTime);
             camera.Update(gameTime, this);
-            
+
             foreach (var enemy in allEnemies)
             {
                 enemy.Update(gameTime);
                 if (playerRectangle.Intersects(new Rectangle((int)enemy.Position.X, (int)enemy.Position.Y, enemy.Texture.Width, enemy.Texture.Height)))
                 {
-                    System.Threading.Thread.Sleep(500);
-                    Console.WriteLine("You Lose");
-                    Exit();
+                    GameOverMessage = "You Lose!";
+                    
+                    gameState = GameState.GameOver;
                 }
             }
-            base.Update(gameTime);
+        }
+
+        private void UpdateMainMenu(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
+                gameState = GameState.Playing;
         }
 
         /// <summary>
@@ -153,24 +192,72 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.Black);
+
+            switch (gameState)
+            {
+                case GameState.MainMenu:
+                    DrawMainMenu(gameTime);
+                    break;
+                case GameState.Playing:
+                    DrawGamePlay(gameTime);
+                    break;
+                case GameState.GameOver:
+                    DrawEndOfGame(gameTime);
+                    break;
+            }
+
+            base.Draw(gameTime);
+            
+        }
+
+        private void DrawEndOfGame(GameTime gameTime)
+        {
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
-            
+
             grid.Draw();
             player.Draw();
             goal.Draw();
 
-            foreach(var enemy in allEnemies)
+            foreach (var enemy in allEnemies)
+            {
+                enemy.Draw();
+            }
+
+            if (!GameOverMessage.Equals(""))
+            {
+                spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y), Color.Black);
+                spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Black);
+            }
+
+            spriteBatch.End();
+        }
+
+        private void DrawGamePlay(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.White);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
+
+            grid.Draw();
+            player.Draw();
+            goal.Draw();
+
+            foreach (var enemy in allEnemies)
             {
                 enemy.Draw();
             }
 
             spriteBatch.End();
+        }
 
-            
-            base.Draw(gameTime);
+        private void DrawMainMenu(GameTime gameTime)
+        {
+            throw new NotImplementedException();
         }
 
         private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, System.Func<int, Color> paint)
@@ -200,7 +287,7 @@ namespace CaveGeneration
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap);
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
-                enemySpawner = new EnemySpawner(2, enemyTexture, spriteBatch);
+                enemySpawner = new EnemySpawner(3, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
                 enemySpawner.RunSpawner();
                 player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);

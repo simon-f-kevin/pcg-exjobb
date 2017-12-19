@@ -23,6 +23,7 @@ namespace CaveGeneration.Models.Characters
             SpriteBatch = spiteBatch;
             MaxSpeed = 0.5f;
             Gravity = 2;
+            JumpingHeight = texture.Height * 1.5f;
             _canJump = CanJump;
         }
 
@@ -68,10 +69,8 @@ namespace CaveGeneration.Models.Characters
                 nBlocksLeft++;
                 if (nBlocksLeft >= (blocksToMove * 20)) nBlocksRight = 0;
             }
-            
            
             if(nBlocksLeft >= (blocksToMove * 20)) {
-
                 //Move right
                 if (IsByRightWall())
                 {
@@ -80,8 +79,8 @@ namespace CaveGeneration.Models.Characters
                 Movement += Vector2.UnitX * MaxSpeed;
                 nBlocksRight++;
                 if (nBlocksRight == (blocksToMove * 20)) nBlocksLeft = 0;
-                
             }
+
             if (_canJump)
             {
                 if (IsByLeftWall())
@@ -95,7 +94,7 @@ namespace CaveGeneration.Models.Characters
                     Movement -= Vector2.UnitX * (MaxSpeed * 7.5f);
                 }
             }
-            
+
         }
 
         protected override void SimulateFriction()

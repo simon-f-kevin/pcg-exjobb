@@ -39,7 +39,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                 {
                     enemyID = i
                 };
-                enemy.SetSpawnPoint(GenerateSpawnPoint());
+                enemy.SetSpawnPoint(GenerateSpawnPoint(enemy));
                 enemyIDs.Add(i);
                 Enemies.Add(enemy);
             }
@@ -51,7 +51,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             return Enemies;
         }
 
-        private Vector2 GenerateSpawnPoint()
+        private Vector2 GenerateSpawnPoint(Enemy enemy)
         {
             Vector2 spawnPoint;
             float X = rnd.Next(0, grid.Cells.GetLength(0));
@@ -69,13 +69,16 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             
             if(Enemies.Count >= 1)
             {
-                foreach (var enemy in Enemies)
+                foreach (Enemy prevEnemy in Enemies)
                 {
-                    Rectangle otherEnemy = new Rectangle(new Point((int)enemy.Position.X, (int)enemy.Position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
-                    if (enemyRectangle.Intersects(otherEnemy) || grid.IsCollidingWithCell(enemyRectangle))
+                    if(prevEnemy.enemyID < enemy.enemyID)
                     {
-                        X = X + enemyTexture.Width; //if two enemies spawn on eachother the new one moves to the right
-                        enemyRectangle.X = (int)X;
+                        Rectangle prevEnemyRectangle = new Rectangle(new Point((int)prevEnemy.Position.X, (int)prevEnemy.Position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
+                        if (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle))
+                        {
+                            X = X + enemyTexture.Width; //if two enemies spawn on eachother the new one moves to the right
+                            enemyRectangle.X = (int)X;
+                        }
                     }
                 }
             }
