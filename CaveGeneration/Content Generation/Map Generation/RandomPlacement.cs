@@ -47,7 +47,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         {
             if (UseRandomSeed)
             {
-                Seed = DateTime.Now.ToString();
+                Seed = DateTime.Now.TimeOfDay.TotalSeconds.ToString();
             }
 
             Random pseudoRandom = new Random(Seed.GetHashCode());

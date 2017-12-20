@@ -289,7 +289,7 @@ namespace CaveGeneration
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
                 enemySpawner = new EnemySpawner(3, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
-                enemySpawner.RunSpawner();
+                enemySpawner.RunSpawner(spawnPoint);
                 player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
                 startAndGoalPlacer.SetPlayer(player);
                 allEnemies = enemySpawner.GetEnemies();
@@ -305,7 +305,7 @@ namespace CaveGeneration
                     if (ex.Message.Equals("Not solveable"))
                     {
                         solveable = false;
-                        var tmp = new Random(seed.GetHashCode()).Next();
+                        var tmp = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
                         seed = tmp.ToString();
                     }
                 }

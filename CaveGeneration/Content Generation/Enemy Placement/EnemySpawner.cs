@@ -31,7 +31,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             rnd = new Random();
         }
 
-        public void RunSpawner()
+        public void RunSpawner(Rectangle playerSpawnpoint)
         {
             for (int i = 0; i < nEnemies; i++)
             {
@@ -39,7 +39,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                 {
                     enemyID = i
                 };
-                enemy.SetSpawnPoint(GenerateSpawnPoint(enemy));
+                enemy.SetSpawnPoint(GenerateSpawnPoint(enemy, playerSpawnpoint));
                 enemyIDs.Add(i);
                 Enemies.Add(enemy);
             }
@@ -51,14 +51,14 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             return Enemies;
         }
 
-        private Vector2 GenerateSpawnPoint(Enemy enemy)
+        private Vector2 GenerateSpawnPoint(Enemy enemy, Rectangle playerSpawnpoint)
         {
             Vector2 spawnPoint;
             float X = rnd.Next(0, grid.Cells.GetLength(0));
             float Y = rnd.Next(0, grid.Cells.GetLength(1));
             Rectangle enemyRectangle = new Rectangle(new Point((int)X, (int)Y), new Point(enemyTexture.Width, enemyTexture.Height));
-
-            while (grid.IsCollidingWithCell(enemyRectangle)) //make sure enemy dont spawn inside walls or outside map
+            
+            while (grid.IsCollidingWithCell(enemyRectangle) && !enemyRectangle.Intersects(playerSpawnpoint)) //make sure enemy dont spawn inside walls or outside map
             {
                 X = rnd.Next(0, grid.Cells.GetLength(0) * 20);
                 Y = rnd.Next(0, grid.Cells.GetLength(1) * 20);
@@ -74,7 +74,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                     if(prevEnemy.enemyID < enemy.enemyID)
                     {
                         Rectangle prevEnemyRectangle = new Rectangle(new Point((int)prevEnemy.Position.X, (int)prevEnemy.Position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
-                        if (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle))
+                        if (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle) || enemyRectangle.Intersects(playerSpawnpoint))
                         {
                             X = X + enemyTexture.Width; //if two enemies spawn on eachother the new one moves to the right
                             enemyRectangle.X = (int)X;
