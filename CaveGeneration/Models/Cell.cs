@@ -19,11 +19,29 @@ namespace CaveGeneration.Models
 
         public bool IsVisible { get; set; }
 
+        private Color TileColor { get; set; }
+
         public Cell(Vector2 pos, Texture2D texture, bool visible)
         {
             Position = pos;
             Texture = texture;
             IsVisible = visible;
+
+            SetTileColor();
+
+        }
+
+        private void SetTileColor()
+        {
+            TileColor = Color.Gray;
+            if (Position.Y < 40)
+            {
+                TileColor = Color.Green;
+            }
+            else if (Position.Y < 300)
+            {
+                TileColor = Color.SaddleBrown;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -32,7 +50,10 @@ namespace CaveGeneration.Models
             if (IsVisible)
             {
                 Rectangle destinationRect = new Rectangle(new Point((int)Position.X, (int)Position.Y), new Point(Texture.Width - 1, Texture.Height - 1));
-                _spriteBatch.Draw(Texture, destinationRect, color: Color.White);
+
+
+
+                _spriteBatch.Draw(Texture, destinationRect, color: TileColor);
             }
         }
 

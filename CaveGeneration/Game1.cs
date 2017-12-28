@@ -95,7 +95,7 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("Font");
-            block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gray);
+            block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.White);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
             enemyTexture = Content.Load<Texture2D>("enemy");
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
