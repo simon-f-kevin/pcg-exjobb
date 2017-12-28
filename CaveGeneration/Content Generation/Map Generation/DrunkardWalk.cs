@@ -11,11 +11,12 @@ namespace CaveGeneration.Content_Generation.Map_Generation
     public class DrunkardWalk : MapGenerator
     {
 
-        int numberOfWalks = 10;
-        int numberOfSteps = 1000;
+        int numberOfWalks = 5;
+        int numberOfSteps = 250;
         int distanceBetweenWalks = 5;
 
-        Random rand = new Random();
+        Random rand;
+        int numberofSmoothings;
 
         /* 
         public DIRECTION WeightedDirection;
@@ -37,9 +38,13 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         public override void Start(string seed)
         {
             if (seed.Equals(""))
-                UseRandomSeed = true;
+            {
+                seed = DateTime.Now.ToString();
+            }
+                
 
-            Seed = seed;
+            
+            rand = new Random(seed.GetHashCode());
             GenerateMap();
 
             for (int x = 0; x < Width; x++)
@@ -92,9 +97,9 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         private void Walk(int StartX, int StartY)
         {
             int upChance = 20;      //Ignore this column
-            int downChance = 20     + upChance;
-            int leftChance = 20     + downChance;
-            int rightChance = 40    + leftChance;
+            int downChance = 20 + upChance;
+            int leftChance = 20 + downChance;
+            int rightChance = 40 + leftChance;
 
             for (int i = 0; i < numberOfSteps; i++)
             {
@@ -104,7 +109,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
                 int rnd = rand.Next(100);
 
 
-                if(rnd < upChance)
+                if (rnd < upChance)
                 {
                     map[StartX, StartY--] = 0;
                 }
@@ -112,7 +117,8 @@ namespace CaveGeneration.Content_Generation.Map_Generation
                 {
                     map[StartX, StartY++] = 0;
                 }
-                else if (rnd < leftChance){
+                else if (rnd < leftChance)
+                {
                     map[StartX--, StartY] = 0;
                 }
                 else if (rnd < rightChance)
@@ -123,7 +129,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             }
 
         }
-#endregion
+        #endregion
 
     }
 }

@@ -107,7 +107,8 @@ namespace CaveGeneration.Models
             HeightInBlocks = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
+            //mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
+            mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks);
             mapCleaner = new CellularAutomata(WidthInBlocks, HeightInBlocks, useCopyOfMap);
             Init(seed, iterationsOfSmoothmap);
         }
