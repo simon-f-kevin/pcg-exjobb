@@ -128,11 +128,8 @@ namespace CaveGeneration.Models
 
             int[,] map = mapGenerator.GetMap();
 
-            for(int i = 0; i < iterationsOfSmoothmap; i++)
-            {
-                map = mapCleaner.SmoothMap(map, iterationsOfSmoothmap);
-            }
-
+            map = mapCleaner.SmoothMap(map, iterationsOfSmoothmap);
+            
             int col = map.GetLength(0);
             int row = map.GetLength(1);
             for (int x = 0; x < col; x++)

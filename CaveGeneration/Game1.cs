@@ -41,6 +41,7 @@ namespace CaveGeneration
         public Rectangle playerRectangle;
 
         string seed;
+        string originalSeed;
         int blockHeight;
         int blockWidth;
 
@@ -66,6 +67,7 @@ namespace CaveGeneration
 
             // Set your seed. Leave empty if you want a random map
             seed = "";
+            originalSeed = seed;
 
             // Sets the window-size
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
@@ -305,8 +307,18 @@ namespace CaveGeneration
                     if (ex.Message.Equals("Not solveable"))
                     {
                         solveable = false;
-                        var tmp = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
-                        seed = tmp.ToString();
+                        Console.WriteLine(seed);
+                        Console.WriteLine(originalSeed);
+                        int tmp;
+                        if (!originalSeed.Equals(""))
+                        {
+                            tmp = new Random(seed.GetHashCode()).Next();
+                        }
+                        else
+                        {
+                            tmp = new Random().Next();
+                        }
+                        seed = tmp.GetHashCode().ToString();
                     }
                 }
             }
