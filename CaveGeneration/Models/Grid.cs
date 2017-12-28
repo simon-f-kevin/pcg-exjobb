@@ -115,7 +115,7 @@ namespace CaveGeneration.Models
         private void Init(string seed, int iterationsOfSmoothmap)
         {
             Cells = new Cell[WidthInBlocks, HeightInBlocks];
-            mapGenerator.Start(seed, iterationsOfSmoothmap);
+            mapGenerator.Start(seed);
            
             for (int x = 0; x < WidthInBlocks; x++)
             {
@@ -130,7 +130,7 @@ namespace CaveGeneration.Models
 
             for(int i = 0; i < iterationsOfSmoothmap; i++)
             {
-                map = mapCleaner.SmoothMap(map);
+                map = mapCleaner.SmoothMap(map, iterationsOfSmoothmap);
             }
 
             int col = map.GetLength(0);

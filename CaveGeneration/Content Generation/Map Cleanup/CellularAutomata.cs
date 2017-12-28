@@ -18,7 +18,16 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
             useCopy = useMapCopy;
         }
 
-        public override int[,] SmoothMap(int[,] map)
+        public override int[,] SmoothMap(int[,] map, int iterationsOfSmoothmap)
+        {
+            
+            for (int i = 0; i < iterationsOfSmoothmap; i++) {
+                map = Smoothmap2(map);
+            }
+            return map;
+        }
+
+        private int[,] Smoothmap2(int[,] map)
         {
             var pm = CopyMap(map);
             for (int x = 0; x < Width; x++)

@@ -12,7 +12,7 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
         protected int Height;
         protected int[,] map;
 
-        public abstract int[,] SmoothMap(int[,] map);
+        public abstract int[,] SmoothMap(int[,] map, int iterationsOfSmoothmap);
 
     }
 }

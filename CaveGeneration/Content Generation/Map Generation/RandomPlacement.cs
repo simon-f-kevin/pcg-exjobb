@@ -16,16 +16,16 @@ namespace CaveGeneration.Content_Generation.Map_Generation
             this.randomFillPercent = randomFillPercent;
         }
 
-        public override void Start(string seed, int iterationsOfSmoothmap)
+        public override void Start(string seed)
         {
             if (seed.Equals(""))
                 UseRandomSeed = true;
 
             Seed = seed;
-            GenerateMap(iterationsOfSmoothmap);
+            GenerateMap();
         }
 
-        private void GenerateMap(int iterationsOfSmoothmap)
+        private void GenerateMap()
         {
             map = new int[Width, Height];
             RandomFillMap();
