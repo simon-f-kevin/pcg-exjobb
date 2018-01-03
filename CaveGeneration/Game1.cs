@@ -49,6 +49,11 @@ namespace CaveGeneration
 
         GameState gameState;
 
+        //Create map parameters
+        int mapWidth = 64;
+        int mapHeight = 16;
+        bool useCopy = true;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -103,7 +108,7 @@ namespace CaveGeneration
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
-            CreateMap(64, 16, useCopyOfMap: true);
+            CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
             // TODO: use this.Content to load your game content here
         }
@@ -145,6 +150,13 @@ namespace CaveGeneration
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                gameState = GameState.MainMenu;
+
+            }
         }
 
         private void UpdateGameplay(GameTime gameTime)
@@ -185,7 +197,11 @@ namespace CaveGeneration
                 Exit();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
                 gameState = GameState.Playing;
+
+            }
         }
 
         /// <summary>
@@ -231,7 +247,8 @@ namespace CaveGeneration
 
             if (!GameOverMessage.Equals(""))
             {
-                spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y), Color.Black);
+                spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y - 50), Color.Black);
+                spriteBatch.DrawString(font, "Press enter to return to menu", new Vector2(player.Position.X, player.Position.Y), Color.Black);
                 spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Black);
             }
 
@@ -259,7 +276,17 @@ namespace CaveGeneration
 
         private void DrawMainMenu(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            GraphicsDevice.Clear(Color.White);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
+
+            
+            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(600,100), Color.Black);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(600,200), Color.Black);
+            
+
+            spriteBatch.End();
         }
 
         private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, System.Func<int, Color> paint)
