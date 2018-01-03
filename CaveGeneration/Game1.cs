@@ -185,9 +185,18 @@ namespace CaveGeneration
                 enemy.Update(gameTime);
                 if (playerRectangle.Intersects(new Rectangle((int)enemy.Position.X, (int)enemy.Position.Y, enemy.Texture.Width, enemy.Texture.Height)))
                 {
-                    GameOverMessage = "You Lose!";
                     
-                    gameState = GameState.GameOver;
+                    if (!player.hurt)
+                    {
+                        player.dealDamage();
+                    }
+                    if (!player.isAlive())
+                    {
+                        GameOverMessage = "You Lose!";
+
+                        gameState = GameState.GameOver;
+                    }
+                  
                 }
             }
         }

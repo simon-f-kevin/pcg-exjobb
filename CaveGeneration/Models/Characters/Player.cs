@@ -14,6 +14,14 @@ namespace CaveGeneration.Models.Characters
 
         List<Action> oldInput = null;
 
+        int hp = 3;
+
+        public bool hurt = false;
+
+        int hurtmaxframes = 120;
+        int hurtframes = 0;
+
+
         public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
         {
             Position = position;
@@ -23,6 +31,52 @@ namespace CaveGeneration.Models.Characters
             JumpingHeight = texture.Height * 1.5f;
             Gravity = 2;
             Alive = true;
+        }
+
+        public new void Draw()
+        {
+            if (hurt)
+            {
+                if(hurtframes < hurtmaxframes)
+                {
+                    hurtframes++;
+                    SpriteBatch.Draw(Texture, Position, Color.Red);
+                }
+                else
+                {
+                    hurtframes = 0;
+                    hurt = false;
+                    SpriteBatch.Draw(Texture, Position, Color.White);
+                }
+            }
+            else
+            {
+                SpriteBatch.Draw(Texture, Position, Color.White);
+            }
+        }
+
+
+        public void dealDamage()
+        {
+            hp--;
+            if (hp <= 0)
+            {
+                Alive = false;
+            }
+            else
+            {
+                hurt = true;
+            }
+        }
+        public bool isAlive()
+        {
+            if (hp <= 0)
+            {
+                Alive = false;
+            }
+            else Alive = true;
+
+            return Alive;
         }
 
         public override void Update(GameTime gametime)
