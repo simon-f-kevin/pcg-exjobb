@@ -54,6 +54,7 @@ namespace CaveGeneration
         int mapHeight = 16;
         bool useCopy = true;
 
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -282,8 +283,8 @@ namespace CaveGeneration
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
 
             
-            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(600,100), Color.Black);
-            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(600,200), Color.Black);
+            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(player.Position.X, player.Position.Y), Color.Black);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Black);
             
 
             spriteBatch.End();
