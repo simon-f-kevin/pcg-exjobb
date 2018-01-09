@@ -291,20 +291,20 @@ namespace CaveGeneration.Content_Generation.Astar
         {
             int x = inAround.X;
             int y = inAround.Y;
-
+/*
             if ((x > 0) && (y > 0))
                 inNeighbors[0] = m_SearchSpace[x - 1, y - 1];
             else
-                inNeighbors[0] = null;
+ */               inNeighbors[0] = null;
 
             if (y > 0)
                 inNeighbors[1] = m_SearchSpace[x, y - 1];
             else
                 inNeighbors[1] = null;
 
-            if ((x < Width - 1) && (y > 0))
-                inNeighbors[2] = m_SearchSpace[x + 1, y - 1];
-            else
+            //if ((x < Width - 1) && (y > 0))
+            //    inNeighbors[2] = m_SearchSpace[x + 1, y - 1];
+            //else
                 inNeighbors[2] = null;
 
             if (x > 0)
@@ -317,9 +317,9 @@ namespace CaveGeneration.Content_Generation.Astar
             else
                 inNeighbors[4] = null;
 
-            if ((x > 0) && (y < Height - 1))
-                inNeighbors[5] = m_SearchSpace[x - 1, y + 1];
-            else
+            //if ((x > 0) && (y < Height - 1))
+            //    inNeighbors[5] = m_SearchSpace[x - 1, y + 1];
+            //else
                 inNeighbors[5] = null;
 
             if (y < Height - 1)
@@ -327,9 +327,9 @@ namespace CaveGeneration.Content_Generation.Astar
             else
                 inNeighbors[6] = null;
 
-            if ((x < Width - 1) && (y < Height - 1))
-                inNeighbors[7] = m_SearchSpace[x + 1, y + 1];
-            else
+            //if ((x < Width - 1) && (y < Height - 1))
+            //    inNeighbors[7] = m_SearchSpace[x + 1, y + 1];
+            //else
                 inNeighbors[7] = null;
         }
 
