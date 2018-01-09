@@ -18,7 +18,7 @@ namespace CaveGeneration.Models.Characters
 
         public bool hurt = false;
 
-        int hurtmaxframes = 120;
+        int hurtmaxframes = 60;
         int hurtframes = 0;
 
 
