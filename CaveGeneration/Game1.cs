@@ -89,7 +89,7 @@ namespace CaveGeneration
 
             GameOverMessage = "";
 
-            gameState = GameState.Playing;
+            gameState = GameState.MainMenu;
 
             base.Initialize();
         }
@@ -289,11 +289,11 @@ namespace CaveGeneration
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
+            spriteBatch.Begin();
 
             
-            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(player.Position.X, player.Position.Y), Color.Black);
-            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Black);
+            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(200, 200), Color.Black);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 200 + 50), Color.Black);
             
 
             spriteBatch.End();
