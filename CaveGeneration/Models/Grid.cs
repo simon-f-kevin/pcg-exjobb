@@ -26,11 +26,11 @@ namespace CaveGeneration.Models
 
         private static Grid _instance;
 
-        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap)
+        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap, MapGeneratorType type)
         {
             if(_instance == null)
             {
-                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap, useCopyOfMap);
+                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap, useCopyOfMap, type);
                 return _instance;
             }
             return _instance;
@@ -101,14 +101,21 @@ namespace CaveGeneration.Models
             return move.FurthestAvailableLocationSoFar;
         }
 
-        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap)
+        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap, MapGeneratorType type)
         {
             WidthInBlocks = x;
             HeightInBlocks = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            //mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
-            mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks);
+            if (type == MapGeneratorType.DrunkardWalk)
+            {
+                mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks);
+            }
+            else if(type == MapGeneratorType.RandomPlacement)
+            {
+                mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
+            }
+
             mapCleaner = new CellularAutomata(WidthInBlocks, HeightInBlocks, useCopyOfMap);
             Init(seed, iterationsOfSmoothmap);
         }

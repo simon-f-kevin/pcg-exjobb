@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace CaveGeneration.Content_Generation.Map_Generation
 {
+    public enum MapGeneratorType
+    {
+        DrunkardWalk, 
+        RandomPlacement,
+    }
+
     public abstract class MapGenerator
     {
         public int Width;

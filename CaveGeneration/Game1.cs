@@ -328,7 +328,7 @@ namespace CaveGeneration
             do
             {
                 Grid.ClearInstance();
-                grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap);
+                grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap, Content_Generation.Map_Generation.MapGeneratorType.DrunkardWalk);
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
                 enemySpawner = new EnemySpawner(3, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
