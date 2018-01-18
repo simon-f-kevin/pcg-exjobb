@@ -56,7 +56,7 @@ namespace CaveGeneration.Models.Characters
         }
 
 
-        public void dealDamage()
+        public void DealDamage()
         {
             hp--;
             if (hp <= 0)
@@ -68,7 +68,8 @@ namespace CaveGeneration.Models.Characters
                 hurt = true;
             }
         }
-        public bool isAlive()
+
+        public bool IsAlive()
         {
             if (hp <= 0)
             {
@@ -77,6 +78,11 @@ namespace CaveGeneration.Models.Characters
             else Alive = true;
 
             return Alive;
+        }
+
+        public int GetHp()
+        {
+            return hp;
         }
 
         public override void Update(GameTime gametime)

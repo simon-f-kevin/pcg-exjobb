@@ -34,6 +34,7 @@ namespace CaveGeneration
         Goal goal;
         StartAndGoalPlacer startAndGoalPlacer;
         EnemySpawner enemySpawner;
+        HealthCounter hpCounter;
 
         List<Enemy> allEnemies;
 
@@ -103,6 +104,7 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("Font");
+            hpCounter = new HealthCounter(spriteBatch, font);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.White);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
             enemyTexture = Content.Load<Texture2D>("enemy");
@@ -177,6 +179,7 @@ namespace CaveGeneration
             }
 
             // TODO: Add your update logic here
+            hpCounter.Update(player.GetHp());
             player.Update(gameTime);
             camera.Update(gameTime, this);
 
@@ -188,9 +191,9 @@ namespace CaveGeneration
                     
                     if (!player.hurt)
                     {
-                        player.dealDamage();
+                        player.DealDamage();
                     }
-                    if (!player.isAlive())
+                    if (!player.IsAlive())
                     {
                         GameOverMessage = "You Lose!";
 
@@ -275,6 +278,7 @@ namespace CaveGeneration
             grid.Draw();
             player.Draw();
             goal.Draw();
+            hpCounter.Draw(player.Position);
 
             foreach (var enemy in allEnemies)
             {

@@ -60,6 +60,7 @@
     <Compile Include="Models\Characters\Enemy.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Grid.cs" />
+    <Compile Include="Models\HealthCounter.cs" />
     <Compile Include="Models\Input.cs" />
     <Compile Include="Models\MovementWrapper.cs" />
     <Compile Include="Program.cs" />
