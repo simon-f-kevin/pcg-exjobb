@@ -1,5 +1,6 @@
 ﻿using CaveGeneration.Content_Generation.Map_Cleanup;
 using CaveGeneration.Content_Generation.Map_Generation;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -26,11 +27,11 @@ namespace CaveGeneration.Models
 
         private static Grid _instance;
 
-        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap, MapGeneratorType type)
+        public static Grid CreateNewGrid(int gridWidth, int gridHeight, SpriteBatch sb, Texture2D texture, string seed, Settings settings)
         {
             if(_instance == null)
             {
-                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, iterationsOfSmoothmap, useCopyOfMap, type);
+                _instance = new Grid(gridWidth, gridHeight, sb, texture, seed, settings);
                 return _instance;
             }
             return _instance;
@@ -101,23 +102,23 @@ namespace CaveGeneration.Models
             return move.FurthestAvailableLocationSoFar;
         }
 
-        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, int iterationsOfSmoothmap, bool useCopyOfMap, MapGeneratorType type)
+        private Grid(int x, int y, SpriteBatch sb, Texture2D texture, string seed, Settings settings)
         {
             WidthInBlocks = x;
             HeightInBlocks = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            if (type == MapGeneratorType.DrunkardWalk)
+            if (settings.mapGeneratorType == MapGeneratorType.DrunkardWalk)
             {
-                mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks);
+                mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks, settings);
             }
-            else if(type == MapGeneratorType.RandomPlacement)
+            else if(settings.mapGeneratorType == MapGeneratorType.RandomPlacement)
             {
-                mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, randomFillPercent: 45); //change this when choosing algorithm for generation
+                mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, settings); //change this when choosing algorithm for generation
             }
 
-            mapCleaner = new CellularAutomata(WidthInBlocks, HeightInBlocks, useCopyOfMap);
-            Init(seed, iterationsOfSmoothmap);
+            mapCleaner = new CellularAutomata(WidthInBlocks, HeightInBlocks, settings);
+            Init(seed, settings.IterationsOfsmoothmap);
         }
 
         private void Init(string seed, int iterationsOfSmoothmap)

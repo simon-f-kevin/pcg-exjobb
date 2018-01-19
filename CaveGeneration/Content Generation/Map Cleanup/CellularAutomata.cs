@@ -1,4 +1,5 @@
-﻿using CaveGeneration.Models;
+﻿using CaveGeneration.Content_Generation.Parameter_Settings;
+using CaveGeneration.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,13 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
         
         private bool useCopy;
 
-        public CellularAutomata(int width, int height, bool useMapCopy)
+
+        public CellularAutomata(int width, int height, Settings settings)
         {
             this.Width = width;
             this.Height = height;
-            useCopy = useMapCopy;
+            this.settings = settings;
+            useCopy = settings.usecopy;
         }
 
         public override int[,] SmoothMap(int[,] map, int iterationsOfSmoothmap)

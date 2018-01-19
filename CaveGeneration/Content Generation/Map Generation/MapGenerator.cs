@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaveGeneration.Content_Generation.Parameter_Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,14 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         public bool UseRandomSeed;
         public string Seed;
 
-        public MapGenerator(int width, int height)
+        protected Settings settings;
+
+
+        public MapGenerator(int width, int height, Settings settings)
         {
             Height = height;
             Width = width;
+            this.settings = settings;
         }
 
         public abstract void Start(string seed);

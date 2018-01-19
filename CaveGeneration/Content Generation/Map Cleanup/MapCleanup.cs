@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaveGeneration.Content_Generation.Parameter_Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
         protected int Width;
         protected int Height;
         protected int[,] map;
+
+        protected Settings settings;
+
 
         public abstract int[,] SmoothMap(int[,] map, int iterationsOfSmoothmap);
 

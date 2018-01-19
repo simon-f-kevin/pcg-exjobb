@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using CaveGeneration.Content_Generation.Astar;
 using System.Collections.Generic;
 using CaveGeneration.Models.Characters;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 
 namespace CaveGeneration.Content_Generation.Goal_Placement
 {
@@ -18,6 +19,9 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         private Texture2D playerTexture;
         private Player player;
         private GraphicsDeviceManager graphics;
+
+        private Settings settings;
+
 
         public StartAndGoalPlacer(Goal goal, Texture2D texture, GraphicsDeviceManager graphics)
         {

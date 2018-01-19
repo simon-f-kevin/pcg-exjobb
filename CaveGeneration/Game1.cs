@@ -9,6 +9,7 @@ using CaveGeneration.Content_Generation.Astar;
 using System.Collections.Generic;
 using CaveGeneration.Models.Characters;
 using CaveGeneration.Content_Generation.Enemy_Placement;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 
 namespace CaveGeneration
 {
@@ -324,13 +325,17 @@ namespace CaveGeneration
 
         private void CreateMap(int mapWidthInBlocks, int mapHeightInBlocks, bool useCopyOfMap)
         {
+
+            Settings settings = PredefinedSettings.settings1;
+            
+
             bool solveable = true;
             do
             {
                 Grid.ClearInstance();
-                grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, 2, useCopyOfMap, Content_Generation.Map_Generation.MapGeneratorType.DrunkardWalk);
+                grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
-                enemySpawner = new EnemySpawner(3, enemyTexture, spriteBatch);
+                enemySpawner = new EnemySpawner(settings, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
                 enemySpawner.RunSpawner(spawnPoint);
                 player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);

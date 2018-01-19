@@ -1,4 +1,5 @@
 ﻿using CaveGeneration.Content_Generation.Map_Cleanup;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace CaveGeneration.Content_Generation.Map_Generation
     {
         public int randomFillPercent;
 
-        public RandomPlacement(int width, int height, int randomFillPercent) : base(width, height)
+        public RandomPlacement(int width, int height, Settings settings) : base(width, height, settings)
         {
-            this.randomFillPercent = randomFillPercent;
+            this.randomFillPercent = settings.randomFillPercent;
         }
 
         public override void Start(string seed)

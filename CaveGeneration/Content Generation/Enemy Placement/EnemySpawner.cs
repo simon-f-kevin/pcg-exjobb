@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,16 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
         private Random rnd;
         private SpriteBatch spriteBatch;
 
+        private Settings settings;
+
         private Grid grid = Grid.Instance();
 
-        public EnemySpawner(int numberOfEnemies, Texture2D enemyTexture, SpriteBatch spriteBatch)
+        public EnemySpawner(Settings settings, Texture2D enemyTexture, SpriteBatch spriteBatch)
         {
+            this.settings = settings;
             Enemies = new List<Enemy>();
             enemyIDs = new List<int>();
-            nEnemies = numberOfEnemies;
+            nEnemies = settings.EnemyCount;
             this.enemyTexture = enemyTexture;
             this.spriteBatch = spriteBatch;
             rnd = new Random();

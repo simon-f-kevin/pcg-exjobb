@@ -1,4 +1,5 @@
 ﻿using CaveGeneration.Content_Generation.Map_Cleanup;
+using CaveGeneration.Content_Generation.Parameter_Settings;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -30,9 +31,11 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         */
 
-        public DrunkardWalk(int width, int height) : base(width, height)
+        public DrunkardWalk(int width, int height, Settings settings) : base(width, height, settings)
         {
-
+            numberOfSteps = settings.numberOfSteps;
+            numberOfWalks = settings.numberOfWalks;
+            distanceBetweenWalks = settings.distanceBetweenWalks;
         }
 
         public override void Start(string seed)
