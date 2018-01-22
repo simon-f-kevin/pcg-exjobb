@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using CaveGeneration.Models.Characters;
 using CaveGeneration.Content_Generation.Enemy_Placement;
 using CaveGeneration.Content_Generation.Parameter_Settings;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace CaveGeneration
 {
@@ -26,6 +28,8 @@ namespace CaveGeneration
         Texture2D characterTexture;
         Texture2D goalTexture;
         Texture2D enemyTexture;
+
+        Song backgroundMusic;
 
         SpriteFont font;
 
@@ -52,7 +56,11 @@ namespace CaveGeneration
         int totalLives;
         int gamesWon;
 
+        bool musicIsPlaying;
         GameState gameState;
+
+
+        KeyboardState previousState;
 
         //Create map parameters
         int mapWidth = 64;
@@ -97,6 +105,8 @@ namespace CaveGeneration
             totalLives = 0;
             gamesWon = 0;
             gameState = GameState.MainMenu;
+            musicIsPlaying = false;
+            MediaPlayer.IsRepeating = true;
 
             base.Initialize();
         }
@@ -110,6 +120,7 @@ namespace CaveGeneration
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("Font");
+            backgroundMusic = Content.Load<Song>("cave-music");
             hpCounter = new HealthCounter(spriteBatch, font);
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.White);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
@@ -119,6 +130,13 @@ namespace CaveGeneration
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
             playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
+
+            if (!musicIsPlaying)
+            {
+                MediaPlayer.Play(backgroundMusic);
+                musicIsPlaying = true;
+            }
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -188,6 +206,24 @@ namespace CaveGeneration
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && !previousState.IsKeyDown(Keys.M))
+            {
+                if(musicIsPlaying == false)
+                {
+                    MediaPlayer.Resume();
+                    musicIsPlaying = true;
+                }
+                else
+                {
+                    MediaPlayer.Pause();
+                    musicIsPlaying = false;
+                }
+                
+            }
+            previousState = Keyboard.GetState();
+
+               
+
             if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
             {
                 GameOverMessage = "You Win!";
@@ -249,6 +285,9 @@ namespace CaveGeneration
 
         private void UpdateStatScreen(GameTime gameTime)
         {
+            musicIsPlaying = false;
+            MediaPlayer.Stop();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
         }
@@ -313,6 +352,7 @@ namespace CaveGeneration
 
             spriteBatch.DrawString(font, "Press enter to start game", new Vector2(200, 200), Color.Navy);
             spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 200 + 50), Color.Navy);
+            spriteBatch.DrawString(font, "Nick & Simon 2018", new Vector2(200, 200 + 200), Color.Navy);
 
 
             spriteBatch.End();
@@ -358,7 +398,7 @@ namespace CaveGeneration
             {
                 spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y - 50), Color.Navy);
                 spriteBatch.DrawString(font, "Game " + (numberOfGames + 1) + " of 5 ", new Vector2(player.Position.X + 250, player.Position.Y - 50), Color.Navy);
-                spriteBatch.DrawString(font, "Press enter to play again", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
+                spriteBatch.DrawString(font, "Press enter to continue", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
                 spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Navy);
             }
 
@@ -375,6 +415,7 @@ namespace CaveGeneration
             spriteBatch.DrawString(font, "You won " + gamesWon + " games out of 5!", new Vector2(player.Position.X, player.Position.Y - 50), Color.Navy);
             spriteBatch.DrawString(font, "You got " + totalLives + " points!", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
             spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Navy);
+            spriteBatch.DrawString(font, "Music by KyBOz / www.oreitia.com", new Vector2(player.Position.X, player.Position.Y + 100), Color.Navy);
 
             spriteBatch.End();
         }

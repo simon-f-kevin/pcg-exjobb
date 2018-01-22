@@ -116,3 +116,9 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin cave-music.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:cave-music.mp3
+
