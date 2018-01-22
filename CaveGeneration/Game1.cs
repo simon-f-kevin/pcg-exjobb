@@ -95,7 +95,7 @@ namespace CaveGeneration
             GameOverMessage = "";
             numberOfGames = 0;
             totalLives = 0;
-            gamesWon = 0;
+            gamesWon = 1;
             gameState = GameState.MainMenu;
 
             base.Initialize();
@@ -227,8 +227,6 @@ namespace CaveGeneration
         /// <param name="gameTime"></param>
         private void UpdateEndOfGame(GameTime gameTime)
         {
-
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -237,16 +235,17 @@ namespace CaveGeneration
             {
                 if (numberOfGames < 4)
                 {
+                    GetStats();
                     RestartGame();
                 }
                 else if (numberOfGames == 4)
                 {
+                    GetStats();
                     gameState = GameState.StatScreen;
                 }
                 else gameState = GameState.GameOver;
             }
         }
-
 
         private void UpdateStatScreen(GameTime gameTime)
         {
@@ -255,16 +254,23 @@ namespace CaveGeneration
         }
 
         /// <summary>
+        /// This method gets the stats from your current game and adds them to total stats
+        /// </summary>
+        private void GetStats()
+        {
+            totalLives += player.GetHp();
+            if (GameOverMessage.Equals("You Win!"))
+            {
+                gamesWon++;
+            }
+        }
+
+        /// <summary>
         /// This method crates a new map to let the player play the game again. 
         /// </summary>
         private void RestartGame()
         {
             numberOfGames++;
-            totalLives += player.GetHp();
-            if(GameOverMessage.Equals("You Win!"))
-            {
-                gamesWon++;
-            }
             CreateMap(mapWidth, mapHeight, useCopy);
             gameState = GameState.Playing;
         }
