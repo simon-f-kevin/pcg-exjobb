@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CaveGeneration.Content_Generation.Parameter_Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CaveGeneration.Models.Characters
 
         List<Action> oldInput = null;
 
-        int hp = 3;
+        int hp;
 
         public bool hurt = false;
 
@@ -22,7 +23,7 @@ namespace CaveGeneration.Models.Characters
         int hurtframes = 0;
 
 
-        public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch)
+        public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch, Settings settings)
         {
             Position = position;
             Texture = texture;
@@ -30,6 +31,7 @@ namespace CaveGeneration.Models.Characters
             MaxSpeed = 2;
             JumpingHeight = texture.Height * 1.5f;
             Gravity = 2;
+            hp = settings.PlayerLives;
             Alive = true;
         }
 

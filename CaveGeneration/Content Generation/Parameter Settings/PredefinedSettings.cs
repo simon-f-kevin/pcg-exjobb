@@ -15,11 +15,12 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             GoalonGround = true,
             usecopy = true,
             IterationsOfsmoothmap = 2,
-            distanceBetweenWalks = 5,
-            numberOfSteps = 250,
-            numberOfWalks = 5,
-            randomFillPercent = 45,
-            mapGeneratorType = Content_Generation.Map_Generation.MapGeneratorType.DrunkardWalk
+            DistanceBetweenWalks = 5,
+            NumberOfSteps = 250,
+            NumberOfWalks = 5,
+            RandomFillPercent = 45,
+            mapGeneratorType = Content_Generation.Map_Generation.MapGeneratorType.DrunkardWalk,
+            PlayerLives = 3
         };
     }
 }

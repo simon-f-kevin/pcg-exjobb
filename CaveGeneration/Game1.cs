@@ -48,6 +48,9 @@ namespace CaveGeneration
         int blockWidth;
 
         string GameOverMessage;
+        int numberOfGames;
+        int totalLives;
+        int gamesWon;
 
         GameState gameState;
 
@@ -90,7 +93,9 @@ namespace CaveGeneration
             camera = new Camera(GraphicsDevice.Viewport);
 
             GameOverMessage = "";
-
+            numberOfGames = 0;
+            totalLives = 0;
+            gamesWon = 0;
             gameState = GameState.MainMenu;
 
             base.Initialize();
@@ -145,24 +150,35 @@ namespace CaveGeneration
                 case GameState.GameOver:
                     UpdateEndOfGame(gameTime);
                     break;
+                case GameState.StatScreen:
+                    UpdateStatScreen(gameTime);
+                    break;
             }
             base.Update(gameTime);
             
         }
 
-        private void UpdateEndOfGame(GameTime gameTime)
+        /// <summary>
+        /// This is the update loop for the main menu
+        /// </summary>
+        /// <param name="gameTime"></param>
+        private void UpdateMainMenu(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                gameState = GameState.MainMenu;
+                //CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
+                gameState = GameState.Playing;
 
             }
         }
 
+        /// <summary>
+        /// Update loop for playing the game.
+        /// </summary>
+        /// <param name="gameTime"></param>
         private void UpdateGameplay(GameTime gameTime)
         {
             playerPosition = player.Position;
@@ -205,17 +221,52 @@ namespace CaveGeneration
             }
         }
 
-        private void UpdateMainMenu(GameTime gameTime)
+        /// <summary>
+        /// The update loop for the end of game screen
+        /// </summary>
+        /// <param name="gameTime"></param>
+        private void UpdateEndOfGame(GameTime gameTime)
         {
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
-                CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
-                gameState = GameState.Playing;
-
+                if (numberOfGames < 4)
+                {
+                    RestartGame();
+                }
+                else if (numberOfGames == 4)
+                {
+                    gameState = GameState.StatScreen;
+                }
+                else gameState = GameState.GameOver;
             }
+        }
+
+
+        private void UpdateStatScreen(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+        }
+
+        /// <summary>
+        /// This method crates a new map to let the player play the game again. 
+        /// </summary>
+        private void RestartGame()
+        {
+            numberOfGames++;
+            totalLives += player.GetHp();
+            if(GameOverMessage.Equals("You Win!"))
+            {
+                gamesWon++;
+            }
+            CreateMap(mapWidth, mapHeight, useCopy);
+            gameState = GameState.Playing;
         }
 
         /// <summary>
@@ -237,34 +288,26 @@ namespace CaveGeneration
                 case GameState.GameOver:
                     DrawEndOfGame(gameTime);
                     break;
+                case GameState.StatScreen:
+                    DrawStatScreen(gameTime);
+                    break;
             }
 
             base.Draw(gameTime);
             
         }
 
-        private void DrawEndOfGame(GameTime gameTime)
+        private void DrawMainMenu(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
+            spriteBatch.Begin();
 
-            grid.Draw();
-            player.Draw();
-            goal.Draw();
 
-            foreach (var enemy in allEnemies)
-            {
-                enemy.Draw();
-            }
+            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(200, 200), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 200 + 50), Color.Navy);
 
-            if (!GameOverMessage.Equals(""))
-            {
-                spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y - 50), Color.Black);
-                spriteBatch.DrawString(font, "Press enter to return to menu", new Vector2(player.Position.X, player.Position.Y), Color.Black);
-                spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Black);
-            }
 
             spriteBatch.End();
         }
@@ -289,17 +332,43 @@ namespace CaveGeneration
             spriteBatch.End();
         }
 
-        private void DrawMainMenu(GameTime gameTime)
+        private void DrawEndOfGame(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.White);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
+
+            grid.Draw();
+            player.Draw();
+            goal.Draw();
+
+            foreach (var enemy in allEnemies)
+            {
+                enemy.Draw();
+            }
+
+            if (!GameOverMessage.Equals(""))
+            {
+                spriteBatch.DrawString(font, GameOverMessage, new Vector2(player.Position.X, player.Position.Y - 50), Color.Navy);
+                spriteBatch.DrawString(font, "Game " + (numberOfGames + 1) + " of 5 ", new Vector2(player.Position.X + 250, player.Position.Y - 50), Color.Navy);
+                spriteBatch.DrawString(font, "Press enter to play again", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
+                spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Navy);
+            }
+
+            spriteBatch.End();
+        }
+
+        private void DrawStatScreen(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            
-            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(200, 200), Color.Black);
-            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 200 + 50), Color.Black);
-            
+            spriteBatch.DrawString(font, "You won " + gamesWon + " games out of 5!", new Vector2(player.Position.X, player.Position.Y - 50), Color.Navy);
+            spriteBatch.DrawString(font, "You got " + totalLives + " points!", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Navy);
 
             spriteBatch.End();
         }
@@ -338,7 +407,7 @@ namespace CaveGeneration
                 enemySpawner = new EnemySpawner(settings, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
                 enemySpawner.RunSpawner(spawnPoint);
-                player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch);
+                player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch, settings);
                 startAndGoalPlacer.SetPlayer(player);
                 allEnemies = enemySpawner.GetEnemies();
 

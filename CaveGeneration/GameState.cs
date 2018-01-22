@@ -11,5 +11,6 @@ namespace CaveGeneration
         MainMenu,
         Playing,
         GameOver,
+        StatScreen,
     }
 }

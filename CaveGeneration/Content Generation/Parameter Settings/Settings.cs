@@ -19,13 +19,15 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
         public MapGeneratorType mapGeneratorType { get; set; }
 
-        public int numberOfWalks { get; set; }
+        public int NumberOfWalks { get; set; }
 
-        public int numberOfSteps { get; set; }
+        public int NumberOfSteps { get; set; }
 
-        public int distanceBetweenWalks { get; set; }
+        public int DistanceBetweenWalks { get; set; }
 
-        public int randomFillPercent { get; set; }
+        public int RandomFillPercent { get; set; }
+
+        public int PlayerLives { get; set; }
 
 
     }

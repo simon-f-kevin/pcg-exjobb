@@ -33,9 +33,9 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
         public DrunkardWalk(int width, int height, Settings settings) : base(width, height, settings)
         {
-            numberOfSteps = settings.numberOfSteps;
-            numberOfWalks = settings.numberOfWalks;
-            distanceBetweenWalks = settings.distanceBetweenWalks;
+            numberOfSteps = settings.NumberOfSteps;
+            numberOfWalks = settings.NumberOfWalks;
+            distanceBetweenWalks = settings.DistanceBetweenWalks;
         }
 
         public override void Start(string seed)

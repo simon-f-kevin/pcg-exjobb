@@ -14,7 +14,7 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
         public RandomPlacement(int width, int height, Settings settings) : base(width, height, settings)
         {
-            this.randomFillPercent = settings.randomFillPercent;
+            this.randomFillPercent = settings.RandomFillPercent;
         }
 
         public override void Start(string seed)

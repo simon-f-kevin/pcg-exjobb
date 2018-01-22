@@ -49,7 +49,7 @@ namespace CaveGeneration.Models
 
         public void Draw(Vector2 playerPosition)
         {
-            spriteBatch.DrawString(font, NumberOfLives.ToString() , DrawingPosition(playerPosition), Color.Black);
+            spriteBatch.DrawString(font, "Lives: " + NumberOfLives.ToString() , DrawingPosition(playerPosition), Color.Black);
         }
     }
 }
