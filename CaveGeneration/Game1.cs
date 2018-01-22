@@ -95,7 +95,7 @@ namespace CaveGeneration
             GameOverMessage = "";
             numberOfGames = 0;
             totalLives = 0;
-            gamesWon = 1;
+            gamesWon = 0;
             gameState = GameState.MainMenu;
 
             base.Initialize();
@@ -370,7 +370,7 @@ namespace CaveGeneration
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
 
             spriteBatch.DrawString(font, "You won " + gamesWon + " games out of 5!", new Vector2(player.Position.X, player.Position.Y - 50), Color.Navy);
             spriteBatch.DrawString(font, "You got " + totalLives + " points!", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
