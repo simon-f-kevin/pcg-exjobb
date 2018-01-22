@@ -108,11 +108,11 @@ namespace CaveGeneration.Models
             HeightInBlocks = y;
             _spriteBatch = sb;
             CellTexture = texture;
-            if (settings.mapGeneratorType == MapGeneratorType.DrunkardWalk)
+            if (settings.MapGeneratorType == MapGeneratorType.DrunkardWalk)
             {
                 mapGenerator = new DrunkardWalk(WidthInBlocks, HeightInBlocks, settings);
             }
-            else if(settings.mapGeneratorType == MapGeneratorType.RandomPlacement)
+            else if(settings.MapGeneratorType == MapGeneratorType.RandomPlacement)
             {
                 mapGenerator = new RandomPlacement(WidthInBlocks, HeightInBlocks, settings); //change this when choosing algorithm for generation
             }

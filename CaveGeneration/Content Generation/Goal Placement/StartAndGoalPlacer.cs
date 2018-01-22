@@ -23,11 +23,12 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         private Settings settings;
 
 
-        public StartAndGoalPlacer(Goal goal, Texture2D texture, GraphicsDeviceManager graphics)
+        public StartAndGoalPlacer(Goal goal, Texture2D texture, GraphicsDeviceManager graphics, Settings settings)
         {
             Map = grid.Cells;
             Goal = goal;
             this.graphics = graphics;
+            this.settings = settings;
             playerTexture = texture;
             TestSpawnPoint();
         }
@@ -71,7 +72,10 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
                         MoveGoalToLeft();
                         nLeftMoves++;
                     }
-                    MoveGoalToGround();
+                    if(settings.GoalonGround == true)
+                    {
+                        MoveGoalToGround();
+                    }
                 }
             }
             return Goal;

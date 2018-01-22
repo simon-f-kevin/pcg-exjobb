@@ -17,7 +17,6 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         int distanceBetweenWalks = 5;
 
         Random rand;
-        int numberofSmoothings;
 
         Directions directions;
 
@@ -91,8 +90,8 @@ namespace CaveGeneration.Content_Generation.Map_Generation
 
         private void MultiWalk(int walkers)
         {
-            int x = 0;
-            int y = 0;
+            int x = (int)settings.StartPositionForWalkers.X;
+            int y = (int)settings.StartPositionForWalkers.Y;
 
             for (int i = 0; i < walkers; i++)
             {

@@ -21,6 +21,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
         private SpriteBatch spriteBatch;
 
         private Settings settings;
+        private int distanceToMove;
 
         private Grid grid = Grid.Instance();
 
@@ -32,6 +33,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             nEnemies = settings.EnemyCount;
             this.enemyTexture = enemyTexture;
             this.spriteBatch = spriteBatch;
+            distanceToMove = settings.DistanceBetweenEnemies;
             rnd = new Random();
         }
 
@@ -80,7 +82,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                         Rectangle prevEnemyRectangle = new Rectangle(new Point((int)prevEnemy.Position.X, (int)prevEnemy.Position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
                         if (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle) || enemyRectangle.Intersects(playerSpawnpoint))
                         {
-                            X = X + enemyTexture.Width; //if two enemies spawn on eachother the new one moves to the right
+                            X = X + enemy.Texture.Width + distanceToMove; //if two enemies spawn on eachother the new one moves to the right
                             enemyRectangle.X = (int)X;
                         }
                     }

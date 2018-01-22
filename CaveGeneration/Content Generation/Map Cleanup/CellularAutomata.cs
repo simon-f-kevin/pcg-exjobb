@@ -18,7 +18,7 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
             this.Width = width;
             this.Height = height;
             this.settings = settings;
-            useCopy = settings.usecopy;
+            useCopy = settings.UseCopy;
         }
 
         public override int[,] SmoothMap(int[,] map, int iterationsOfSmoothmap)
@@ -47,11 +47,11 @@ namespace CaveGeneration.Content_Generation.Map_Cleanup
                         neighbourWallTiles = GetSorroundingWallCount(x, y, map);
                     }
 
-                    if (neighbourWallTiles > 4)
+                    if (neighbourWallTiles > settings.NumberOfNeighborCells)
                     {
                         map[x, y] = 1;
                     }
-                    else if (neighbourWallTiles < 4)
+                    else if (neighbourWallTiles < settings.NumberOfNeighborCells)
                     {
                         map[x, y] = 0;
                     }

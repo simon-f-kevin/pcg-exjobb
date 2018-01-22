@@ -57,7 +57,6 @@ namespace CaveGeneration.Models.Characters
             }
         }
 
-
         public void DealDamage()
         {
             hp--;

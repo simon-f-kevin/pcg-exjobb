@@ -13,17 +13,15 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
         {
             //Enemy placement
             EnemyCount = 3,
-            //distance between enemeies
+            DistanceBetweenEnemies = 10,
 
-
-
-            //Goal and start position  NOT IMPLEMENTED
+            //Goal and start position
             GoalonGround = true,
 
             //Cellular Automata
-            usecopy = true,
+            UseCopy = true,
             IterationsOfsmoothmap = 2,
-            //number of neighbors for cellular automata
+            NumberOfNeighborCells = 4,
 
 
             //Drunkard Walk
@@ -37,16 +35,17 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
                 Left = 20,
                 Right = 40
             },
+            StartPositionForWalkers = new Microsoft.Xna.Framework.Vector2(0,0),
 
             //Random placement
             RandomFillPercent = 45,
 
 
             //Which map generator to use;
-            mapGeneratorType = Content_Generation.Map_Generation.MapGeneratorType.DrunkardWalk,
+            MapGeneratorType = Map_Generation.MapGeneratorType.DrunkardWalk,
 
 
-            //Player lives
+            //Player lives 
             PlayerLives = 3
         };
     }

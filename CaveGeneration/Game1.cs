@@ -30,7 +30,6 @@ namespace CaveGeneration
         Texture2D enemyTexture;
 
         Song backgroundMusic;
-
         SpriteFont font;
 
         Grid grid;
@@ -58,7 +57,6 @@ namespace CaveGeneration
 
         bool musicIsPlaying;
         GameState gameState;
-
 
         KeyboardState previousState;
 
@@ -156,7 +154,6 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
             switch (gameState)
             {
                 case GameState.MainMenu:
@@ -450,7 +447,7 @@ namespace CaveGeneration
             {
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
-                startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics);
+                startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics, settings);
                 enemySpawner = new EnemySpawner(settings, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
                 enemySpawner.RunSpawner(spawnPoint);
