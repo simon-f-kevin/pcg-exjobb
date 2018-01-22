@@ -19,23 +19,26 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         Random rand;
         int numberofSmoothings;
 
-        /* 
-        public DIRECTION WeightedDirection;
-        public int Weight;       
-        public enum DIRECTION
+        Directions directions;
+
+        /*
+         * The odds of DrunkardWalk going in a certain direction
+         * All ints must add up to 100
+         */
+        public class Directions
         {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT
+            public int Up { get; set; }
+            public int Down { get; set; }
+            public int Left { get; set; }
+            public int Right { get; set; }
         }
-        */
 
         public DrunkardWalk(int width, int height, Settings settings) : base(width, height, settings)
         {
             numberOfSteps = settings.NumberOfSteps;
             numberOfWalks = settings.NumberOfWalks;
             distanceBetweenWalks = settings.DistanceBetweenWalks;
+            directions = settings.DrunkardDirections;
         }
 
         public override void Start(string seed)
@@ -99,10 +102,10 @@ namespace CaveGeneration.Content_Generation.Map_Generation
         }
         private void Walk(int StartX, int StartY)
         {
-            int upChance = 20;      //Ignore this column
-            int downChance = 20 + upChance;
-            int leftChance = 20 + downChance;
-            int rightChance = 40 + leftChance;
+            int upChance = directions.Up;       
+            int downChance = directions.Down    + upChance;
+            int leftChance = directions.Left    + downChance;
+            int rightChance = directions.Right  + leftChance;
 
             for (int i = 0; i < numberOfSteps; i++)
             {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CaveGeneration.Content_Generation.Map_Generation.DrunkardWalk;
 
 namespace CaveGeneration.Content_Generation.Parameter_Settings
 {
@@ -29,6 +30,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
         public int PlayerLives { get; set; }
 
+        public Directions DrunkardDirections;
 
     }
 }
