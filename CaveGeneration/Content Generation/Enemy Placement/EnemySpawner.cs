@@ -17,6 +17,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
         private List<int> enemyIDs;
         private int nEnemies;
         private Texture2D enemyTexture;
+        private Texture2D staticEnemyTexture;
         private Random rnd;
         private SpriteBatch spriteBatch;
 
@@ -25,26 +26,38 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
 
         private Grid grid = Grid.Instance();
 
-        public EnemySpawner(Settings settings, Texture2D enemyTexture, SpriteBatch spriteBatch)
+        public EnemySpawner(Settings settings, Texture2D enemyTexture, Texture2D staticEnemyTexture, SpriteBatch spriteBatch)
         {
             this.settings = settings;
             Enemies = new List<Enemy>();
             enemyIDs = new List<int>();
             nEnemies = settings.EnemyCount;
             this.enemyTexture = enemyTexture;
+            this.staticEnemyTexture = staticEnemyTexture;
             this.spriteBatch = spriteBatch;
             distanceToMove = settings.DistanceBetweenEnemies;
             rnd = new Random();
         }
 
-        public void RunSpawner(Rectangle playerSpawnpoint)
+        public void RunEnemySpawner(Rectangle playerSpawnpoint)
         {
             for (int i = 0; i < nEnemies; i++)
             {
-                var enemy = new Enemy(enemyTexture, spriteBatch, true)
+                Enemy enemy;
+                if (rnd.Next(1, 101) <= settings.StaticEnemyChance)
                 {
-                    enemyID = i
-                };
+                    enemy = new StaticEnemy(staticEnemyTexture, spriteBatch)
+                    {
+                        enemyID = i
+                    };
+                }
+                else
+                {
+                    enemy = new Enemy(enemyTexture, spriteBatch, settings.EnemiesCanJump)
+                    {
+                        enemyID = i
+                    };
+                }
                 enemy.SetSpawnPoint(GenerateSpawnPoint(enemy, playerSpawnpoint));
                 enemyIDs.Add(i);
                 Enemies.Add(enemy);
@@ -56,7 +69,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
         {
             return Enemies;
         }
-
+        //TODO: move enemy spawn further away form player
         private Vector2 GenerateSpawnPoint(Enemy enemy, Rectangle playerSpawnpoint)
         {
             Vector2 spawnPoint;

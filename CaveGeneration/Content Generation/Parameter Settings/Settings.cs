@@ -1,10 +1,5 @@
 ﻿using CaveGeneration.Content_Generation.Map_Generation;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CaveGeneration.Content_Generation.Map_Generation.DrunkardWalk;
 
 namespace CaveGeneration.Content_Generation.Parameter_Settings
@@ -12,6 +7,10 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
     public class Settings
     {
         public int EnemyCount { get; set; }
+
+        public int StaticEnemyChance { get; set; }
+
+        public bool EnemiesCanJump { get; set; }
 
         public int DistanceBetweenEnemies { get; set; }
 

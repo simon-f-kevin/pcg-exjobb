@@ -14,6 +14,8 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             //Enemy placement
             EnemyCount = 3,
             DistanceBetweenEnemies = 10,
+            EnemiesCanJump = true,
+            StaticEnemyChance = 30,
 
             //Goal and start position
             GoalonGround = true,
