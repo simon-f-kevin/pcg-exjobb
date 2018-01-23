@@ -162,6 +162,7 @@ namespace CaveGeneration
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            UpdateUniversal(gameTime);
             switch (gameState)
             {
                 case GameState.MainMenu:
@@ -181,14 +182,35 @@ namespace CaveGeneration
             
         }
 
+        private void UpdateUniversal(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && !previousState.IsKeyDown(Keys.M))
+            {
+                if (musicIsPlaying == false)
+                {
+                    MediaPlayer.Resume();
+                    musicIsPlaying = true;
+                }
+                else
+                {
+                    MediaPlayer.Pause();
+                    musicIsPlaying = false;
+                }
+
+            }
+            previousState = Keyboard.GetState();
+        }
+
         /// <summary>
         /// This is the update loop for the main menu
         /// </summary>
         /// <param name="gameTime"></param>
         private void UpdateMainMenu(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
@@ -207,25 +229,6 @@ namespace CaveGeneration
             playerPosition = player.Position;
             playerRectangle.X = (int)playerPosition.X;
             playerRectangle.Y = (int)playerPosition.Y;
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.M) && !previousState.IsKeyDown(Keys.M))
-            {
-                if(musicIsPlaying == false)
-                {
-                    MediaPlayer.Resume();
-                    musicIsPlaying = true;
-                }
-                else
-                {
-                    MediaPlayer.Pause();
-                    musicIsPlaying = false;
-                }
-                
-            }
-            previousState = Keyboard.GetState();
 
                
 
@@ -276,9 +279,6 @@ namespace CaveGeneration
         /// <param name="gameTime"></param>
         private void UpdateEndOfGame(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
@@ -300,9 +300,6 @@ namespace CaveGeneration
         {
             musicIsPlaying = false;
             MediaPlayer.Stop();
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
         }
 
         /// <summary>
