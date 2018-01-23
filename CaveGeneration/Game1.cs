@@ -68,6 +68,9 @@ namespace CaveGeneration
         bool useCopy = true;
 
 
+        Rectangle StageArea;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -107,6 +110,8 @@ namespace CaveGeneration
             gameState = GameState.MainMenu;
             musicIsPlaying = false;
             MediaPlayer.IsRepeating = true;
+
+            StageArea = new Rectangle(0, 0, mapWidth * blockWidth, mapHeight * blockHeight);
 
             base.Initialize();
         }
@@ -235,6 +240,14 @@ namespace CaveGeneration
             hpCounter.Update(player.GetHp());
             player.Update(gameTime);
             camera.Update(gameTime, this);
+
+            if (!playerRectangle.Intersects(StageArea))
+            {
+                while (player.IsAlive())
+                    player.DealDamage();
+                GameOverMessage = "You Lose!";
+                gameState = GameState.GameOver;
+            }
 
             foreach (var enemy in allEnemies)
             {
