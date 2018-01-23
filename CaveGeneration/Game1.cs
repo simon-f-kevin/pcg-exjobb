@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using CaveGeneration.Models.Characters;
 using CaveGeneration.Content_Generation.Enemy_Placement;
 using CaveGeneration.Content_Generation.Parameter_Settings;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 
 namespace CaveGeneration
@@ -28,6 +27,7 @@ namespace CaveGeneration
         Texture2D characterTexture;
         Texture2D goalTexture;
         Texture2D enemyTexture;
+        Texture2D staticEnemyTexture;
 
         Song backgroundMusic;
         SpriteFont font;
@@ -123,6 +123,7 @@ namespace CaveGeneration
             block = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.White);
             characterTexture = Content.Load<Texture2D>("sprite-girl");
             enemyTexture = Content.Load<Texture2D>("enemy");
+            staticEnemyTexture = Content.Load<Texture2D>("static-enemy");
             goalTexture = CreateTexture(graphics.GraphicsDevice, blockWidth, blockHeight, pixel => Color.Gold);
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
@@ -448,9 +449,9 @@ namespace CaveGeneration
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics, settings);
-                enemySpawner = new EnemySpawner(settings, enemyTexture, spriteBatch);
+                enemySpawner = new EnemySpawner(settings, enemyTexture, staticEnemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();
-                enemySpawner.RunSpawner(spawnPoint);
+                enemySpawner.RunEnemySpawner(spawnPoint);
                 player = new Player(characterTexture, new Vector2(spawnPoint.X, spawnPoint.Y), spriteBatch, settings);
                 startAndGoalPlacer.SetPlayer(player);
                 allEnemies = enemySpawner.GetEnemies();
