@@ -12,6 +12,7 @@ using CaveGeneration.Content_Generation.Enemy_Placement;
 using CaveGeneration.Content_Generation.Parameter_Settings;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using CaveGeneration.Content_Generation.Pitfall_Placement;
 
 namespace CaveGeneration
 {
@@ -39,6 +40,7 @@ namespace CaveGeneration
         StartAndGoalPlacer startAndGoalPlacer;
         EnemySpawner enemySpawner;
         HealthCounter hpCounter;
+        PitfallSpawner pitfallSpawner;
 
         List<Enemy> allEnemies;
 
@@ -447,6 +449,10 @@ namespace CaveGeneration
             {
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
+
+                pitfallSpawner = new PitfallSpawner(settings);
+                pitfallSpawner.GeneratePitfalls();
+
                 startAndGoalPlacer = new StartAndGoalPlacer(goal, characterTexture, graphics, settings);
                 enemySpawner = new EnemySpawner(settings, enemyTexture, spriteBatch);
                 spawnPoint = startAndGoalPlacer.GetSpawnPosition();

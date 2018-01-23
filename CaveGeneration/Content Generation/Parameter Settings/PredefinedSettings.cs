@@ -35,7 +35,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
                 Left = 20,
                 Right = 40
             },
-            StartPositionForWalkers = new Microsoft.Xna.Framework.Vector2(0,0),
+            StartPositionForWalkers = new Microsoft.Xna.Framework.Vector2(0, 0),
 
             //Random placement
             RandomFillPercent = 45,
@@ -46,7 +46,12 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
 
             //Player lives 
-            PlayerLives = 3
+            PlayerLives = 3,
+
+            //Pitfalls
+            NumberOfPitfalls = 2,
+            PitfallMaxHeight = 6,
+            PitfallWidth = 3
         };
     }
 }

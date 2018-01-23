@@ -39,5 +39,11 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
         public Directions DrunkardDirections;
 
+        public int NumberOfPitfalls { get; set; }
+
+        public int PitfallWidth { get; set; }
+
+        public int PitfallMaxHeight { get; set; }
+
     }
 }

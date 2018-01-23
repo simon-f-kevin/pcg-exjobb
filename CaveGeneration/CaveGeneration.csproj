@@ -53,6 +53,7 @@
     <Compile Include="Content Generation\Map Generation\RandomPlacement.cs" />
     <Compile Include="Content Generation\Parameter Settings\PredefinedSettings.cs" />
     <Compile Include="Content Generation\Parameter Settings\Settings.cs" />
+    <Compile Include="Content Generation\Pitfall Placement\PitfallSpawner.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Models\Camera.cs" />
