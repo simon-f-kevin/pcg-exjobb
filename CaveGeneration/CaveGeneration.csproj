@@ -59,8 +59,8 @@
     <Compile Include="Models\Camera.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Characters\Character.cs" />
-    <Compile Include="Models\Characters\Player.cs" />
     <Compile Include="Models\Characters\Enemy.cs" />
+    <Compile Include="Models\Characters\Player.cs" />
     <Compile Include="Models\Characters\StaticEnemy.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Grid.cs" />

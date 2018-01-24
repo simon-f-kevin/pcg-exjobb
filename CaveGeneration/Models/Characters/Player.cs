@@ -22,6 +22,9 @@ namespace CaveGeneration.Models.Characters
         int hurtmaxframes = 60;
         int hurtframes = 0;
 
+        private float superJumpHeight;
+        private float regularJumpHeight;
+
 
         public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch, Settings settings)
         {
@@ -30,6 +33,8 @@ namespace CaveGeneration.Models.Characters
             SpriteBatch = spiteBatch;
             MaxSpeed = 2;
             JumpingHeight = texture.Height * 1.5f;
+            regularJumpHeight = JumpingHeight;
+            superJumpHeight = JumpingHeight * 2.3f;
             Gravity = 2;
             hp = settings.PlayerLives;
             Alive = true;
@@ -108,6 +113,18 @@ namespace CaveGeneration.Models.Characters
 
             bool leftWall = IsByLeftWall();
             bool rightWall = IsByRightWall();
+
+
+            if (actions.Contains(Action.SuperJump) && actions.Contains(Action.MoveUp) && IsOnGround() && hp > 1)
+            {
+                JumpingHeight = superJumpHeight;
+                DealDamage();
+            }
+            else
+            {
+                JumpingHeight = regularJumpHeight;
+            }
+
 
             if ((leftWall || rightWall) && !IsOnGround())
             {

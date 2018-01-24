@@ -12,7 +12,8 @@ namespace CaveGeneration.Models
     {
         MoveLeft,
         MoveRight,
-        MoveUp
+        MoveUp,
+        SuperJump
     }
 
     public class Input
@@ -27,6 +28,8 @@ namespace CaveGeneration.Models
             if (kbState.IsKeyDown(Keys.Left) || gpState.IsButtonDown(Buttons.DPadLeft)) { Actions.Add(Action.MoveLeft); }
             if (kbState.IsKeyDown(Keys.Right) || gpState.IsButtonDown(Buttons.DPadRight)) { Actions.Add(Action.MoveRight); }
             if ((kbState.IsKeyDown(Keys.Space) || kbState.IsKeyDown(Keys.Up) || gpState.IsButtonDown(Buttons.DPadUp) || gpState.IsButtonDown(Buttons.A))) { Actions.Add(Action.MoveUp); }
+            if ((kbState.IsKeyDown(Keys.X) || gpState.IsButtonDown(Buttons.RightTrigger))) { Actions.Add(Action.SuperJump); }
+
 
             return Actions;
         }
