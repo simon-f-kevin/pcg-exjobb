@@ -91,7 +91,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
             {
                 for (int y = 0; y < Y - 1; y++)
                 {
-                    if (grid.IsCollidingWithCell(spawnPoint))
+                    if (grid.IsCollidingWithCell(spawnPoint) || !SpawnAboveGround(x,y))
                     {
                         spawnPoint = new Rectangle(new Point(x * playerTexture.Width, y * playerTexture.Height), new Point(playerTexture.Width, playerTexture.Height));
                     }
@@ -101,6 +101,18 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
                     }
                 }
             }
+        }
+
+        private bool SpawnAboveGround(int x, int y)
+        {
+            for (int i = 0; i < Map.GetLength(1); i++)
+            {
+                if (Map[x, y+i].IsVisible)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private Goal GenerateFirstValidGoalPosition()
