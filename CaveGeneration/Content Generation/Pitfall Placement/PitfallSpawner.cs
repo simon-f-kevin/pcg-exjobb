@@ -23,10 +23,6 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
         private int PitfallWidth;
         private int PitfallMaxHeight;
 
-        
-
-
-
 
         public PitfallSpawner(Settings settings)
         {
