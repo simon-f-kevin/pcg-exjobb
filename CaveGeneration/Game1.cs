@@ -54,6 +54,7 @@ namespace CaveGeneration
 
         string GameOverMessage;
         int numberOfGames;
+        int remainingLives;
         int totalLives;
         int gamesWon;
 
@@ -106,7 +107,9 @@ namespace CaveGeneration
             GameOverMessage = "";
             numberOfGames = 0;
             totalLives = 0;
+            remainingLives = 0;
             gamesWon = 0;
+            
             gameState = GameState.MainMenu;
             musicIsPlaying = false;
             MediaPlayer.IsRepeating = true;
@@ -323,7 +326,8 @@ namespace CaveGeneration
         /// </summary>
         private void GetStats()
         {
-            totalLives += player.GetHp();
+            remainingLives = player.GetHp();
+            totalLives += remainingLives;
             if (GameOverMessage.Equals("You Win!"))
             {
                 gamesWon++;
@@ -496,13 +500,18 @@ namespace CaveGeneration
         {
 
             Settings settings = PredefinedSettings.settings1;
-            
+
 
             bool solveable = true;
             do
             {
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
+
+                if (settings.IncrementDifficulty && remainingLives >= 2)
+                {
+                    DifficultyIncrementer.Increment(settings, seed);
+                }
 
                 pitfallSpawner = new PitfallSpawner(settings);
                 pitfallSpawner.GeneratePitfalls();

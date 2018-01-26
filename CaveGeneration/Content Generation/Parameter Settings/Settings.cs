@@ -6,6 +6,9 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 {
     public class Settings
     {
+        public bool IncrementDifficulty { get; set; }
+        public int IncrementChance { get; set; }
+
         public int EnemyCount { get; set; }
 
         public int StaticEnemyChance { get; set; }

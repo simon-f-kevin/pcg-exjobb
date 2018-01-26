@@ -51,6 +51,7 @@
     <Compile Include="Content Generation\Map Generation\DrunkardWalk.cs" />
     <Compile Include="Content Generation\Map Generation\MapGenerator.cs" />
     <Compile Include="Content Generation\Map Generation\RandomPlacement.cs" />
+    <Compile Include="Content Generation\Parameter Settings\DifficultyIncrementer.cs" />
     <Compile Include="Content Generation\Parameter Settings\PredefinedSettings.cs" />
     <Compile Include="Content Generation\Parameter Settings\Settings.cs" />
     <Compile Include="Content Generation\Pitfall Placement\PitfallSpawner.cs" />

@@ -11,6 +11,10 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
         public static Settings settings1 = new Settings()
         {
+            //Increment Difficulty, higher chance is easier
+            IncrementChance = 3,
+            IncrementDifficulty = true,
+
             //Enemy placement
             EnemyCount = 3,
             DistanceBetweenEnemies = 10,
@@ -51,9 +55,9 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             PlayerLives = 3,
 
             //Pitfalls
-            NumberOfPitfalls = 2,
+            NumberOfPitfalls = 0,
             PitfallMaxHeight = 6,
-            PitfallWidth = 3
+            PitfallWidth = 2
         };
     }
 }
