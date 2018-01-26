@@ -105,7 +105,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
 
         private bool SpawnAboveGround(int x, int y)
         {
-            for (int i = 0; i < Map.GetLength(1); i++)
+            for (int i = 0; i < Map.GetLength(1) - 1; i++)
             {
                 if (Map[x, y+i].IsVisible)
                 {
