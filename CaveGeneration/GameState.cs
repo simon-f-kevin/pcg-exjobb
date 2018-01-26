@@ -12,5 +12,6 @@ namespace CaveGeneration
         Playing,
         GameOver,
         StatScreen,
+        Tutorial,
     }
 }

@@ -64,7 +64,10 @@ namespace CaveGeneration.Models.Characters
 
         public void DealDamage()
         {
-            hp--;
+            if(hp > 0)
+            {
+                hp--;
+            }
             if (hp <= 0)
             {
                 Alive = false;
@@ -114,6 +117,11 @@ namespace CaveGeneration.Models.Characters
             bool leftWall = IsByLeftWall();
             bool rightWall = IsByRightWall();
 
+            if (actions.Contains(Action.Suicide))
+            {
+                hp = 0;
+                Alive = false;
+            }
 
             if (actions.Contains(Action.SuperJump) && actions.Contains(Action.MoveUp) && IsOnGround() && hp > 1)
             {

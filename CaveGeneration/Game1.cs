@@ -177,10 +177,14 @@ namespace CaveGeneration
                 case GameState.StatScreen:
                     UpdateStatScreen(gameTime);
                     break;
+                case GameState.Tutorial:
+                    UpdateTutorial(gameTime);
+                    break;
             }
             base.Update(gameTime);
             
         }
+
 
         private void UpdateUniversal(GameTime gameTime)
         {
@@ -217,6 +221,10 @@ namespace CaveGeneration
                 //CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
                 gameState = GameState.Playing;
 
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.T))
+            {
+                gameState = GameState.Tutorial;
             }
         }
 
@@ -262,14 +270,14 @@ namespace CaveGeneration
                     {
                         player.DealDamage();
                     }
-                    if (!player.IsAlive())
-                    {
-                        GameOverMessage = "You Lose!";
-
-                        gameState = GameState.GameOver;
-                    }
                   
                 }
+            }
+            if (!player.IsAlive())
+            {
+                GameOverMessage = "You Lose!";
+
+                gameState = GameState.GameOver;
             }
         }
 
@@ -300,6 +308,14 @@ namespace CaveGeneration
         {
             musicIsPlaying = false;
             MediaPlayer.Stop();
+        }
+
+        private void UpdateTutorial(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                gameState = GameState.MainMenu;
+            }
         }
 
         /// <summary>
@@ -346,11 +362,15 @@ namespace CaveGeneration
                 case GameState.StatScreen:
                     DrawStatScreen(gameTime);
                     break;
+                case GameState.Tutorial:
+                    DrawTutorial(gameTime);
+                    break;
             }
 
             base.Draw(gameTime);
             
         }
+
 
         private void DrawMainMenu(GameTime gameTime)
         {
@@ -360,9 +380,10 @@ namespace CaveGeneration
             spriteBatch.Begin();
 
 
-            spriteBatch.DrawString(font, "Press enter to start game", new Vector2(200, 200), Color.Navy);
-            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 200 + 50), Color.Navy);
-            spriteBatch.DrawString(font, "Nick & Simon 2018", new Vector2(200, 200 + 200), Color.Navy);
+            spriteBatch.DrawString(font, "Press Enter to start game", new Vector2(200, 200), Color.Navy);
+            spriteBatch.DrawString(font, "Press T for tutorial", new Vector2(200, 250), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 300), Color.Navy);
+            spriteBatch.DrawString(font, "Nick & Simon 2018", new Vector2(200, 400), Color.Navy);
 
 
             spriteBatch.End();
@@ -426,6 +447,28 @@ namespace CaveGeneration
             spriteBatch.DrawString(font, "You got " + totalLives + " points!", new Vector2(player.Position.X, player.Position.Y), Color.Navy);
             spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(player.Position.X, player.Position.Y + 50), Color.Navy);
             spriteBatch.DrawString(font, "Music by KyBOz / www.oreitia.com", new Vector2(player.Position.X, player.Position.Y + 100), Color.Navy);
+
+            spriteBatch.End();
+        }
+
+        private void DrawTutorial(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.White);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+
+            spriteBatch.DrawString(font, "Use arrow keys to move or left thumbstick on controllers", new Vector2(100, 100), Color.Navy);
+            spriteBatch.DrawString(font, "Press Up arrow, Space or A on controllers to jump", new Vector2(100, 150), Color.Navy);
+            spriteBatch.DrawString(font, "Hold X or RT on controllers and jump to perform", new Vector2(100, 200), Color.Navy);
+            spriteBatch.DrawString(font, "a super jump(This drains 1 health)", new Vector2(100, 250), Color.Navy);
+            spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 300), Color.Navy);
+            spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 350), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 400), Color.Navy);
+            
+            spriteBatch.DrawString(font, "Press Enter to return to main menu", new Vector2(100, 450), Color.Navy);
+
 
             spriteBatch.End();
         }
