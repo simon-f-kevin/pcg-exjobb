@@ -107,6 +107,7 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
         {
             for (int i = 0; i < Map.GetLength(1) - 1; i++)
             {
+                if (y > Map.GetLength(1)) y = y - 1;
                 if (Map[x, y+i].IsVisible)
                 {
                     return true;
