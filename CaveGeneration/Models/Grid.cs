@@ -47,7 +47,7 @@ namespace CaveGeneration.Models
             _instance = null;
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             foreach (var cell in Cells)
             {

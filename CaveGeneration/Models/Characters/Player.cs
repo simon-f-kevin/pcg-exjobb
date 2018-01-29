@@ -26,11 +26,9 @@ namespace CaveGeneration.Models.Characters
         private float regularJumpHeight;
 
 
-        public Player(Texture2D texture, Vector2 position, SpriteBatch spiteBatch, Settings settings)
+        public Player(Texture2D texture, Vector2 position, SpriteBatch spriteBatch, Settings settings) : base(texture, spriteBatch)
         {
             Position = position;
-            Texture = texture;
-            SpriteBatch = spiteBatch;
             MaxSpeed = 2;
             JumpingHeight = texture.Height * 1.5f;
             regularJumpHeight = JumpingHeight;
@@ -40,7 +38,7 @@ namespace CaveGeneration.Models.Characters
             Alive = true;
         }
 
-        public new void Draw()
+        public new void Draw(GameTime gameTime)
         {
             if (hurt)
             {
@@ -119,6 +117,7 @@ namespace CaveGeneration.Models.Characters
 
             if (actions.Contains(Action.Suicide))
             {
+                hurt = true;
                 hp = 0;
                 Alive = false;
             }

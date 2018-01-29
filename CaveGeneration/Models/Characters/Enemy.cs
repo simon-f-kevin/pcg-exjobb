@@ -17,14 +17,13 @@ namespace CaveGeneration.Models.Characters
         private int nBlocksLeft = 0;
         private int nBlocksRight = 0;
 
-        public Enemy(Texture2D texture, SpriteBatch spiteBatch, bool CanJump)
+        public Enemy(Texture2D texture, SpriteBatch spriteBatch, bool CanJump) : base(texture, spriteBatch)
         {
-            Texture = texture;
-            SpriteBatch = spiteBatch;
             MaxSpeed = 0.5f;
             Gravity = 2;
             JumpingHeight = texture.Height * 1.5f;
             _canJump = CanJump;
+
         }
 
         public void SetSpawnPoint(Vector2 spawn)

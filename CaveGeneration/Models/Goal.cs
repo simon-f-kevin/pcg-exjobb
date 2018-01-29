@@ -23,7 +23,7 @@ namespace CaveGeneration.Models
             BoundingRectangle = new Rectangle(new Point((int)pos.X, (int)pos.Y), new Point(Texture.Width, Texture.Height));
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             SpriteBatch.Draw(Texture, BoundingRectangle, Color.White);
         }

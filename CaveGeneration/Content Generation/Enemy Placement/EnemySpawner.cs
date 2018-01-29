@@ -59,21 +59,21 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                         enemyID = i
                     };
                 }
-                enemy.SetSpawnPoint(GenerateSpawnPoint(enemy, playerSpawnpoint));
+                enemy.SetSpawnPoint(GenerateEnemySpawnpoint(enemy, playerSpawnpoint));
                 enemyIDs.Add(i);
                 Enemies.Add(enemy);
             }
         }
-
         
         public List<Enemy> GetEnemies()
         {
             return Enemies;
         }
+
         //TODO: move enemy spawn further away form player
-        private Vector2 GenerateSpawnPoint(Enemy enemy, Rectangle playerSpawnpoint)
+        private Vector2 GenerateEnemySpawnpoint(Enemy enemy, Rectangle playerSpawnpoint)
         {
-            Vector2 spawnPoint;
+            Vector2 enemySpawnpoint;
             float X = rnd.Next(0, grid.Cells.GetLength(0));
             float Y = rnd.Next(0, grid.Cells.GetLength(1));
             forbiddenZone = new Rectangle(new Point(playerSpawnpoint.Left, playerSpawnpoint.Bottom), new Point(enemyTexture.Width * 3, enemyTexture.Height * 3));
@@ -104,9 +104,9 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                 }
             }
 
-            spawnPoint = new Vector2(X, Y);
+            enemySpawnpoint = new Vector2(X, Y);
 
-            return spawnPoint;
+            return enemySpawnpoint;
         }
 
     }

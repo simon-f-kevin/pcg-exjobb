@@ -23,6 +23,7 @@ namespace CaveGeneration
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Camera camera;
+        FrameCounter frameCounter;
 
         Texture2D block;
         Texture2D characterTexture;
@@ -42,10 +43,8 @@ namespace CaveGeneration
         HealthCounter hpCounter;
         PitfallSpawner pitfallSpawner;
 
+        Settings settings;
         List<Enemy> allEnemies;
-
-        public Vector2 playerPosition;
-        public Rectangle playerRectangle;
 
         string seed;
         string originalSeed;
@@ -68,7 +67,6 @@ namespace CaveGeneration
         int mapHeight = 16;
         bool useCopy = true;
 
-
         Rectangle StageArea;
 
 
@@ -76,6 +74,9 @@ namespace CaveGeneration
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false; //this unlocks the fps, which makes movement unreliable
         }
 
         /// <summary>
@@ -116,6 +117,8 @@ namespace CaveGeneration
 
             StageArea = new Rectangle(0, 0, mapWidth * blockWidth, mapHeight * blockHeight);
 
+            settings = PredefinedSettings.settings1;
+
             base.Initialize();
         }
 
@@ -138,7 +141,8 @@ namespace CaveGeneration
             spawnPoint = new Rectangle(new Point(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), new Point(characterTexture.Width, characterTexture.Height));
             goal = new Goal(new Vector2(0, 0), goalTexture, spriteBatch);
             CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
-            playerRectangle = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height);
+
+            frameCounter = new FrameCounter();
 
             if (!musicIsPlaying)
             {
@@ -216,8 +220,6 @@ namespace CaveGeneration
         /// <param name="gameTime"></param>
         private void UpdateMainMenu(GameTime gameTime)
         {
-
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 //CreateMap(mapWidth, mapHeight, useCopyOfMap: useCopy);
@@ -236,13 +238,8 @@ namespace CaveGeneration
         /// <param name="gameTime"></param>
         private void UpdateGameplay(GameTime gameTime)
         {
-            playerPosition = player.Position;
-            playerRectangle.X = (int)playerPosition.X;
-            playerRectangle.Y = (int)playerPosition.Y;
-
-               
-
-            if (goal.BoundingRectangle.Intersects(new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Texture.Width, player.Texture.Height)))
+            Enemy EnemyToBeDeleted = null;
+            if (goal.BoundingRectangle.Intersects(player.BoundingRectangle))
             {
                 GameOverMessage = "You Win!";
                 
@@ -252,9 +249,9 @@ namespace CaveGeneration
             // TODO: Add your update logic here
             hpCounter.Update(player.GetHp());
             player.Update(gameTime);
-            camera.Update(gameTime, this);
+            camera.Update(gameTime, player);
 
-            if (!playerRectangle.Intersects(StageArea))
+            if (!player.IsInsideStage(StageArea))
             {
                 while (player.IsAlive())
                     player.DealDamage();
@@ -265,7 +262,11 @@ namespace CaveGeneration
             foreach (var enemy in allEnemies)
             {
                 enemy.Update(gameTime);
-                if (playerRectangle.Intersects(new Rectangle((int)enemy.Position.X, (int)enemy.Position.Y, enemy.Texture.Width, enemy.Texture.Height)))
+                if (!enemy.IsInsideStage(StageArea))
+                {
+                    EnemyToBeDeleted = enemy;
+                }
+                if (player.BoundingRectangle.Intersects(enemy.BoundingRectangle))
                 {
                     
                     if (!player.hurt)
@@ -275,6 +276,13 @@ namespace CaveGeneration
                   
                 }
             }
+
+            if (EnemyToBeDeleted != null)
+            {
+                allEnemies.Remove(EnemyToBeDeleted);
+                EnemyToBeDeleted = null;
+            }
+
             if (!player.IsAlive())
             {
                 GameOverMessage = "You Lose!";
@@ -289,12 +297,15 @@ namespace CaveGeneration
         /// <param name="gameTime"></param>
         private void UpdateEndOfGame(GameTime gameTime)
         {
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 if (numberOfGames < 4)
                 {
                     GetStats();
+                    if (settings.IncrementDifficulty && remainingLives >= 2)
+                    {
+                        DifficultyIncrementer.Increment(settings, seed);
+                    }
                     RestartGame();
                 }
                 else if (numberOfGames == 4)
@@ -399,14 +410,15 @@ namespace CaveGeneration
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
 
-            grid.Draw();
-            player.Draw();
-            goal.Draw();
+            grid.Draw(gameTime);
+            player.Draw(gameTime);
+            goal.Draw(gameTime);
             hpCounter.Draw(player.Position);
+            frameCounter.Draw(gameTime, Window);
 
             foreach (var enemy in allEnemies)
             {
-                enemy.Draw();
+                enemy.Draw(gameTime);
             }
 
             spriteBatch.End();
@@ -419,13 +431,13 @@ namespace CaveGeneration
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.transform);
 
-            grid.Draw();
-            player.Draw();
-            goal.Draw();
+            grid.Draw(gameTime);
+            player.Draw(gameTime);
+            goal.Draw(gameTime);
 
             foreach (var enemy in allEnemies)
             {
-                enemy.Draw();
+                enemy.Draw(gameTime);
             }
 
             if (!GameOverMessage.Equals(""))
@@ -469,7 +481,7 @@ namespace CaveGeneration
             spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 300), Color.Navy);
             spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 350), Color.Navy);
             spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 400), Color.Navy);
-            
+
             spriteBatch.DrawString(font, "Press Enter to return to main menu", new Vector2(100, 450), Color.Navy);
 
 
@@ -497,20 +509,12 @@ namespace CaveGeneration
 
         private void CreateMap(int mapWidthInBlocks, int mapHeightInBlocks, bool useCopyOfMap)
         {
-
-            Settings settings = PredefinedSettings.settings1;
-
-
             bool solveable = true;
             do
             {
                 Grid.ClearInstance();
                 grid = Grid.CreateNewGrid(mapWidthInBlocks, mapHeightInBlocks, spriteBatch, block, seed, settings);
 
-                if (settings.IncrementDifficulty && remainingLives >= 2)
-                {
-                    DifficultyIncrementer.Increment(settings, seed);
-                }
 
                 pitfallSpawner = new PitfallSpawner(settings);
                 pitfallSpawner.GeneratePitfalls();
