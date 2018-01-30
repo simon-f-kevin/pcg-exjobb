@@ -36,9 +36,6 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
             this.NumberOfPitfalls = settings.NumberOfPitfalls;
             this.PitfallMaxHeight = settings.PitfallMaxHeight;
             this.PitfallWidth = settings.PitfallWidth;
-
-            
-
         }
 
 
