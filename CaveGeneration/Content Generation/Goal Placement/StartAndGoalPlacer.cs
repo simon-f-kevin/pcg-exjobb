@@ -53,7 +53,6 @@ namespace CaveGeneration.Content_Generation.Goal_Placement
                 if (nLeftMoves == 10)
                 {
                     throw new NotSolveableException("Not solveable");
-                    //return Goal;
                 }
                 path = TestIfMapIsSolveable();
                 if (IsGoalReachable() && path != null)

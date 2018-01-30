@@ -61,7 +61,7 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
 
             for (int y = rows - 1; y >= rows - PitfallMaxHeight; y--)
             {
-                for (int x = 0; x < collumns; x++)
+                for (int x = 5; x < collumns; x++)
                 {
                     if (ValidPosition(x, y))
                     {

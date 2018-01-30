@@ -12,7 +12,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
         public static Settings settings1 = new Settings()
         {
             //Increment Difficulty, higher chance is easier
-            IncrementChance = 3,
+            IncrementChance = 66,
             IncrementDifficulty = true,
 
             //Enemy placement

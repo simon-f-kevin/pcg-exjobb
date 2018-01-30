@@ -12,13 +12,13 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
         {
             Random rand = new Random(seed);
 
-            if(rand.Next(settings.IncrementChance) == 1)
+            if(rand.Next(100) <= settings.IncrementChance)
                 settings.NumberOfPitfalls++;
-            if (rand.Next(settings.IncrementChance) == 1)
+            if (rand.Next(100) <= settings.IncrementChance)
                 settings.PitfallWidth++;
-            if (rand.Next(settings.IncrementChance) == 1)
+            if (rand.Next(100) <= settings.IncrementChance)
                 settings.PitfallMaxHeight++;
-            if (rand.Next(settings.IncrementChance) == 1)
+            if (rand.Next(100) <= settings.IncrementChance)
                 settings.EnemyCount++;
         }
 

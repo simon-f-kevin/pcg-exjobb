@@ -90,7 +90,7 @@ namespace CaveGeneration
             // TODO: Add your initialization logic here
 
             // Set your seed. Leave empty if you want a random map
-            seed = "";
+            seed = "oliver";
             originalSeed = seed;
 
             // Sets the window-size
