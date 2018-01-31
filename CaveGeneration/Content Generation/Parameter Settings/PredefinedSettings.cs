@@ -12,7 +12,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
         public static Settings settings1 = new Settings()
         {
             //Set seed. Leave empty if you want a random map
-            Seed = "Markus e Noob",
+            Seed = "Markus",
 
             //Increment Difficulty, higher chance is easier
             IncrementChance = 66,
@@ -33,7 +33,10 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             NumberOfNeighborCells = 4,
 
 
-            //Drunkard Walk
+            //Which map generator to use;
+            MapGeneratorType = Map_Generation.MapGeneratorType.DrunkardWalk,
+
+            //Drunkard Walk settings, ignore if MapGeneratorType is Random Placement
             DistanceBetweenWalks = 5,
             NumberOfSteps = 250,
             NumberOfWalks = 5,
@@ -46,13 +49,8 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             },
             StartPositionForWalkers = new Microsoft.Xna.Framework.Vector2(0, 0),
 
-            //Random placement
+            //Random placement settings, ignore if MapGeneratorType is Drunkard Walk
             RandomFillPercent = 45,
-
-
-            //Which map generator to use;
-            MapGeneratorType = Map_Generation.MapGeneratorType.DrunkardWalk,
-
 
             //Player lives 
             PlayerLives = 3,

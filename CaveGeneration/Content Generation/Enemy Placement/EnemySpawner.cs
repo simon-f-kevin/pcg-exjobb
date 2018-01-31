@@ -95,7 +95,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
                     if(prevEnemy.enemyID < enemy.enemyID)
                     {
                         Rectangle prevEnemyRectangle = new Rectangle(new Point((int)prevEnemy.Position.X, (int)prevEnemy.Position.Y), new Point(enemyTexture.Width, enemyTexture.Height));
-                        if (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle) || enemyRectangle.Intersects(forbiddenZone))
+                        while (enemyRectangle.Intersects(prevEnemyRectangle) || grid.IsCollidingWithCell(enemyRectangle) || enemyRectangle.Intersects(forbiddenZone))
                         {
                             X = X + enemy.Texture.Width + distanceToMove; //if two enemies spawn on eachother the new one moves to the right
                             enemyRectangle.X = (int)X;
