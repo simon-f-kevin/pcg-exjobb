@@ -89,8 +89,10 @@ namespace CaveGeneration
         {
             // TODO: Add your initialization logic here
 
-            // Set your seed. Leave empty if you want a random map
-            seed = "oliver";
+            settings = PredefinedSettings.settings1;
+
+            // Set your seed.
+            seed = settings.Seed;
             originalSeed = seed;
 
             // Sets the window-size
@@ -116,8 +118,6 @@ namespace CaveGeneration
             MediaPlayer.IsRepeating = true;
 
             StageArea = new Rectangle(0, 0, mapWidth * blockWidth, mapHeight * blockHeight);
-
-            settings = PredefinedSettings.settings1;
 
             base.Initialize();
         }

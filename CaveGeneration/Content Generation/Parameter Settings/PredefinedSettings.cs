@@ -11,6 +11,9 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 
         public static Settings settings1 = new Settings()
         {
+            //Set seed. Leave empty if you want a random map
+            Seed = "Markus e Noob",
+
             //Increment Difficulty, higher chance is easier
             IncrementChance = 66,
             IncrementDifficulty = true,

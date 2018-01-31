@@ -42,7 +42,7 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
         public void GeneratePitfalls()
         {
             var PositionList = FindPitfallPositions();
-            Random rand = new Random();
+            Random rand = new Random(settings.Seed.GetHashCode());
             for(int i = 0; i < NumberOfPitfalls; i++)
             {
                 int pos = rand.Next(PositionList.Count);
@@ -51,7 +51,7 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
                 PositionList.Remove(PitfallPosition);
             }
         }
-
+#region Private Functions
         private LinkedList<Vector2> FindPitfallPositions()
         {
             LinkedList<Vector2> positionList = new LinkedList<Vector2>();
@@ -91,5 +91,6 @@ namespace CaveGeneration.Content_Generation.Pitfall_Placement
                 }
             }
         }
+#endregion
     }
 }

@@ -37,7 +37,7 @@ namespace CaveGeneration.Content_Generation.Enemy_Placement
             this.staticEnemyTexture = staticEnemyTexture;
             this.spriteBatch = spriteBatch;
             distanceToMove = settings.DistanceBetweenEnemies;
-            rnd = new Random();
+            rnd = new Random(settings.Seed.GetHashCode());
         }
 
         public void RunEnemySpawner(Rectangle playerSpawnpoint)
