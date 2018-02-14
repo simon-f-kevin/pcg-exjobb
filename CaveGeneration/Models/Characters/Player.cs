@@ -35,7 +35,7 @@ namespace CaveGeneration.Models.Characters
             CurrentSpeed = 40;
             JumpingHeight = texture.Height * 27;
             regularJumpHeight = JumpingHeight;
-            superJumpHeight = JumpingHeight * 5;
+            superJumpHeight = JumpingHeight * 4;
             slowJumpHeight = JumpingHeight / 2;
             slowSpeed = CurrentSpeed / 2;
             defaultSpeed = CurrentSpeed;

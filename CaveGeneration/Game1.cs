@@ -12,6 +12,8 @@ using CaveGeneration.Content_Generation.Enemy_Placement;
 using CaveGeneration.Content_Generation.Parameter_Settings;
 using Microsoft.Xna.Framework.Media;
 using CaveGeneration.Content_Generation.Pitfall_Placement;
+using System.Xml;
+using StorageSystem;
 
 namespace CaveGeneration
 {
@@ -319,8 +321,15 @@ namespace CaveGeneration
 
         private void UpdateStatScreen(GameTime gameTime)
         {
+            SaveStatsToFile("TestPlayer");
             musicIsPlaying = false;
             MediaPlayer.Stop();
+        }
+
+        private void SaveStatsToFile(string playername)
+        {
+            StorageHandler storage = new StorageHandler();
+            storage.SaveStatsToStorage(playername, gamesWon);
         }
 
         private void UpdateTutorial(GameTime gameTime)
