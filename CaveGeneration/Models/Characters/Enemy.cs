@@ -19,9 +19,9 @@ namespace CaveGeneration.Models.Characters
 
         public Enemy(Texture2D texture, SpriteBatch spriteBatch, bool CanJump) : base(texture, spriteBatch)
         {
-            MaxSpeed = 0.5f;
-            Gravity = 2;
-            JumpingHeight = texture.Height * 1.5f;
+            CurrentSpeed = 10;//0.5f;
+            Gravity = 20;
+            JumpingHeight = texture.Height * 25;
             _canJump = CanJump;
 
         }
@@ -59,11 +59,11 @@ namespace CaveGeneration.Models.Characters
                 //Move left towards player spawnpoint
                 if (IsByLeftWall())
                 {
-                    Movement += Vector2.UnitX * (MaxSpeed);
+                    Movement += Vector2.UnitX * (CurrentSpeed);
                 }
                 else
                 {
-                    Movement -= Vector2.UnitX * MaxSpeed;
+                    Movement -= Vector2.UnitX * CurrentSpeed;
                 }
                 nBlocksLeft++;
                 if (nBlocksLeft >= (blocksToMove * 20)) nBlocksRight = 0;
@@ -73,9 +73,9 @@ namespace CaveGeneration.Models.Characters
                 //Move right
                 if (IsByRightWall())
                 {
-                    Movement -= Vector2.UnitX * (MaxSpeed);
+                    Movement -= Vector2.UnitX * (CurrentSpeed);
                 }
-                Movement += Vector2.UnitX * MaxSpeed;
+                Movement += Vector2.UnitX * CurrentSpeed;
                 nBlocksRight++;
                 if (nBlocksRight == (blocksToMove * 20)) nBlocksLeft = 0;
             }
@@ -85,12 +85,12 @@ namespace CaveGeneration.Models.Characters
                 if (IsByLeftWall())
                 {
                     Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
-                    Movement += Vector2.UnitX * (MaxSpeed * 7.5f);
+                    Movement += Vector2.UnitX * (CurrentSpeed * 7.5f);
                 }
                 if (IsByRightWall())
                 {
                     Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
-                    Movement -= Vector2.UnitX * (MaxSpeed * 7.5f);
+                    Movement -= Vector2.UnitX * (CurrentSpeed * 7.5f);
                 }
             }
 

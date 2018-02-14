@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace CaveGeneration.Models.Characters
 {
@@ -8,7 +9,8 @@ namespace CaveGeneration.Models.Characters
         public Vector2 Movement { get; set; }
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
-        public float MaxSpeed { get; set; }
+        public float CurrentSpeed { get; set; }
+        public float MaximumSpeed { get; set; }
         public float JumpingHeight { get; set; }
         public float Gravity { get; set; }
 
@@ -22,6 +24,7 @@ namespace CaveGeneration.Models.Characters
         {
             Texture = texture;
             SpriteBatch = spriteBatch;
+            MaximumSpeed = 200;
             BoundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
         }
 
@@ -47,8 +50,10 @@ namespace CaveGeneration.Models.Characters
 
         protected void UpdatePosition(GameTime gametime)
         {
+            float dT = (float)gametime.ElapsedGameTime.TotalSeconds;
             oldPosition = Position;
-            Position += Movement * (float)gametime.ElapsedGameTime.TotalMilliseconds / 60;
+            ConstrainMovementToMaxSpeed();
+            Position += Movement * dT;
             Position = grid.WhereCanIGetTo(oldPosition, Position, new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height));
             BoundingRectangle.X = (int)Position.X;
             BoundingRectangle.Y = (int)Position.Y;
@@ -78,6 +83,21 @@ namespace CaveGeneration.Models.Characters
         {
             Rectangle boundingCharacter = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width + 1, Texture.Height);
             return grid.IsCollidingWithCell(boundingCharacter);
+        }
+
+        private void ConstrainMovementToMaxSpeed()
+        {
+            if (Math.Abs(Math.Abs(Movement.X) - MaximumSpeed) > MaximumSpeed)
+            {
+                if (Movement.X > MaximumSpeed)
+                {
+                    Movement = new Vector2(MaximumSpeed, Movement.Y);
+                }
+                if (Movement.X < 0 && Movement.X < - MaximumSpeed)
+                {
+                    Movement = new Vector2(-MaximumSpeed, Movement.Y);
+                }
+            }
         }
 
     }

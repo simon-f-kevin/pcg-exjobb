@@ -15,7 +15,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             if(rand.Next(100) <= settings.IncrementChance)
                 settings.NumberOfPitfalls++;
             if (rand.Next(100) <= settings.IncrementChance)
-                settings.PitfallWidth++;
+                while(settings.PitfallWidth < 3) settings.PitfallWidth++;
             if (rand.Next(100) <= settings.IncrementChance)
                 settings.PitfallMaxHeight++;
             if (rand.Next(100) <= settings.IncrementChance)

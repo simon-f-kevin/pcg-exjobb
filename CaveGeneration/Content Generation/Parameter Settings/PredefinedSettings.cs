@@ -12,14 +12,14 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
         public static Settings settings1 = new Settings()
         {
             //Set seed. Leave empty if you want a random map
-            Seed = "Markus",
+            Seed = "",
 
             //Increment Difficulty, higher chance is easier
             IncrementChance = 66,
             IncrementDifficulty = true,
 
             //Enemy placement
-            EnemyCount = 3,
+            EnemyCount = 0,
             DistanceBetweenEnemies = 10,
             EnemiesCanJump = true,
             StaticEnemyChance = 30,

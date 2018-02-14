@@ -13,7 +13,7 @@ namespace CaveGeneration.Models.Characters
 
         public StaticEnemy(Texture2D texture, SpriteBatch spiteBatch) : base(texture, spiteBatch, false)
         {
-            MaxSpeed = 0;
+            CurrentSpeed = 0;
         }
     }
 }

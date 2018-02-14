@@ -76,7 +76,7 @@ namespace CaveGeneration
             Content.RootDirectory = "Content";
 
             IsFixedTimeStep = false;
-            //graphics.SynchronizeWithVerticalRetrace = false; //this unlocks the fps, which makes movement unreliable
+            graphics.SynchronizeWithVerticalRetrace = false; //this unlocks the fps, which makes movement unreliable
         }
 
         /// <summary>

@@ -29,11 +29,11 @@ namespace CaveGeneration.Models.Characters
         public Player(Texture2D texture, Vector2 position, SpriteBatch spriteBatch, Settings settings) : base(texture, spriteBatch)
         {
             Position = position;
-            MaxSpeed = 2;
-            JumpingHeight = texture.Height * 1.5f;
+            CurrentSpeed = 40;
+            JumpingHeight = texture.Height * 27;
             regularJumpHeight = JumpingHeight;
-            superJumpHeight = JumpingHeight * 2.3f;
-            Gravity = 2;
+            superJumpHeight = JumpingHeight * 5;
+            Gravity = 30;
             hp = settings.PlayerLives;
             Alive = true;
         }
@@ -137,9 +137,9 @@ namespace CaveGeneration.Models.Characters
             {
                 if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveLeft) && leftWall && !groundJump))
                 {
-                    if (!oldInput.Contains(Action.MoveUp)) { 
-                        Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
-                        Movement += Vector2.UnitX * (MaxSpeed * 7.5f);
+                    if (!oldInput.Contains(Action.MoveUp)) {
+                        Movement = -Vector2.UnitY * (JumpingHeight); 
+                        Movement += Vector2.UnitX * (CurrentSpeed); 
                         groundJump = true;
                         return;
                     }
@@ -147,8 +147,8 @@ namespace CaveGeneration.Models.Characters
                 else if (actions.Contains(Action.MoveUp) && (actions.Contains(Action.MoveRight) && rightWall && !groundJump))
                 {
                     if (!oldInput.Contains(Action.MoveUp)) {
-                        Movement = -Vector2.UnitY * (JumpingHeight * 1.1f);
-                        Movement -= Vector2.UnitX * (MaxSpeed * 7.5f);
+                        Movement = -Vector2.UnitY * (JumpingHeight); 
+                        Movement -= Vector2.UnitX * (CurrentSpeed);
                         groundJump = true;
                         return;
                     }
@@ -156,17 +156,17 @@ namespace CaveGeneration.Models.Characters
                 else if (!IsOnGround())
                 {
                     if (actions.Contains(Action.MoveLeft))
-                    { Movement -= Vector2.UnitX * (MaxSpeed * 1.1f); }
+                    { Movement -= Vector2.UnitX * (CurrentSpeed); }
                     if (actions.Contains(Action.MoveRight))
-                    { Movement += Vector2.UnitX * (MaxSpeed * 1.1f); }
+                    { Movement += Vector2.UnitX * (CurrentSpeed); }
                 }
             }
             else if (!IsOnGround())
             {
                 if (actions.Contains(Action.MoveLeft))
-                    { Movement -= Vector2.UnitX * (MaxSpeed * 1.1f); }
+                { Movement -= Vector2.UnitX * (CurrentSpeed); } 
                 if (actions.Contains(Action.MoveRight))
-                    { Movement += Vector2.UnitX * (MaxSpeed * 1.1f); }
+                { Movement += Vector2.UnitX * (CurrentSpeed); }
             }
 
             if (IsOnGround() && (actions.Contains(Action.MoveUp)))
@@ -176,9 +176,9 @@ namespace CaveGeneration.Models.Characters
             }
 
             if (IsOnGround() && actions.Contains(Action.MoveLeft))
-                { Movement -= Vector2.UnitX * MaxSpeed; }
+                { Movement -= Vector2.UnitX * CurrentSpeed; }
             if (IsOnGround() && actions.Contains(Action.MoveRight))
-                { Movement += Vector2.UnitX * MaxSpeed; }
+                { Movement += Vector2.UnitX * CurrentSpeed; }
 
             oldInput = actions;
 
@@ -186,15 +186,17 @@ namespace CaveGeneration.Models.Characters
 
         protected override void SimulateFriction()
         {
+            KeyboardState kbState = Keyboard.GetState();
             if (IsOnGround())
-            {
-                KeyboardState kbState = Keyboard.GetState();
+            {   
                 if (!kbState.IsKeyDown(Keys.Space) && !kbState.IsKeyDown(Keys.Up))
                 {
-                    Movement -= Movement * Vector2.One * .08f;
+                    Movement -= Movement * .08f;
                 }
             }
-            else { Movement -= Movement * Vector2.One * .01f; }
+            else {
+                Movement -= Movement * Vector2.One * .01f;
+            }
         }
 
     }
