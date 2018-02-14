@@ -98,9 +98,17 @@ namespace CaveGeneration
             originalSeed = seed;
 
             // Sets the window-size
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
             graphics.IsFullScreen = false;
+            if (graphics.IsFullScreen)
+            {
+                graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+                graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            }
+            else
+            {
+                graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width - 100;
+                graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
+            }
             graphics.ApplyChanges();
 
             //Sets the block size
