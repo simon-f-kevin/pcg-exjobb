@@ -24,6 +24,9 @@ namespace CaveGeneration.Models.Characters
 
         private float superJumpHeight;
         private float regularJumpHeight;
+        private float slowJumpHeight;
+        private float slowSpeed;
+        private float defaultSpeed;
 
 
         public Player(Texture2D texture, Vector2 position, SpriteBatch spriteBatch, Settings settings) : base(texture, spriteBatch)
@@ -33,6 +36,9 @@ namespace CaveGeneration.Models.Characters
             JumpingHeight = texture.Height * 27;
             regularJumpHeight = JumpingHeight;
             superJumpHeight = JumpingHeight * 5;
+            slowJumpHeight = JumpingHeight / 2;
+            slowSpeed = CurrentSpeed / 2;
+            defaultSpeed = CurrentSpeed;
             Gravity = 30;
             hp = settings.PlayerLives;
             Alive = true;
@@ -127,9 +133,15 @@ namespace CaveGeneration.Models.Characters
                 JumpingHeight = superJumpHeight;
                 DealDamage();
             }
+            else if (actions.Contains(Action.Slow))
+            {
+                JumpingHeight = slowJumpHeight;
+                CurrentSpeed = slowSpeed;
+            }
             else
             {
                 JumpingHeight = regularJumpHeight;
+                CurrentSpeed = defaultSpeed;
             }
 
 
@@ -139,7 +151,7 @@ namespace CaveGeneration.Models.Characters
                 {
                     if (!oldInput.Contains(Action.MoveUp)) {
                         Movement = -Vector2.UnitY * (JumpingHeight); 
-                        Movement += Vector2.UnitX * (CurrentSpeed); 
+                        Movement += Vector2.UnitX * (MaximumSpeed); 
                         groundJump = true;
                         return;
                     }
@@ -148,7 +160,7 @@ namespace CaveGeneration.Models.Characters
                 {
                     if (!oldInput.Contains(Action.MoveUp)) {
                         Movement = -Vector2.UnitY * (JumpingHeight); 
-                        Movement -= Vector2.UnitX * (CurrentSpeed);
+                        Movement -= Vector2.UnitX * (MaximumSpeed);
                         groundJump = true;
                         return;
                     }

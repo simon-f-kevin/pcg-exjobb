@@ -8,7 +8,6 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
 {
     class PredefinedSettings
     {
-
         public static Settings settings1 = new Settings()
         {
             //Set seed. Leave empty if you want a random map
@@ -19,7 +18,7 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             IncrementDifficulty = true,
 
             //Enemy placement
-            EnemyCount = 0,
+            EnemyCount = 3,
             DistanceBetweenEnemies = 10,
             EnemiesCanJump = true,
             StaticEnemyChance = 30,

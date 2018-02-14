@@ -14,7 +14,8 @@ namespace CaveGeneration.Models
         MoveRight,
         MoveUp,
         SuperJump,
-        Suicide
+        Suicide,
+        Slow,
     }
 
     public class Input
@@ -31,7 +32,7 @@ namespace CaveGeneration.Models
             if ((kbState.IsKeyDown(Keys.Space) || kbState.IsKeyDown(Keys.Up) || gpState.IsButtonDown(Buttons.DPadUp) || gpState.IsButtonDown(Buttons.A))) { Actions.Add(Action.MoveUp); }
             if ((kbState.IsKeyDown(Keys.X) || gpState.IsButtonDown(Buttons.RightTrigger))) { Actions.Add(Action.SuperJump); }
             if((kbState.IsKeyDown(Keys.Q) || gpState.IsButtonDown(Buttons.B))) { Actions.Add(Action.Suicide); }
-
+            if((kbState.IsKeyDown(Keys.Z) || gpState.IsButtonDown(Buttons.LeftTrigger))) { Actions.Add(Action.Slow); }
 
             return Actions;
         }
