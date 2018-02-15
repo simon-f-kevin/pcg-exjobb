@@ -17,22 +17,6 @@ namespace StorageSystem
 
         }
 
-        //private string NameHandler()
-        //{
-        //    XDocument doc = XDocument.Load(@"D:\\database.xml");
-        //    var elem = doc.Descendants("Count");
-        //    int value;
-        //    XElement tempEl;
-        //    foreach(var el in elem)
-        //    {
-        //        value = int.Parse(el.Value);
-        //        value += 1;
-        //        tempEl = new XElement("Count", value);
-        //    }
-        //    doc.Element("Count").Add(tempEl);
-        //    return null;
-        //}
-
         public void SaveStatsToStorage(string playerName, int score)
         {
             if (!File.Exists(@"D:\\database.xml") || File.ReadAllText(@"D:\\database.xml").Equals(""))
