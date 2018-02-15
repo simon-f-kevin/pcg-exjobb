@@ -329,15 +329,9 @@ namespace CaveGeneration
 
         private void UpdateStatScreen(GameTime gameTime)
         {
-            SaveStatsToFile("TestPlayer");
+            if(Keyboard.GetState().IsKeyDown(Keys.Escape)) SaveStatsToFile("TestPlayer");
             musicIsPlaying = false;
             MediaPlayer.Stop();
-        }
-
-        private void SaveStatsToFile(string playername)
-        {
-            StorageHandler storage = new StorageHandler();
-            storage.SaveStatsToStorage(playername, gamesWon);
         }
 
         private void UpdateTutorial(GameTime gameTime)
@@ -346,29 +340,6 @@ namespace CaveGeneration
             {
                 gameState = GameState.MainMenu;
             }
-        }
-
-        /// <summary>
-        /// This method gets the stats from your current game and adds them to total stats
-        /// </summary>
-        private void GetStats()
-        {
-            remainingLives = player.GetHp();
-            totalLives += remainingLives;
-            if (GameOverMessage.Equals("You Win!"))
-            {
-                gamesWon++;
-            }
-        }
-
-        /// <summary>
-        /// This method crates a new map to let the player play the game again. 
-        /// </summary>
-        private void RestartGame()
-        {
-            numberOfGames++;
-            CreateMap(mapWidth, mapHeight, useCopy);
-            gameState = GameState.Playing;
         }
 
         /// <summary>
@@ -495,11 +466,12 @@ namespace CaveGeneration
             spriteBatch.DrawString(font, "Press Up arrow, Space or A on controllers to jump", new Vector2(100, 150), Color.Navy);
             spriteBatch.DrawString(font, "Hold X or RT on controllers and jump to perform", new Vector2(100, 200), Color.Navy);
             spriteBatch.DrawString(font, "a super jump(This drains 1 health)", new Vector2(100, 250), Color.Navy);
-            spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 300), Color.Navy);
-            spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 350), Color.Navy);
-            spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 400), Color.Navy);
+            spriteBatch.DrawString(font, "Hold Z to do a slow jump(half the jumping height)", new Vector2(100, 300), Color.Navy);
+            spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 350), Color.Navy);
+            spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 400), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 450), Color.Navy);
 
-            spriteBatch.DrawString(font, "Press Enter to return to main menu", new Vector2(100, 450), Color.Navy);
+            spriteBatch.DrawString(font, "Press Enter to play the game", new Vector2(100, 500), Color.Navy);
 
 
             spriteBatch.End();
@@ -522,6 +494,35 @@ namespace CaveGeneration
             texture.SetData(data);
 
             return texture;
+        }
+
+        /// <summary>
+        /// This method crates a new map to let the player play the game again. 
+        /// </summary>
+        private void RestartGame()
+        {
+            numberOfGames++;
+            CreateMap(mapWidth, mapHeight, useCopy);
+            gameState = GameState.Playing;
+        }
+
+        /// <summary>
+        /// This method gets the stats from your current game and adds them to total stats
+        /// </summary>
+        private void GetStats()
+        {
+            remainingLives = player.GetHp();
+            totalLives += remainingLives;
+            if (GameOverMessage.Equals("You Win!"))
+            {
+                gamesWon++;
+            }
+        }
+
+        private void SaveStatsToFile(string playername)
+        {
+            StorageHandler storage = new StorageHandler();
+            storage.SaveStatsToStorage(playername, totalLives);
         }
 
         private void CreateMap(int mapWidthInBlocks, int mapHeightInBlocks, bool useCopyOfMap)
