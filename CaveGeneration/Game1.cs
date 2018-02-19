@@ -462,16 +462,16 @@ namespace CaveGeneration
             spriteBatch.Begin();
 
 
-            spriteBatch.DrawString(font, "Use arrow keys to move or left thumbstick on controllers", new Vector2(100, 100), Color.Navy);
-            spriteBatch.DrawString(font, "Press Up arrow, Space or A on controllers to jump", new Vector2(100, 150), Color.Navy);
-            spriteBatch.DrawString(font, "Hold X or RT on controllers and jump to perform", new Vector2(100, 200), Color.Navy);
-            spriteBatch.DrawString(font, "a super jump(This drains 1 health)", new Vector2(100, 250), Color.Navy);
-            spriteBatch.DrawString(font, "Hold Z to do a slow jump(half the jumping height)", new Vector2(100, 300), Color.Navy);
-            spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 350), Color.Navy);
-            spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 400), Color.Navy);
-            spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 450), Color.Navy);
+            spriteBatch.DrawString(font, "Use arrow keys to move or left thumbstick on controllers", new Vector2(100, 50), Color.Navy);
+            spriteBatch.DrawString(font, "Press Up arrow, Space or A on controllers to jump", new Vector2(100, 100), Color.Navy);
+            spriteBatch.DrawString(font, "Hold X or RT on controllers and jump to perform", new Vector2(100, 150), Color.Navy);
+            spriteBatch.DrawString(font, "a super jump(This drains 1 health)", new Vector2(100, 200), Color.Navy);
+            spriteBatch.DrawString(font, "Hold Z to do a slow jump(half the jumping height)", new Vector2(100, 250), Color.Navy);
+            spriteBatch.DrawString(font, "Press M to mute the music", new Vector2(100, 300), Color.Navy);
+            spriteBatch.DrawString(font, "Press Q to skip current level", new Vector2(100, 350), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 400), Color.Navy);
 
-            spriteBatch.DrawString(font, "Press Enter to play the game", new Vector2(100, 500), Color.Navy);
+            spriteBatch.DrawString(font, "Press Enter to play the game", new Vector2(100, 450), Color.Navy);
 
 
             spriteBatch.End();
