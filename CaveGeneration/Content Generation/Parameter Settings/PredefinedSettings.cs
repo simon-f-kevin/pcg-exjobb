@@ -111,5 +111,56 @@ namespace CaveGeneration.Content_Generation.Parameter_Settings
             PitfallMaxHeight = 6,
             PitfallWidth = 2
         };
+        public static Settings settings3 = new Settings()
+        {
+            //Set seed. Leave empty if you want a random map
+            Seed = "",
+
+            //Increment Difficulty, higher chance is harder
+            IncrementChance = 75,
+            IncrementDifficulty = true,
+
+            //Enemy placement
+            EnemyCount = 2,
+            DistanceBetweenEnemies = 10,
+            EnemiesCanJump = true,
+            StaticEnemyChance = 100,
+
+            //Goal and start position
+            GoalonGround = true,
+
+            //Cellular Automata
+            UseCopy = true,
+            IterationsOfsmoothmap = 2,
+            NumberOfNeighborCells = 4,
+
+
+            //Which map generator to use;
+            MapGeneratorType = Map_Generation.MapGeneratorType.DrunkardWalk,
+
+            //Drunkard Walk settings, ignore if MapGeneratorType is Random Placement
+            DistanceBetweenWalks = 5,
+            NumberOfSteps = 250,
+            NumberOfWalks = 5,
+            DrunkardDirections = new Map_Generation.DrunkardWalk.Directions()
+            {
+                Up = 20,
+                Down = 20,
+                Left = 20,
+                Right = 40
+            },
+            StartPositionForWalkers = new Microsoft.Xna.Framework.Vector2(0, 0),
+
+            //Random placement settings, ignore if MapGeneratorType is Drunkard Walk
+            RandomFillPercent = 45,
+
+            //Player lives 
+            PlayerLives = 3,
+
+            //Pitfalls
+            NumberOfPitfalls = 2,
+            PitfallMaxHeight = 7,
+            PitfallWidth = 2
+        };
     }
 }

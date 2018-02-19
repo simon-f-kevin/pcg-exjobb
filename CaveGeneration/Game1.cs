@@ -12,8 +12,7 @@ using CaveGeneration.Content_Generation.Enemy_Placement;
 using CaveGeneration.Content_Generation.Parameter_Settings;
 using Microsoft.Xna.Framework.Media;
 using CaveGeneration.Content_Generation.Pitfall_Placement;
-using System.Xml;
-using StorageSystem;
+
 
 namespace CaveGeneration
 {
@@ -91,14 +90,14 @@ namespace CaveGeneration
         {
             // TODO: Add your initialization logic here
 
-            settings = PredefinedSettings.settings1;
+            settings = PredefinedSettings.settings3;
 
             // Set your seed.
             seed = settings.Seed;
             originalSeed = seed;
 
             // Sets the window-size
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             if (graphics.IsFullScreen)
             {
                 graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
@@ -329,7 +328,7 @@ namespace CaveGeneration
 
         private void UpdateStatScreen(GameTime gameTime)
         {
-            if(Keyboard.GetState().IsKeyDown(Keys.Escape)) SaveStatsToFile("TestPlayer");
+            //if(Keyboard.GetState().IsKeyDown(Keys.Escape)) SaveStatsToFile("TestPlayer");
             musicIsPlaying = false;
             MediaPlayer.Stop();
         }
@@ -518,13 +517,13 @@ namespace CaveGeneration
                 gamesWon++;
             }
         }
-
+        /*
         private void SaveStatsToFile(string playername)
         {
             StorageHandler storage = new StorageHandler();
             storage.SaveStatsToStorage(playername, totalLives);
         }
-
+        */
         private void CreateMap(int mapWidthInBlocks, int mapHeightInBlocks, bool useCopyOfMap)
         {
             bool solveable = true;
