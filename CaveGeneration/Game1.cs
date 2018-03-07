@@ -90,7 +90,7 @@ namespace CaveGeneration
         {
             // TODO: Add your initialization logic here
 
-            settings = PredefinedSettings.settings3;
+            settings = PredefinedSettings.settings2;
 
             // Set your seed.
             seed = settings.Seed;
@@ -196,6 +196,9 @@ namespace CaveGeneration
                 case GameState.Tutorial:
                     UpdateTutorial(gameTime);
                     break;
+                case GameState.Story:
+                    UpdateStory(gameTime);
+                    break;
             }
             base.Update(gameTime);
             
@@ -238,6 +241,10 @@ namespace CaveGeneration
             if (Keyboard.GetState().IsKeyDown(Keys.T))
             {
                 gameState = GameState.Tutorial;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                gameState = GameState.Story;
             }
         }
 
@@ -341,6 +348,14 @@ namespace CaveGeneration
             }
         }
 
+        private void UpdateStory(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                gameState = GameState.MainMenu;
+            }
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -366,6 +381,9 @@ namespace CaveGeneration
                 case GameState.Tutorial:
                     DrawTutorial(gameTime);
                     break;
+                case GameState.Story:
+                    DrawStory(gameTime);
+                    break;
             }
 
             base.Draw(gameTime);
@@ -383,8 +401,9 @@ namespace CaveGeneration
 
             spriteBatch.DrawString(font, "Press Enter to start game", new Vector2(200, 200), Color.Navy);
             spriteBatch.DrawString(font, "Press T for tutorial", new Vector2(200, 250), Color.Navy);
-            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 300), Color.Navy);
-            spriteBatch.DrawString(font, "Nick & Simon 2018", new Vector2(200, 400), Color.Navy);
+            spriteBatch.DrawString(font, "Press S to see the story", new Vector2(200, 300), Color.Navy);
+            spriteBatch.DrawString(font, "Press Esc to exit game", new Vector2(200, 350), Color.Navy);
+            spriteBatch.DrawString(font, "Nick & Simon 2018", new Vector2(200, 450), Color.Navy);
 
 
             spriteBatch.End();
@@ -471,6 +490,36 @@ namespace CaveGeneration
             spriteBatch.DrawString(font, "Press Esc to exit the game at any time", new Vector2(100, 400), Color.Navy);
 
             spriteBatch.DrawString(font, "Press Enter to play the game", new Vector2(100, 450), Color.Navy);
+
+
+            spriteBatch.End();
+        }
+
+
+        private void DrawStory(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.White);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+
+            spriteBatch.DrawString(font, "I have never seen the sky. We were born in these caverns, deep benath  ", new Vector2(25, 25), Color.Navy);
+            spriteBatch.DrawString(font, "the surface. Our parents would speak of a great calamity up above, ", new Vector2(25, 75), Color.Navy);
+            spriteBatch.DrawString(font, "but we were too young to understand the warnings in their tales. ", new Vector2(25, 125), Color.Navy);
+            spriteBatch.DrawString(font, "My sisters sought to see the outside world and one by one wandered  ", new Vector2(25, 175), Color.Navy);
+            spriteBatch.DrawString(font, "up to the tunnels we were forbidden to walk, towards the exit.", new Vector2(25, 225), Color.Navy);
+            spriteBatch.DrawString(font, "But when they returned they were no longer themselves, ", new Vector2(25, 275), Color.Navy);
+            spriteBatch.DrawString(font, "but something much more sinister. ", new Vector2(25, 325), Color.Navy);
+            spriteBatch.DrawString(font, "I know not what caused them to transform, but the depths  ", new Vector2(25, 375), Color.Navy);
+            spriteBatch.DrawString(font, "of the underground has kept me safe, and if there is ", new Vector2(25, 425), Color.Navy);
+            spriteBatch.DrawString(font, "a way to turn them back it is to be found here beneath the surface.", new Vector2(25, 475), Color.Navy);
+            spriteBatch.DrawString(font, "So I venture deeper and deeper in the hopes of finding the source, ", new Vector2(25, 525), Color.Navy);
+            spriteBatch.DrawString(font, "that which has protected me, for only I remain.", new Vector2(25, 575), Color.Navy);
+            spriteBatch.DrawString(font, "We are the cave generation, and once more these caves shall be ", new Vector2(25, 625), Color.Navy);
+            spriteBatch.DrawString(font, "our salvation.", new Vector2(25, 675), Color.Navy);
+
+            spriteBatch.DrawString(font, "Press Enter to play the game", new Vector2(25, 725), Color.Navy);
 
 
             spriteBatch.End();
